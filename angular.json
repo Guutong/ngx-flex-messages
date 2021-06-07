@@ -15,6 +15,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
+            "tsConfig": "projects/flex-messages/tsconfig.lib.json",
             "project": "projects/flex-messages/ng-package.json"
           },
           "configurations": {
