@@ -1,6 +1,6 @@
 {
   "name": "ngx-flex-messages",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,8 +14,12 @@
     "predeploy": "npm run build-storybook",
     "deploy-storybook": "gh-pages -d storybook-static"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Guutong/ngx-flex-messages.git"
+  },
   "homepage": "http://guutong.github.io/ngx-flex-messages",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "~12.0.3",
     "@angular/common": "~12.0.3",

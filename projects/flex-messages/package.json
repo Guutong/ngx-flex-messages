@@ -1,5 +1,5 @@
 {
-  "name": "flex-messages",
+  "name": "npx-flex-messages",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^12.0.3",
@@ -7,5 +7,10 @@
   },
   "dependencies": {
     "tslib": "^2.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Guutong/ngx-flex-messages.git"
+  },
+  "homepage": "http://guutong.github.io/ngx-flex-messages"
 }
