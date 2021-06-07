@@ -1,6 +1,8 @@
 
 import { setCompodocJson } from "@storybook/addon-docs/angular";
 import docJson from "../documentation.json";
+import '!style-loader!css-loader!sass-loader!./../projects/flex-messages/src/styles/global.scss';
+
 setCompodocJson(docJson);
 
 

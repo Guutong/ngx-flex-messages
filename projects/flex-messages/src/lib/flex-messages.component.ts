@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-flex-messages',
+  selector: 'ngx-flex-messages',
   template: `
     <p>
       flex-messages works!
