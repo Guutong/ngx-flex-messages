@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Input,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 
@@ -13,15 +12,19 @@ import {
   styles: [],
 })
 export class FlexMessagesComponent implements AfterViewInit {
-  @Input('json')
-  json: {
+  @Input('data')
+  data: {
     type: string;
     altText: string;
     contents: any | {
       type: string;
       contents: any;
+      header: any;
+      hero: any;
+      body: any;
+      footer: any;
     };
-  };
+  } | any;
 
   @ViewChild('flex')
   flex!: ElementRef;
@@ -32,14 +35,16 @@ export class FlexMessagesComponent implements AfterViewInit {
     if (this.flex) {
       let carousel = `
       <div class="LySlider">
-        <div class="lyInner"><!-- inner --></div>
+        <div class="lyInner">
+          <!-- inner -->
+        </div>
       </div>
       <br>
       `;
       let result = '';
       
-      if (this.json.type === 'flex') {
-        const { contents } = this.json;
+      if (this.data.type === 'flex') {
+        const { contents } = this.data;
         switch (contents.type) {
           case 'bubble':
             result = bubble_object(contents);
@@ -56,8 +61,9 @@ export class FlexMessagesComponent implements AfterViewInit {
           default:
             break;
         }
+      
       }
-      this.flex.nativeElement.innerHTML += carousel;
+      this.flex.nativeElement.innerHTML = carousel;
     }
   }
 }
@@ -127,6 +133,7 @@ function bubble_object(json: any) {
 
   return bubble;
 }
+
 function box_recursive(parent_box: string, json: any) {
   let result: any[] = [];
   json.forEach((obj: any, index: any) => {
@@ -146,14 +153,11 @@ function box_recursive(parent_box: string, json: any) {
     }
     result[index] = temp;
   });
+
   json.forEach((obj: any, index: any) => {
     result[index] = result[index].replace('<!-- content -->', '');
-    parent_box = parent_box.replace(
-      '<!-- content -->',
-      result[index] + '<!-- content -->'
-    );
-  });
-
+    parent_box = parent_box.replace('<!-- content -->', result[index] + '<!-- content -->');
+  });  
   return parent_box;
 }
 
@@ -814,10 +818,6 @@ function span_object(json: any) {
   return `<span class="MdSpn ${ExWB} ${size} ${ExFntSty} ${ExTxtDec}" style="${style2}" >${text}</span>`;
 }
 
-function carousel_struc() {
-  return `<div class="LySlider"><div class="lyInner"><!-- inner --></div></div><br>`;
-}
-
 function bubble_struc(json: any) {
   let { size, direction, action } = json;
   size = !size || size === '' ? 'medium' : size;
@@ -941,6 +941,7 @@ function text_object(json: any) {
   text = !text ? '' : text;
   return `<div class="MdTxt ${fl} ${exabs} ${exmgn} ${alg} ${grv} ${size} ${ExWB} ${ExFntSty} ${ExTxtDec} ${ExWrap} ${ext} ${exb} ${exl} ${exr}" style="${style2}"><p>${text}<!-- content --></p></div>`;
 }
+
 function upper1digit(str: string) {
   return str.charAt(0).toUpperCase();
 }
