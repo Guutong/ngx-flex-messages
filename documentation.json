@@ -7,7 +7,7 @@
     "components": [
         {
             "name": "FlexMessagesComponent",
-            "id": "component-FlexMessagesComponent-0c7f6af17c21bcf509731b8377e9ab2e",
+            "id": "component-FlexMessagesComponent-86d4f62e758cda5d298cde375f00385a",
             "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -15,22 +15,45 @@
             "outputs": [],
             "providers": [],
             "selector": "ngx-flex-messages",
-            "styleUrls": [],
+            "styleUrls": [
+                "./flex-messages.component.scss"
+            ],
             "styles": [],
-            "template": "<p>\n  flex-messages works!\n</p>\n",
-            "templateUrl": [],
+            "templateUrl": [
+                "./flex-messages.component.html"
+            ],
             "viewProviders": [],
-            "inputsClass": [],
+            "inputsClass": [
+                {
+                    "name": "json",
+                    "line": 10,
+                    "type": "any"
+                }
+            ],
             "outputsClass": [],
-            "propertiesClass": [],
+            "propertiesClass": [
+                {
+                    "name": "flex",
+                    "type": "ElementRef",
+                    "optional": false,
+                    "description": "",
+                    "line": 13,
+                    "decorators": [
+                        {
+                            "name": "ViewChild",
+                            "stringifiedArguments": "'flex'"
+                        }
+                    ]
+                }
+            ],
             "methodsClass": [
                 {
-                    "name": "ngOnInit",
+                    "name": "ngAfterViewInit",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 17
+                    "line": 19
                 }
             ],
             "hostBindings": [],
@@ -38,9 +61,14 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  template: `\n    <p>\n      flex-messages works!\n    </p>\n  `,\n  styles: [\n  ]\n})\nexport class FlexMessagesComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  templateUrl: './flex-messages.component.html',\n  styleUrls: [ './flex-messages.component.scss']\n})\nexport class FlexMessagesComponent implements AfterViewInit {\n  @Input(\"json\")\n  json: any;\n\n  @ViewChild('flex')\n  flex!: ElementRef;\n\n  constructor() {\n    \n  }\n\n  ngAfterViewInit(): void {\n    if (this.flex) {\n      let carousel = carousel_struc();\n      let result = ''\n      if (this.json['type'] === 'flex') {\n        this.json = this.json['contents'];\n        if (this.json['type'] === 'bubble') {\n            result = bubble_object(this.json)\n            carousel = carousel.replace('<!-- inner -->', result)\n        } else if (this.json['type'] === 'carousel') {\n          this.json['contents'].forEach((obj: any, index: any) => {\n            let result = bubble_object(obj)\n            result = result.replace('<!-- content -->', '')\n            result = result.replace('<!-- inner -->', '')\n            carousel = carousel.replace('<!-- inner -->', result + '<!-- inner -->')\n          });\n        }\n      }\n    \n      this.flex.nativeElement.innerHTML += carousel;\n    }\n  }\n}\n\nfunction bubble_object(json: any) {\n  let { hero, header, body, footer } = json\n  let hero_object = hero_struc()\n  let header_object = header_struc()\n  let body_object = body_struc(json)\n  let footer_object = footer_struc()\n  let bubble = bubble_struc(json)\n\n  let box: any = ''\n  for (let key in hero) {\n      if (hero.hasOwnProperty(key)) {\n          if (key === 'type' && hero[key] === 'box') {\n              box = box_object(hero)\n              let box_inner = box_recursive(box, hero['contents'])\n              box = box_inner\n          } else {\n              box = convert_object(hero)\n          }\n      }\n  }\n  hero_object = hero_object.replace('<!-- inner -->', box)\n\n  box = ''\n  for (let key in header) {\n      if (header.hasOwnProperty(key)) {\n          if (key === 'type' && header[key] === 'box') {\n              box = box_object(header)\n              let box_inner = box_recursive(box, header['contents'])\n              box = box_inner\n          }\n      }\n  }\n  header_object = header_object.replace('<!-- inner -->', box)\n\n  box = ''\n  for (let key in body) {\n      if (body.hasOwnProperty(key)) {\n          if (key === 'type' && body[key] === 'box') {\n              box = box_object(body)\n              let box_inner = box_recursive(box, body['contents'])\n              box = box_inner\n          }\n      }\n  }\n  body_object = body_object.replace('<!-- inner -->', box)\n\n  box = ''\n  for (let key in footer) {\n      if (footer.hasOwnProperty(key)) {\n          if (key === 'type' && footer[key] === 'box') {\n              box = box_object(footer)\n              let box_inner = box_recursive(box, footer['contents'])\n              box = box_inner\n          }\n      }\n  }\n  footer_object = footer_object.replace('<!-- inner -->', box)\n\n\n  bubble = bubble.replace('<!-- hero -->', hero_object)\n  bubble = bubble.replace('<!-- header -->', header_object)\n  bubble = bubble.replace('<!-- body -->', body_object)\n  bubble = bubble.replace('<!-- footer -->', footer_object)\n\n  return bubble\n}\nfunction box_recursive(parent_box: string, json: any) {\n  let result: any[] = []\n  json.forEach((obj: any, index: any) => {\n      let temp\n      if (obj['type'] === 'box') {\n          let temp2 = box_object(obj)\n          temp = box_recursive(temp2, obj['contents'])\n      } else if (obj['type'] === 'text' && obj['contents'] && obj['contents'].length > 0) {\n          let temp2 = convert_object(obj)\n          temp = box_recursive(temp2 || '', obj['contents'])\n      } else {\n          temp = convert_object(obj)\n      }\n      result[index] = temp\n  })\n  json.forEach((obj: any, index: any) => {\n      result[index] = result[index].replace('<!-- content -->', '')\n      parent_box = parent_box.replace('<!-- content -->', result[index] + '<!-- content -->')\n  })\n\n  return parent_box\n}\n\nfunction convert_object(json: any) {\n  let object;\n  switch (json['type']) {\n      case 'image':\n          object = image_object(json)\n          break;\n      case 'icon':\n          object = icon_object(json)\n          break;\n      case 'text':\n          object = text_object(json)\n          break;\n      case 'span':\n          object = span_object(json)\n          break;\n      case 'button':\n          object = button_object(json)\n          break;\n      case 'filler':\n          object = filler_object(json)\n          break;\n      case 'spacer':\n          object = spacer_object(json)\n          break;\n      case 'separator':\n          object = separator_object(json)\n          break;\n      default:\n          object = null\n  }\n  return object\n}\n\nfunction box_object(json: any) {\n  let layout1 = ''\n  let layout2 = ''\n  let style = ''\n  let { layout, position, flex, spacing, margin, width, height, backgroundColor, borderColor, borderWidth, cornerRadius, justifyContent, alignItems, offsetTop, offsetBottom, offsetStart, offsetEnd, paddingAll, paddingTop, paddingBottom, paddingStart, paddingEnd, background } = json\n  if (layout === 'baseline') {\n      layout1 = 'hr'\n      layout2 = 'bl'\n  } else if (layout === 'horizontal') {\n      layout1 = 'hr'\n      layout2 = ''\n  } else if (layout === 'vertical') {\n      layout1 = 'vr'\n      layout2 = ''\n  }\n  let fl = ''\n  if (flex > 3) {\n      style += `-webkit-box-flex:${flex};flex-grow:${flex};`\n  } else {\n      fl = (flex >= 0) ? `fl${flex}` : ''\n  }\n  let exabs = (position === 'absolute') ? 'ExAbs' : ''\n  let spc = ''\n  if (spacing && spacing.indexOf(\"px\") >= 0) {\n      spc = ''\n  } else {\n      spc = (spacing) ? 'spc' + upperalldigit(spacing) : ''\n  }\n\n  let exmgn\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnT' + upperalldigit(margin) : ''\n  }\n  if (width && width !== '') {\n      style += `width:${width};`\n  }\n  if (height && height !== '') {\n      style += `height:${height};`\n  }\n  if (backgroundColor) {\n      style += `background-color:${backgroundColor} !important;`\n  }\n  if (borderColor) {\n      style += `border-color:${borderColor} !important;`\n  }\n\n  let ExBdr = ''\n  if (borderWidth && borderWidth.indexOf(\"px\") >= 0) {\n      style += `border-width:${borderWidth};`\n      ExBdr = ''\n  } else {\n      switch (borderWidth) {\n          case 'none':\n              ExBdr = 'ExBdrWdtNone'\n              break;\n          case 'light':\n              ExBdr = 'ExBdrWdtLgh'\n              break;\n          case 'normal':\n              ExBdr = 'ExBdrWdtNml'\n              break;\n          case 'medium':\n              ExBdr = 'ExBdrWdtMdm'\n              break;\n          case 'semi-bold':\n              ExBdr = 'ExBdrWdtSbd'\n              break;\n          case 'bold':\n              ExBdr = 'ExBdrWdtBld'\n              break;\n          default:\n              ExBdr = ''\n          // code block\n      }\n  }\n  let ExBdrRad = ''\n  if (cornerRadius && cornerRadius.indexOf(\"px\") >= 0) {\n      style += `border-radius:${cornerRadius};`\n      ExBdrRad = ''\n  } else {\n      ExBdrRad = (cornerRadius) ? 'ExBdrRad' + upperalldigit(cornerRadius) : ''\n  }\n\n  let jfc = ''\n  if (justifyContent && justifyContent !== '') {\n      switch (justifyContent) {\n          case 'center':\n              jfc = 'itms-jfcC'\n              break;\n          case 'flex-start':\n              jfc = 'itms-jfcS'\n              break;\n          case 'flex-end':\n              jfc = 'itms-jfcE'\n              break;\n          case 'space-between':\n              jfc = 'itms-jfcSB'\n              break;\n          case 'space-around':\n              jfc = 'itms-jfcSA'\n              break;\n          case 'space-evenly':\n              jfc = 'itms-jfcSE'\n              break;\n          default:\n              jfc = ''\n          // code block\n      }\n  }\n  let alg = ''\n  if (alignItems && alignItems !== '') {\n      switch (alignItems) {\n          case 'center':\n              alg = 'itms-algC'\n              break;\n          case 'flex-start':\n              alg = 'itms-algS'\n              break;\n          case 'flex-end':\n              alg = 'itms-algE'\n              break;\n          default:\n              alg = ''\n          // code block\n      }\n  }\n  let ext = ''\n  if (offsetTop && offsetTop.indexOf(\"px\") >= 0) {\n      style += `top:${offsetTop};`\n      ext = ''\n  } else {\n      ext = (offsetTop) ? 'ExT' + upperalldigit(offsetTop) : ''\n  }\n  let exb = ''\n  if (offsetBottom && offsetBottom.indexOf(\"px\") >= 0) {\n      style += `bottom:${offsetBottom};`\n      exb = ''\n  } else {\n      exb = (offsetBottom) ? 'ExB' + upperalldigit(offsetBottom) : ''\n  }\n  let exl = ''\n  if (offsetStart && offsetStart.indexOf(\"px\") >= 0) {\n      style += `left:${offsetStart};`\n      exl = ''\n  } else {\n      exl = (offsetStart) ? 'ExL' + upperalldigit(offsetStart) : ''\n  }\n  let exr = ''\n  if (offsetEnd && offsetEnd.indexOf(\"px\") >= 0) {\n      style += `right:${offsetEnd};`\n      exr = ''\n  } else {\n      exr = (offsetEnd) ? 'ExR' + upperalldigit(offsetEnd) : ''\n  }\n\n  let ExPadA = ''\n  if (paddingAll && paddingAll.indexOf(\"px\") >= 0) {\n      style += `padding:${paddingAll};`\n      ExPadA = ''\n  } else {\n      ExPadA = (paddingAll) ? 'ExPadA' + upperalldigit(paddingAll) : ''\n  }\n\n  let ExPadT = ''\n  if (paddingTop && paddingTop.indexOf(\"px\") >= 0) {\n      style += `padding-top:${paddingTop};`\n      ExPadT = ''\n  } else {\n      ExPadT = (paddingTop) ? 'ExPadT' + upperalldigit(paddingTop) : ''\n  }\n\n  let ExPadB = ''\n  if (paddingBottom && paddingBottom.indexOf(\"px\") >= 0) {\n      style += `padding-bottom:${paddingBottom};`\n      ExPadB = ''\n  } else {\n      ExPadB = (paddingBottom) ? 'ExPadB' + upperalldigit(paddingBottom) : ''\n  }\n\n  let ExPadL = ''\n  if (paddingStart && paddingStart.indexOf(\"px\") >= 0) {\n      style += `padding-left:${paddingStart};`\n      ExPadL = ''\n  } else {\n      ExPadL = (paddingStart) ? 'ExPadL' + upperalldigit(paddingStart) : ''\n  }\n\n  let ExPadR = ''\n  if (paddingEnd && paddingEnd.indexOf(\"px\") >= 0) {\n      style += `padding-right:${paddingEnd};`\n      ExPadR = ''\n  } else {\n      ExPadR = (paddingEnd) ? 'ExPadR' + upperalldigit(paddingEnd) : ''\n  }\n\n  let centerPosition = ''\n  if (background && background.type === 'linearGradient') {\n      centerPosition = (background.centerPosition) ? background.centerPosition : '50%'\n      if (background.centerColor) {\n          style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`\n      } else {\n          style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`\n      }\n  }\n\n  return `<div class=\"MdBx ${layout1} ${layout2} ${fl} ${exabs} ${exmgn} ${spc} ${ExBdr} ${ExBdrRad} ${jfc} ${alg} ${ext} ${exb} ${exl} ${exr} ${ExPadA} ${ExPadT} ${ExPadB} ${ExPadL} ${ExPadR}\" style=\"${style}\"><!-- content --></div>`\n}\n\n\nfunction button_object(json: any) {\n  let style2 = ''\n  let style3 = ''\n\n  let { flex, margin, position, height, style, color, gravity, adjustMode, offsetTop, offsetBottom, offsetStart, offsetEnd, action } = json\n\n  let fl = ''\n  if (flex > 3) {\n      style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`\n  } else {\n      fl = (flex >= 0) ? `fl${flex}` : ''\n  }\n  let exabs = (position === 'absolute') ? 'ExAbs' : ''\n  let exmgn = ''\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style2 += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnT' + upperalldigit(margin) : ''\n  }\n\n  height = (!height || height === '' || height === 'md') ? '' : 'Ex' + upperalldigit(height)\n  let grv = (gravity === 'bottom' || gravity === 'center') ? 'grv' + upper1digit(gravity) : '';\n\n  let ExBtn = 'ExBtnL'\n  let ExBtnfc = ''\n  if (style && style !== '') {\n      switch (style) {\n          case 'link':\n              ExBtnfc = 'ExBtnL'\n              break;\n          case 'primary':\n              ExBtn = 'ExBtn1'\n              break;\n          case 'secondary':\n              ExBtn = 'ExBtn2'\n              break;\n          default:\n              ExBtn = 'ExBtnL'\n          // code block\n      }\n  }\n\n  if (color) {\n      style3 += `background-color:${color} !important;`\n  }\n\n  let ext = ''\n  if (offsetTop && offsetTop.indexOf(\"px\") >= 0) {\n      style2 += `top:${offsetTop};`\n      ext = ''\n  } else {\n      ext = (offsetTop) ? 'ExT' + upperalldigit(offsetTop) : ''\n  }\n\n  let exb = ''\n  if (offsetBottom && offsetBottom.indexOf(\"px\") >= 0) {\n      style2 += `bottom:${offsetBottom};`\n      exb = ''\n  } else {\n      exb = (offsetBottom) ? 'ExB' + upperalldigit(offsetBottom) : ''\n  }\n\n  let exl = ''\n  if (offsetStart && offsetStart.indexOf(\"px\") >= 0) {\n      style2 += `left:${offsetStart};`\n      exl = ''\n  } else {\n      exl = (offsetStart) ? 'ExL' + upperalldigit(offsetStart) : ''\n  }\n\n  let exr = ''\n  if (offsetEnd && offsetEnd.indexOf(\"px\") >= 0) {\n      style2 += `right:${offsetEnd};`\n      exr = ''\n  } else {\n      exr = (offsetEnd) ? 'ExR' + upperalldigit(offsetEnd) : ''\n  }\n\n  action = (!action) ? { 'type': 'none' } : action\n  if (action.type === 'uri') {\n      return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a href=\"${action.uri}\" target=\"_blank\" style=\"${style3}\"><div>${action.label}</div></a></div>`\n  } else if (action.type === 'message') {\n      return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('message: ${action.text}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`\n  } else if (action.type === 'postback') {\n      return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('postback data: ${action.data}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`\n  } else {\n      return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a style=\"${style3}\"><div>${action.label}</div></a></div>`\n  }\n}\n\nfunction filler_object(json: any) {\n  let style = ''\n  let { flex } = json\n  let fl = ''\n  if (flex > 3) {\n      style += `-webkit-box-flex:${flex};flex-grow:${flex};`\n  } else {\n      fl = (flex >= 0) ? `fl${flex}` : ''\n  }\n  return `<div class=\"mdBxFiller ${fl}\" style=\"${style}\" ></div>`\n}\n\nfunction icon_object(json: any) {\n  let style2 = ''\n  let { size, aspectRatio, url, position, margin, offsetTop, offsetBottom, offsetStart, offsetEnd } = json\n  let styleimg = `background-image:url('${url}');`\n\n  size = (!size || size === '') ? 'md' : size\n  if (size.indexOf(\"px\") >= 0) {\n      style2 += `font-size:${size};`\n      size = ''\n  } else {\n      size = 'Ex' + upperalldigit(size)\n  }\n\n  let ratio: any = '100';\n  if (!aspectRatio || aspectRatio === '') {\n      styleimg += `width:1em;`\n  } else {\n      ratio = ratio[0] / ratio[1]\n      styleimg += `width:${ratio}em;`\n  }\n  let exabs = (position === 'absolute') ? 'ExAbs' : ''\n  let exmgn = ''\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style2 += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnT' + upperalldigit(margin) : ''\n  }\n\n  let ext = ''\n  if (offsetTop && offsetTop.indexOf(\"px\") >= 0) {\n      style2 += `top:${offsetTop};`\n      ext = ''\n  } else {\n      ext = (offsetTop) ? 'ExT' + upperalldigit(offsetTop) : ''\n  }\n\n  let exb = ''\n  if (offsetBottom && offsetBottom.indexOf(\"px\") >= 0) {\n      style2 += `bottom:${offsetBottom};`\n      exb = ''\n  } else {\n      exb = (offsetBottom) ? 'ExB' + upperalldigit(offsetBottom) : ''\n  }\n\n  let exl = ''\n  if (offsetStart && offsetStart.indexOf(\"px\") >= 0) {\n      style2 += `left:${offsetStart};`\n      exl = ''\n  } else {\n      exl = (offsetStart) ? 'ExL' + upperalldigit(offsetStart) : ''\n  }\n\n  let exr = ''\n  if (offsetEnd && offsetEnd.indexOf(\"px\") >= 0) {\n      style2 += `right:${offsetEnd};`\n      exr = ''\n  } else {\n      exr = (offsetEnd) ? 'ExR' + upperalldigit(offsetEnd) : ''\n  }\n\n  return `<div class=\"MdIco fl0 ${size} ${exabs} ${exmgn} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" ><div><span style=\"${styleimg}\"></span></div></div>`\n}\nfunction image_object(json: any) {\n  let style = ''\n  let style2 = ''\n  let { aspectMode, size, aspectRatio, url, position, flex, margin, align, gravity, backgroundColor, offsetTop, offsetBottom, offsetStart, offsetEnd, action } = json\n  let styleimg = `background-image:url('${url}');`\n  if (backgroundColor) {\n      styleimg += `background-color:${backgroundColor} !important;`\n  }\n\n  aspectMode = (!aspectMode || aspectMode === '') ? 'fit' : aspectMode\n  size = (!size || size === '') ? 'md' : size\n  aspectMode = upperalldigit(aspectMode)\n  if (size.indexOf(\"px\") >= 0) {\n      style2 += `width:${size};`\n      size = ''\n  } else {\n      size = 'Ex' + upperalldigit(size)\n  }\n\n  let ratio;\n  if (!aspectRatio || aspectRatio === '') {\n      ratio = '100'\n  } else {\n      ratio = aspectRatio.split(':')\n      ratio = ratio[1] * 100 / ratio[0]\n  }\n  let fl = ''\n  if (flex > 3) {\n      style += `-webkit-box-flex:${flex};flex-grow:${flex};`\n  } else {\n      fl = (flex >= 0) ? `fl${flex}` : ''\n  }\n  let exabs = (position === 'absolute') ? 'ExAbs' : ''\n\n  let exmgn = ''\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnT' + upperalldigit(margin) : ''\n  }\n\n  let alg = (align === 'start' || align === 'end') ? 'alg' + upper1digit(align) : '';\n  let grv = (gravity === 'bottom' || gravity === 'center') ? 'grv' + upper1digit(gravity) : '';\n\n  let ext = ''\n  if (offsetTop && offsetTop.indexOf(\"px\") >= 0) {\n      style += `top:${offsetTop};`\n      ext = ''\n  } else {\n      ext = (offsetTop) ? 'ExT' + upperalldigit(offsetTop) : ''\n  }\n\n  let exb = ''\n  if (offsetBottom && offsetBottom.indexOf(\"px\") >= 0) {\n      style += `bottom:${offsetBottom};`\n      exb = ''\n  } else {\n      exb = (offsetBottom) ? 'ExB' + upperalldigit(offsetBottom) : ''\n  }\n\n  let exl = ''\n  if (offsetStart && offsetStart.indexOf(\"px\") >= 0) {\n      style += `left:${offsetStart};`\n      exl = ''\n  } else {\n      exl = (offsetStart) ? 'ExL' + upperalldigit(offsetStart) : ''\n  }\n\n  let exr = ''\n  if (offsetEnd && offsetEnd.indexOf(\"px\") >= 0) {\n      style += `right:${offsetEnd};`\n      exr = ''\n  } else {\n      exr = (offsetEnd) ? 'ExR' + upperalldigit(offsetEnd) : ''\n  }\n  action = (!action) ? { 'type': 'none' } : action\n  if (action.type === 'uri') {\n      return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a href=\"${action.uri}\" target=\"_blank\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`\n  } else if (action.type === 'message') {\n      return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('message: ${action.text}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`\n  } else if (action.type === 'postback') {\n      return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('postback data: ${action.data}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`\n  } else {\n      return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`\n  }\n\n\n}\nfunction separator_object(json: any) {\n  let style = ''\n  let { margin, color } = json\n\n  let exmgn = ''\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnT' + upperalldigit(margin) : ''\n  }\n  if (color) {\n      style += `border-color:${color} !important;`\n  }\n\n  return `<div class=\"fl0 MdSep ${exmgn}\" style=\"${style}\" ></div>`\n}\nfunction spacer_object(json: any) {\n  let { size } = json\n  size = (!size || size === '') ? 'md' : size\n  if (size.indexOf(\"px\") >= 0) {\n      size = ''\n  } else {\n      size = 'spc' + upperalldigit(size)\n  }\n  return `<div class=\"mdBxSpacer ${size} fl0\" ></div>`\n}\nfunction span_object(json: any) {\n\n  let style2 = ''\n  let { text, size, color, weight, style, decoration } = json\n\n  if (size && size !== '') {\n      if (size.indexOf(\"px\") >= 0) {\n          style2 += `font-size:${size};`\n          size = ''\n      } else {\n          size = 'Ex' + upperalldigit(size)\n      }\n  } else {\n      size = ''\n  }\n\n  if (color && color !== '') {\n      style2 += `color:${color};`\n  }\n  let ExWB = (weight === 'bold') ? 'ExWB' : ''\n  let ExFntSty = (style === 'normal') ? 'ExFntStyNml' : (style === 'italic') ? 'ExFntStyIt' : ''\n  let ExTxtDec = (decoration === 'line-through') ? 'ExTxtDecLt' : (decoration === 'underline') ? 'ExTxtDecUl' : (decoration === 'none') ? 'ExTxtDecNone' : ''\n\n  return `<span class=\"MdSpn ${ExWB} ${size} ${ExFntSty} ${ExTxtDec}\" style=\"${style2}\" >${text}</span>`\n}\n\nfunction carousel_struc() {\n  return `<div class=\"LySlider\"><div class=\"lyInner\"><!-- inner --></div></div><br>`\n}\n\nfunction bubble_struc(json: any) {\n  let { size, direction, action } = json\n  size = (!size || size === '') ? 'medium' : size\n  direction = (!direction || direction == '') ? 'ltr' : direction\n  size = upper2digit(size)\n\n  return `<div class=\"lyItem Ly${size}\"><div class=\"T1 fx${direction.toUpperCase()}\" dir=\"${direction}\"><!-- hero --><!-- header --><!-- body --><!-- footer --></div></div>`\n}\nfunction hero_struc() {\n  return `<div class=\"t1Hero\"><!-- inner --></div>`\n}\nfunction header_struc() {\n  return `<div class=\"t1Header\"><!-- inner --></div>`\n}\nfunction body_struc(json: any) {\n  let { footer } = json\n  let ExHasFooter = (json) ? 'ExHasFooter' : ''\n  return `<div class=\"t1Body ${ExHasFooter}\"><!-- inner --></div>`\n}\nfunction footer_struc() {\n  return `<div class=\"t1Footer\"><!-- inner --></div>`\n}\nfunction text_object(json: any) {\n  let style2 = ''\n  let { flex, margin, size, position, align, gravity, text, color, weight, style, decoration, wrap, maxLines, adjustMode, offsetTop, offsetBottom, offsetStart, offsetEnd } = json\n\n  let fl = ''\n  if (flex > 3) {\n      style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`\n  } else {\n      fl = (flex >= 0) ? `fl${flex}` : ''\n  }\n  let exabs = (position === 'absolute') ? 'ExAbs' : ''\n  let exmgn = ''\n  if (margin && margin.indexOf(\"px\") >= 0) {\n      style2 += `margin-top:${margin};`\n      exmgn = ''\n  } else {\n      exmgn = (margin) ? 'ExMgnL' + upperalldigit(margin) : ''\n  }\n\n  let alg = (align === 'start' || align === 'end' || align === 'center') ? 'ExAlg' + upper1digit(align) : '';\n  let grv = (gravity === 'bottom' || gravity === 'center') ? 'grv' + upper1digit(gravity) : '';\n  size = (!size || size === '') ? 'md' : size\n  if (size.indexOf(\"px\") >= 0) {\n      style2 += `font-size:${size};`\n      size = ''\n  } else {\n      size = 'Ex' + upperalldigit(size)\n  }\n\n  if (color && color !== '') {\n      style2 += `color:${color};`\n  }\n  let ext\n  let ExWB = (weight === 'bold') ? 'ExWB' : ''\n  let ExFntSty = (style === 'normal') ? 'ExFntStyNml' : (style === 'italic') ? 'ExFntStyIt' : ''\n  let ExTxtDec = (decoration === 'line-through') ? 'ExTxtDecLt' : (decoration === 'underline') ? 'ExTxtDecUl' : (decoration === 'none') ? 'ExTxtDecNone' : ''\n  let ExWrap = (wrap === true) ? 'ExWrap' : ''\n  if (offsetTop && offsetTop.indexOf(\"px\") >= 0) {\n      style2 += `top:${offsetTop};`\n      ext = ''\n  } else {\n      ext = (offsetTop) ? 'ExT' + upperalldigit(offsetTop) : ''\n  }\n  let exb\n  if (offsetBottom && offsetBottom.indexOf(\"px\") >= 0) {\n      style2 += `bottom:${offsetBottom};`\n      exb = ''\n  } else {\n      exb = (offsetBottom) ? 'ExB' + upperalldigit(offsetBottom) : ''\n  }\n  let exl\n  if (offsetStart && offsetStart.indexOf(\"px\") >= 0) {\n      style2 += `left:${offsetStart};`\n      exl = ''\n  } else {\n      exl = (offsetStart) ? 'ExL' + upperalldigit(offsetStart) : ''\n  }\n  let exr\n\n  if (offsetEnd && offsetEnd.indexOf(\"px\") >= 0) {\n      style2 += `right:${offsetEnd};`\n      exr = ''\n  } else {\n      exr = (offsetEnd) ? 'ExR' + upperalldigit(offsetEnd) : ''\n  }\n  text = (!text) ? '' : text\n  return `<div class=\"MdTxt ${fl} ${exabs} ${exmgn} ${alg} ${grv} ${size} ${ExWB} ${ExFntSty} ${ExTxtDec} ${ExWrap} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\"><p>${text}<!-- content --></p></div>`\n}\nfunction upper1digit(str: string) {\n  return str.charAt(0).toUpperCase()\n}\nfunction upper2digit(str: string) {\n  return str.charAt(0).toUpperCase() + str.substring(1, 2)\n}\nfunction upperalldigit(str: string) {\n  return str.charAt(0).toUpperCase() + str.slice(1)\n}\n",
             "assetsDirs": [],
-            "styleUrlsData": "",
+            "styleUrlsData": [
+                {
+                    "data": "@charset \"UTF-8\";\n.flex2html-chatbox * {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n  border: 0 solid transparent;\n  font-size: 100%;\n  font-weight: normal;\n  font-style: normal;\n  list-style: none;\n}\n.flex2html-chatbox *::after,\n.flex2html-chatbox *::before {\n  box-sizing: inherit;\n}\n.flex2html-chatbox {\n  background-color: #849ebf;\n  -webkit-box-flex: 1;\n  -ms-flex: 1 1 100%;\n  flex: 1 1 100%;\n  padding-top: 50px;\n  width: 500px;\n  height: auto;\n  line-height: 1.4;\n  color: #444;\n  font-family: -apple-system, \"BlinkMacSystemFont\", Helvetica, Roboto,\n    Sans-Serif;\n  font-size: 16px;\n  -webkit-user-select: none;\n  -webkit-text-size-adjust: none;\n}\n.flex2html-chatbox a {\n  -webkit-touch-callout: none;\n}\n.flex2html-chatbox a:active,\n.flex2html-chatbox a:focus,\n.flex2html-chatbox a:hover,\n.flex2html-chatbox a:link,\n.flex2html-chatbox a:visited {\n  text-decoration: none;\n}\nb,\nem,\nstrong {\n  font-weight: bold;\n}\n.LySlider {\n  overflow: hidden;\n  overflow-x: scroll;\n  -webkit-overflow-scrolling: touch;\n}\n.LySlider::-webkit-scrollbar {\n  display: none;\n}\n.LySlider .lyInner {\n  display: -webkit-box;\n  display: flex;\n  width: 100%;\n}\n.LySlider .lyInner::after {\n  -webkit-box-flex: 0;\n  flex: none;\n  content: \"\";\n  display: block;\n  width: 7px;\n  height: 1px;\n}\n.LySlider .lyItem {\n  -webkit-box-flex: 0;\n  flex: none;\n  display: inherit;\n  width: 80%;\n  /* max-width: 300px; */\n  margin-left: 7px;\n}\n.LySlider .lyItem + .lyItem {\n  margin-left: 9px;\n}\n.LySlider .lyItem.LyGi {\n  max-width: 500px;\n}\n.LySlider .lyItem.LyMe {\n  max-width: 300px;\n}\n.LySlider .lyItem.LyKi {\n  max-width: 260px;\n}\n.LySlider .lyItem.LyMi {\n  max-width: 160px;\n}\n.LySlider .lyItem.LyNa {\n  max-width: 120px;\n}\n.LySlider .T1 {\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n}\n@media (-webkit-min-device-pixel-ratio: 1) {\n  .LySlider .T1 {\n    width: 0;\n  }\n}\n@media (-webkit-min-device-pixel-ratio: 1) and (min-width: 0.001vmax) {\n  .LySlider .T1 {\n    width: auto;\n  }\n}\n@media (min-resolution: 1dpi) {\n  .LySlider .T1 {\n    width: auto;\n  }\n}\n.LySlider .T1 .t1Header {\n  -webkit-box-flex: 0;\n  flex: none;\n}\n.LySlider .T1 .t1Hero {\n  -webkit-box-flex: 0;\n  flex: none;\n}\n.LySlider .T1 .t1Hero:last-child {\n  border-radius: 0;\n}\n.LySlider .T1 .t1Body {\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n  flex-basis: auto;\n}\n@media (-webkit-min-device-pixel-ratio: 1) {\n  .LySlider .T1 .t1Body {\n    width: 0;\n  }\n}\n@media (-webkit-min-device-pixel-ratio: 1) and (min-width: 0.001vmax) {\n  .LySlider .T1 .t1Body {\n    width: auto;\n  }\n}\n@media (min-resolution: 1dpi) {\n  .LySlider .T1 .t1Body {\n    width: auto;\n  }\n}\n.LySlider .T1 .t1Body > .MdBx.vr {\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n  flex-basis: auto;\n}\n.LyGi .T1 {\n  border-radius: 5px;\n  max-width: 500px;\n  margin: 0 7px;\n}\n.LyMe .T1 {\n  border-radius: 17px;\n}\n.LyKi .T1 {\n  border-radius: 10px;\n}\n.LyMi .T1 {\n  border-radius: 10px;\n}\n.LyNa .T1 {\n  border-radius: 10px;\n}\n.T1 {\n  border-radius: 17px;\n  overflow: hidden;\n  background-color: #ffffff;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  flex-direction: column;\n}\n.T1 .t1Body,\n.T1 .t1Footer,\n.T1 .t1Header,\n.T1 .t1Hero {\n  display: inherit;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  flex-direction: column;\n}\n.T1 .t1Body > div,\n.T1 .t1Footer > div,\n.T1 .t1Header > div,\n.T1 .t1Hero > div {\n  flex-basis: auto;\n}\n.T1 .t1Hero:first-child,\n.T1 .t1Hero:first-child .MdImg.ExFull,\n.T1 .t1Hero:first-child .MdImg.ExFull > div,\n.T1 .t1Hero:first-child .MdImg.ExFull > div > a,\n.T1 .t1Hero:first-child .MdImg.ExFull > div > a > span {\n  border-top-left-radius: inherit;\n  border-top-right-radius: inherit;\n}\n.T1 .t1Hero:last-child,\n.T1 .t1Hero:last-child .MdImg.ExFull,\n.T1 .t1Hero:last-child .MdImg.ExFull > div,\n.T1 .t1Hero:last-child .MdImg.ExFull > div > a,\n.T1 .t1Hero:last-child .MdImg.ExFull > div > a > span {\n  border-bottom-left-radius: inherit;\n  border-bottom-right-radius: inherit;\n}\n.T1 .t1Hero:first-child .MdImg.ExFull > div > a > span,\n.T1 .t1Hero:last-child .MdImg.ExFull > div > a > span {\n  overflow: hidden;\n}\n.T1 .t1Header > .MdBx {\n  padding: 20px;\n}\n.LyKi .T1 .t1Header > .MdBx {\n  padding: 13px;\n}\n.LyMi .T1 .t1Header > .MdBx {\n  padding: 10px;\n}\n.LyNa .T1 .t1Header > .MdBx {\n  padding: 10px;\n}\n.T1 .t1Body > .MdBx {\n  padding: 20px;\n  padding-top: 19px;\n}\n.LyKi .T1 .t1Body > .MdBx {\n  padding: 13px;\n}\n.LyMi .T1 .t1Body > .MdBx {\n  padding: 10px;\n}\n.LyNa .T1 .t1Body > .MdBx {\n  padding: 10px;\n}\n.T1 .t1Body.ExHasFooter > .MdBx {\n  padding-bottom: 10px;\n}\n.LyKi .T1 .t1Body.ExHasFooter > .MdBx {\n  padding-bottom: 17px;\n}\n.T1 .t1Footer > .MdBx {\n  padding: 10px;\n}\n.fxLTR,\n[dir=\"ltr\"] {\n  direction: ltr;\n}\n.fxRTL,\n[dir=\"rtl\"] {\n  direction: rtl;\n}\n.MdBtn,\n.MdBx,\n.MdIco,\n.MdImg,\n.MdTxt,\n[class*=\"MdSep\"] {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  flex-direction: column;\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n  min-width: 0;\n  max-width: 100%;\n}\n@media (-webkit-min-device-pixel-ratio: 1) {\n  .MdBtn,\n  .MdBx,\n  .MdIco,\n  .MdImg,\n  .MdTxt,\n  [class*=\"MdSep\"] {\n    width: 0;\n  }\n}\n@media (-webkit-min-device-pixel-ratio: 1) and (min-width: 0.001vmax) {\n  .MdBtn,\n  .MdBx,\n  .MdIco,\n  .MdImg,\n  .MdTxt,\n  [class*=\"MdSep\"] {\n    width: auto;\n  }\n}\n@media (min-resolution: 1dpi) {\n  .MdBtn,\n  .MdBx,\n  .MdIco,\n  .MdImg,\n  .MdTxt,\n  [class*=\"MdSep\"] {\n    width: auto;\n  }\n}\n.MdBx {\n  overflow: hidden;\n  position: relative;\n}\n.MdBx.vr > div {\n  -webkit-box-flex: 0;\n  flex: none;\n  flex-basis: auto;\n}\n.MdBx.hr {\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n  flex-direction: row;\n  width: 100%;\n}\n.MdBx.hr > div {\n  overflow: hidden;\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n}\n@media (-webkit-min-device-pixel-ratio: 1) {\n  .MdBx.hr > div {\n    width: 0;\n  }\n}\n@media (-webkit-min-device-pixel-ratio: 1) and (min-width: 0.001vmax) {\n  .MdBx.hr > div {\n    width: auto;\n  }\n}\n@media (min-resolution: 1dpi) {\n  .MdBx.hr > div {\n    width: auto;\n  }\n}\n.MdBx.hr > div.MdSep {\n  overflow: visible;\n}\n.MdBx.hr > div.fl0 {\n  width: auto;\n}\n.MdBx.hr > div.fl0.MdImg.ExFull {\n  width: 100%;\n}\n.MdBx.hr > div[class*=\"MdSep\"] {\n  -webkit-box-flex: 0;\n  flex: none;\n}\n.MdBx.hr.bl {\n  -webkit-box-align: baseline;\n  align-items: baseline;\n}\n.MdBx.hr > div.ExAbs {\n  width: auto;\n}\n.MdBx.hr.ExAbs {\n  width: auto;\n}\n.MdBx.hr.ExAbs > div {\n  width: auto;\n}\n.ExAbs .MdBx.hr {\n  width: auto;\n}\n.ExAbs .MdBx.hr > div {\n  width: auto;\n}\n.T1 .MdBx.hr.spcXs > div {\n  margin-left: 2px;\n}\n.T1 .MdBx.hr.spcSm > div {\n  margin-left: 4px;\n}\n.T1 .MdBx.hr.spcMd > div {\n  margin-left: 8px;\n}\n.T1 .MdBx.hr.spcLg > div {\n  margin-left: 12px;\n}\n.T1 .MdBx.hr.spcXl > div {\n  margin-left: 16px;\n}\n.T1 .MdBx.hr.spcXXl > div {\n  margin-left: 20px;\n}\n.T1 .MdBx.hr > div.mdBxFiller,\n.T1 .MdBx.hr > div.mdBxSpacer,\n.T1 .MdBx.hr > div:first-child {\n  margin-left: 0;\n}\n.T1.fxRTL .MdBx.hr > div {\n  margin-left: 0;\n}\n.T1.fxRTL .MdBx.hr.spcXs > div {\n  margin-right: 2px;\n}\n.T1.fxRTL .MdBx.hr.spcSm > div {\n  margin-right: 4px;\n}\n.T1.fxRTL .MdBx.hr.spcMd > div {\n  margin-right: 8px;\n}\n.T1.fxRTL .MdBx.hr.spcLg > div {\n  margin-right: 12px;\n}\n.T1.fxRTL .MdBx.hr.spcXl > div {\n  margin-right: 16px;\n}\n.T1.fxRTL .MdBx.hr.spcXXl > div {\n  margin-right: 20px;\n}\n.T1.fxRTL .MdBx.hr > div.mdBxFiller,\n.T1.fxRTL .MdBx.hr > div.mdBxSpacer,\n.T1.fxRTL .MdBx.hr > div:first-child {\n  margin-right: 0;\n}\n.MdBx.itms-jfcS {\n  -webkit-box-pack: start;\n  justify-content: flex-start;\n}\n.MdBx.itms-jfcE {\n  -webkit-box-pack: end;\n  justify-content: flex-end;\n}\n.MdBx.itms-jfcC {\n  -webkit-box-pack: center;\n  justify-content: center;\n}\n.MdBx.itms-jfcSB {\n  -webkit-box-pack: justify;\n  justify-content: space-between;\n}\n.MdBx.itms-jfcSA {\n  justify-content: space-around;\n}\n.MdBx.itms-jfcSE {\n  justify-content: space-evenly;\n}\n.MdBx.itms-algS {\n  -webkit-box-align: start;\n  align-items: flex-start;\n}\n.MdBx.itms-algE {\n  -webkit-box-align: end;\n  align-items: flex-end;\n}\n.MdBx.itms-algC {\n  -webkit-box-align: center;\n  align-items: center;\n}\n.MdBx.itms-algBL {\n  -webkit-box-align: baseline;\n  align-items: baseline;\n}\n.MdBx.itms-algSR {\n  -webkit-box-align: stretch;\n  align-items: stretch;\n}\n.MdBx.vr.spcXs > div {\n  margin-top: 2px;\n}\n.MdBx.vr.spcSm > div {\n  margin-top: 4px;\n}\n.MdBx.vr.spcMd > div {\n  margin-top: 8px;\n}\n.MdBx.vr.spcLg > div {\n  margin-top: 12px;\n}\n.MdBx.vr.spcXl > div {\n  margin-top: 16px;\n}\n.MdBx.vr.spcXXl > div {\n  margin-top: 20px;\n}\n.MdBx.vr > div.mdBxFiller,\n.MdBx.vr > div.mdBxSpacer,\n.MdBx.vr > div:first-child {\n  margin-top: 0;\n}\n.MdBx > div.fl0 {\n  -webkit-box-flex: 0 !important;\n  flex: none !important;\n}\n.MdBx > div.fl1 {\n  -webkit-box-flex: 1 !important;\n  flex: 1 0 0 !important;\n}\n.MdBx > div.fl2 {\n  -webkit-box-flex: 2 !important;\n  flex: 2 0 0 !important;\n}\n.MdBx > div.fl3 {\n  -webkit-box-flex: 3 !important;\n  flex: 3 0 0 !important;\n}\n.MdBx > div.algS {\n  -webkit-box-align: start;\n  align-items: flex-start;\n}\n.MdBx > div.algE {\n  -webkit-box-align: end;\n  align-items: flex-end;\n}\n.MdBx > div.grvC {\n  -webkit-box-pack: center;\n  justify-content: center;\n}\n.MdBx > div.grvB {\n  -webkit-box-pack: end;\n  justify-content: flex-end;\n}\n.T1 .MdBx > div.mdBxFiller {\n  -webkit-box-flex: 1;\n  flex: 1 0 0;\n}\n@media (-webkit-min-device-pixel-ratio: 1) {\n  .T1 .MdBx > div.mdBxFiller {\n    width: 0;\n  }\n}\n@media (-webkit-min-device-pixel-ratio: 1) and (min-width: 0.001vmax) {\n  .T1 .MdBx > div.mdBxFiller {\n    width: auto;\n  }\n}\n@media (min-resolution: 1dpi) {\n  .T1 .MdBx > div.mdBxFiller {\n    width: auto;\n  }\n}\n.MdBx > div.mdBxSpacer {\n  -webkit-box-flex: 0;\n  flex: none;\n}\n.MdBx.hr > div.mdBxSpacer {\n  height: 1px;\n}\n.MdBx.hr > div.mdBxSpacer.spcXs {\n  width: 2px;\n}\n.MdBx.hr > div.mdBxSpacer.spcSm {\n  width: 4px;\n}\n.MdBx.hr > div.mdBxSpacer.spcMd {\n  width: 8px;\n}\n.MdBx.hr > div.mdBxSpacer.spcLg {\n  width: 12px;\n}\n.MdBx.hr > div.mdBxSpacer.spcXl {\n  width: 16px;\n}\n.MdBx.hr > div.mdBxSpacer.spcXXl {\n  width: 20px;\n}\n.MdBx.hr[class*=\"spc\"] > div.mdBxSpacer + div {\n  margin-left: 0;\n}\n.MdBx.hr > .MdSep {\n  align-self: stretch;\n}\n.MdBx.vr > div.mdBxSpacer {\n  width: 1px;\n}\n.MdBx.vr > div.mdBxSpacer.spcXs {\n  height: 2px;\n}\n.MdBx.vr > div.mdBxSpacer.spcSm {\n  height: 4px;\n}\n.MdBx.vr > div.mdBxSpacer.spcMd {\n  height: 8px;\n}\n.MdBx.vr > div.mdBxSpacer.spcLg {\n  height: 12px;\n}\n.MdBx.vr > div.mdBxSpacer.spcXl {\n  height: 16px;\n}\n.MdBx.vr > div.mdBxSpacer.spcXXl {\n  height: 20px;\n}\n.MdBx.vr > div.fl0 {\n  -webkit-box-flex: 0 !important;\n  flex: none !important;\n}\n.MdBx.vr > div.fl1 {\n  -webkit-box-flex: 1 !important;\n  flex: 1 0 auto !important;\n}\n.MdBx.vr > div.fl2 {\n  -webkit-box-flex: 2 !important;\n  flex: 2 0 auto !important;\n}\n.MdBx.vr > div.fl3 {\n  -webkit-box-flex: 3 !important;\n  flex: 3 0 auto !important;\n}\n.MdBx[class*=\"spc\"] > div.mdBxSpacer + div {\n  margin-top: 0;\n}\n[class*=\"MdSep\"] {\n  -webkit-box-flex: 0;\n  flex: none;\n  box-sizing: content-box;\n  width: 100%;\n  border: 0 solid #d4d6da;\n}\n.MdSep {\n  position: relative;\n  -webkit-box-flex: 0;\n  flex: none;\n}\n.MdSep::before {\n  box-sizing: content-box;\n  content: \"\";\n  display: block;\n  position: absolute;\n  z-index: 1;\n  width: 100%;\n  height: 1px;\n  border: inherit;\n  border-top-width: 1px;\n  -webkit-transform-origin: left top;\n  transform-origin: left top;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.MdSep:last-child::before {\n  margin-top: -1px;\n  border-top-width: 0;\n  border-bottom-width: 1px;\n}\n.fxRTL .MdSep::before {\n  -webkit-transform-origin: right top;\n  transform-origin: right top;\n}\n.MdSepB {\n  border-top-width: 1px;\n}\n.MdBx.hr > div.MdSep::before {\n  width: 1px;\n  height: 100%;\n  border-top-width: 0;\n  border-left-width: 1px;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.MdBx.hr > div.MdSep:last-child::before {\n  margin-top: 0;\n  margin-left: -1px;\n  border-left-width: 0;\n  border-right-width: 1px;\n}\n.MdBx.hr > div.MdSepB {\n  border-top-width: 0;\n  border-left-width: 1px;\n}\n.fxRTL .MdBx.hr > div.MdSep::before {\n  border-left-width: 0;\n  border-right-width: 1px;\n}\n.fxRTL .MdBx.hr > div.MdSep:last-child::before {\n  margin-left: 0;\n  margin-right: -1px;\n  border-right-width: 0;\n  border-left-width: 1px;\n}\n.MdTxt {\n  position: relative;\n}\n.MdTxt p {\n  text-overflow: ellipsis;\n  overflow: hidden;\n  white-space: nowrap;\n}\n.MdTxt p:empty {\n  height: 1.4em;\n}\n.MdTxt.ExWrap p {\n  text-overflow: clip;\n  word-wrap: break-word;\n  white-space: normal;\n}\n.MdTxt.Ex2nd {\n  color: #aaa;\n}\n.MdTxt.ExAlgC p {\n  text-align: center;\n}\n.MdTxt.ExAlgE p {\n  text-align: end;\n}\n.MdSpn {\n  font-style: inherit;\n  font-weight: inherit;\n  text-decoration: inherit;\n}\n.MdSpn.ExXXs {\n  font-size: 11px;\n}\n.MdSpn.ExXs {\n  font-size: 13px;\n}\n.MdSpn.ExSm {\n  font-size: 14px;\n}\n.MdSpn.ExMd {\n  font-size: 16px;\n}\n.MdSpn.ExLg {\n  font-size: 19px;\n}\n.MdSpn.ExXl {\n  font-size: 22px;\n}\n.MdSpn.ExXXl {\n  font-size: 29px;\n}\n.MdSpn.Ex3Xl {\n  font-size: 35px;\n}\n.MdSpn.Ex4Xl {\n  font-size: 48px;\n}\n.MdSpn.Ex5Xl {\n  font-size: 74px;\n}\n.MdIco {\n  position: relative;\n}\n.MdIco span {\n  display: inline-block;\n  overflow: hidden;\n  background: no-repeat center;\n  background-size: contain;\n  width: 1em;\n  height: 1em;\n  vertical-align: baseline;\n}\n.MdIco.ExAr2to1 span {\n  width: 2em;\n}\n.MdIco.ExAr3to1 span {\n  width: 3em;\n}\n.MdIco.ExXXs,\n.MdTxt.ExXXs {\n  font-size: 11px;\n}\n.MdIco.ExXs,\n.MdTxt.ExXs {\n  font-size: 13px;\n}\n.MdIco.ExSm,\n.MdTxt.ExSm {\n  font-size: 14px;\n}\n.MdIco.ExMd,\n.MdTxt.ExMd {\n  font-size: 16px;\n}\n.MdIco.ExLg,\n.MdTxt.ExLg {\n  font-size: 19px;\n}\n.MdIco.ExXl,\n.MdTxt.ExXl {\n  font-size: 22px;\n}\n.MdIco.ExXXl,\n.MdTxt.ExXXl {\n  font-size: 29px;\n}\n.MdIco.Ex3Xl,\n.MdTxt.Ex3Xl {\n  font-size: 35px;\n}\n.MdIco.Ex4Xl,\n.MdTxt.Ex4Xl {\n  font-size: 48px;\n}\n.MdIco.Ex5Xl,\n.MdTxt.Ex5Xl {\n  font-size: 74px;\n}\n.MdBtn {\n  position: relative;\n}\n.MdBtn a {\n  display: inherit;\n  -webkit-box-align: center;\n  align-items: center;\n  -webkit-box-pack: center;\n  justify-content: center;\n  width: 100%;\n  height: 52px;\n  padding: 0 16px;\n  border-radius: 8px;\n  font-size: 16px;\n}\n.MdBtn div {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  max-width: 100%;\n}\n.MdBtn.ExBtn1 a {\n  background-color: #17c950;\n  color: #ffffff;\n}\n.MdBtn.ExBtn2 a {\n  background-color: #dcdfe5;\n  color: #111111;\n}\n.MdBtn.ExBtnL a {\n  color: #42659a;\n}\n.MdBtn.ExSm a {\n  height: 40px;\n}\n.MdImg {\n  -webkit-box-align: center;\n  align-items: center;\n  overflow: hidden;\n  position: relative;\n}\n.MdImg > div {\n  max-width: 100%;\n}\n.MdImg a {\n  display: block;\n  position: relative;\n  width: 100%;\n}\n.MdImg span {\n  display: block;\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  overflow: hidden;\n  background-repeat: no-repeat;\n  background-position: center center;\n}\n.MdImg.ExXXs > div {\n  width: 40px;\n}\n.MdImg.ExXs > div {\n  width: 60px;\n}\n.MdImg.ExSm > div {\n  width: 80px;\n}\n.MdImg.ExMd > div {\n  width: 100px;\n}\n.MdImg.ExLg > div {\n  width: 120px;\n}\n.MdImg.ExXl > div {\n  width: 140px;\n}\n.MdImg.ExXXl > div {\n  width: 160px;\n}\n.MdImg.Ex3Xl > div {\n  width: 180px;\n}\n.MdImg.Ex4Xl > div {\n  width: 200px;\n}\n.MdImg.Ex5Xl > div {\n  width: 220px;\n}\n.MdImg.ExFull > div {\n  width: 100%;\n}\n.MdImg.ExAr1to1 a {\n  padding-bottom: 100%;\n}\n.MdImg.ExAr1_51to1 a {\n  padding-bottom: 66.22517%;\n}\n.MdImg.ExAr1_91to1 a {\n  padding-bottom: 52.35602%;\n}\n.MdImg.ExAr20to13 a {\n  padding-bottom: 65%;\n}\n.MdImg.ExAr4to3 a {\n  padding-bottom: 75%;\n}\n.MdImg.ExAr16to9 a {\n  padding-bottom: 56.25%;\n}\n.MdImg.ExAr2to1 a {\n  padding-bottom: 50%;\n}\n.MdImg.ExAr3to1 a {\n  padding-bottom: 33.33333%;\n}\n.MdImg.ExAr3to4 a {\n  padding-bottom: 133.33333%;\n}\n.MdImg.ExAr9to16 a {\n  padding-bottom: 177.77778%;\n}\n.MdImg.ExAr1to2 a {\n  padding-bottom: 200%;\n}\n.MdImg.ExAr1to3 a {\n  padding-bottom: 300%;\n}\n.MdImg.ExFit span {\n  background-size: contain;\n}\n.MdImg.ExCover span {\n  background-size: cover;\n}\n.MdImg.ExCircle span {\n  border-radius: 50%;\n}\n.MdImg.ExMirrored span {\n  -webkit-transform: scaleX(-1);\n  transform: scaleX(-1);\n}\n.MdImg.ExAbs.ExFull {\n  width: 100%;\n}\n.ExMgnANone {\n  margin: 0 !important;\n}\n.ExMgnAXs {\n  margin: 2px !important;\n}\n.ExMgnASm {\n  margin: 4px !important;\n}\n.ExMgnAMd {\n  margin: 8px !important;\n}\n.ExMgnALg {\n  margin: 12px !important;\n}\n.ExMgnAXl {\n  margin: 16px !important;\n}\n.ExMgnAXXl {\n  margin: 20px !important;\n}\n.ExMgnTNone {\n  margin-top: 0 !important;\n}\n.ExMgnTXs {\n  margin-top: 2px !important;\n}\n.ExMgnTSm {\n  margin-top: 4px !important;\n}\n.ExMgnTMd {\n  margin-top: 8px !important;\n}\n.ExMgnTLg {\n  margin-top: 12px !important;\n}\n.ExMgnTXl {\n  margin-top: 16px !important;\n}\n.ExMgnTXXl {\n  margin-top: 20px !important;\n}\n.ExMgnBNone {\n  margin-bottom: 0 !important;\n}\n.ExMgnBXs {\n  margin-bottom: 2px !important;\n}\n.ExMgnBSm {\n  margin-bottom: 4px !important;\n}\n.ExMgnBMd {\n  margin-bottom: 8px !important;\n}\n.ExMgnBLg {\n  margin-bottom: 12px !important;\n}\n.ExMgnBXl {\n  margin-bottom: 16px !important;\n}\n.ExMgnBXXl {\n  margin-bottom: 20px !important;\n}\n.ExMgnLNone {\n  margin-left: 0 !important;\n}\n.ExMgnLXs {\n  margin-left: 2px !important;\n}\n.ExMgnLSm {\n  margin-left: 4px !important;\n}\n.ExMgnLMd {\n  margin-left: 8px !important;\n}\n.ExMgnLLg {\n  margin-left: 12px !important;\n}\n.ExMgnLXl {\n  margin-left: 16px !important;\n}\n.ExMgnLXXl {\n  margin-left: 20px !important;\n}\n.ExMgnRNone {\n  margin-right: 0 !important;\n}\n.ExMgnRXs {\n  margin-right: 2px !important;\n}\n.ExMgnRSm {\n  margin-right: 4px !important;\n}\n.ExMgnRMd {\n  margin-right: 8px !important;\n}\n.ExMgnRLg {\n  margin-right: 12px !important;\n}\n.ExMgnRXl {\n  margin-right: 16px !important;\n}\n.ExMgnRXXl {\n  margin-right: 20px !important;\n}\n.ExPadANone {\n  padding: 0 !important;\n}\n.ExPadAXs {\n  padding: 2px !important;\n}\n.ExPadASm {\n  padding: 4px !important;\n}\n.ExPadAMd {\n  padding: 8px !important;\n}\n.ExPadALg {\n  padding: 12px !important;\n}\n.ExPadAXl {\n  padding: 16px !important;\n}\n.ExPadAXXl {\n  padding: 20px !important;\n}\n.ExPadTNone {\n  padding-top: 0 !important;\n}\n.ExPadTXs {\n  padding-top: 2px !important;\n}\n.ExPadTSm {\n  padding-top: 4px !important;\n}\n.ExPadTMd {\n  padding-top: 8px !important;\n}\n.ExPadTLg {\n  padding-top: 12px !important;\n}\n.ExPadTXl {\n  padding-top: 16px !important;\n}\n.ExPadTXXl {\n  padding-top: 20px !important;\n}\n.ExPadBNone {\n  padding-bottom: 0 !important;\n}\n.ExPadBXs {\n  padding-bottom: 2px !important;\n}\n.ExPadBSm {\n  padding-bottom: 4px !important;\n}\n.ExPadBMd {\n  padding-bottom: 8px !important;\n}\n.ExPadBLg {\n  padding-bottom: 12px !important;\n}\n.ExPadBXl {\n  padding-bottom: 16px !important;\n}\n.ExPadBXXl {\n  padding-bottom: 20px !important;\n}\n.ExPadLNone {\n  padding-left: 0 !important;\n}\n.ExPadLXs {\n  padding-left: 2px !important;\n}\n.ExPadLSm {\n  padding-left: 4px !important;\n}\n.ExPadLMd {\n  padding-left: 8px !important;\n}\n.ExPadLLg {\n  padding-left: 12px !important;\n}\n.ExPadLXl {\n  padding-left: 16px !important;\n}\n.ExPadLXXl {\n  padding-left: 20px !important;\n}\n.ExPadRNone {\n  padding-right: 0 !important;\n}\n.ExPadRXs {\n  padding-right: 2px !important;\n}\n.ExPadRSm {\n  padding-right: 4px !important;\n}\n.ExPadRMd {\n  padding-right: 8px !important;\n}\n.ExPadRLg {\n  padding-right: 12px !important;\n}\n.ExPadRXl {\n  padding-right: 16px !important;\n}\n.ExPadRXXl {\n  padding-right: 20px !important;\n}\n.ExBdrWdtNone {\n  border-width: 0 !important;\n}\n.ExBdrWdtLgh {\n  border-width: 0.5px !important;\n}\n.ExBdrWdtNml {\n  border-width: 1px !important;\n}\n.ExBdrWdtMdm {\n  border-width: 2px !important;\n}\n.ExBdrWdtSbd {\n  border-width: 3px !important;\n}\n.ExBdrWdtBld {\n  border-width: 4px !important;\n}\n.ExBdrRadNone {\n  border-radius: 0 !important;\n}\n.ExBdrRadXs {\n  border-radius: 2px !important;\n}\n.ExBdrRadSm {\n  border-radius: 4px !important;\n}\n.ExBdrRadMd {\n  border-radius: 8px !important;\n}\n.ExBdrRadLg {\n  border-radius: 12px !important;\n}\n.ExBdrRadXl {\n  border-radius: 16px !important;\n}\n.ExBdrRadXXl {\n  border-radius: 20px !important;\n}\n.ExAbs {\n  position: absolute;\n  margin: 0 !important;\n  width: auto;\n}\n.ExTNone {\n  top: 0;\n}\n.ExTXs {\n  top: 2px;\n}\n.ExTSm {\n  top: 4px;\n}\n.ExTMd {\n  top: 8px;\n}\n.ExTLg {\n  top: 12px;\n}\n.ExTXl {\n  top: 16px;\n}\n.ExTXXl {\n  top: 20px;\n}\n.ExBNone {\n  bottom: 0;\n}\n.ExBXs {\n  bottom: 2px;\n}\n.ExBSm {\n  bottom: 4px;\n}\n.ExBMd {\n  bottom: 8px;\n}\n.ExBLg {\n  bottom: 12px;\n}\n.ExBXl {\n  bottom: 16px;\n}\n.ExBXXl {\n  bottom: 20px;\n}\n.ExLNone {\n  left: 0;\n}\n.ExLXs {\n  left: 2px;\n}\n.ExLSm {\n  left: 4px;\n}\n.ExLMd {\n  left: 8px;\n}\n.ExLLg {\n  left: 12px;\n}\n.ExLXl {\n  left: 16px;\n}\n.ExLXXl {\n  left: 20px;\n}\n.ExRNone {\n  right: 0;\n}\n.ExRXs {\n  right: 2px;\n}\n.ExRSm {\n  right: 4px;\n}\n.ExRMd {\n  right: 8px;\n}\n.ExRLg {\n  right: 12px;\n}\n.ExRXl {\n  right: 16px;\n}\n.ExRXXl {\n  right: 20px;\n}\n.ExWR {\n  font-weight: normal !important;\n}\n.ExWR * {\n  font-weight: inherit;\n}\n.ExWB {\n  font-weight: bold !important;\n}\n.ExWB * {\n  font-weight: inherit;\n}\n.ExFntStyNml {\n  font-style: normal !important;\n}\n.ExFntStyNml * {\n  font-style: inherit;\n}\n.ExFntStyIt {\n  font-style: italic !important;\n}\n.ExFntStyIt * {\n  font-style: inherit;\n}\n.ExTxtDecNone {\n  text-decoration: none !important;\n}\n.ExTxtDecUl {\n  text-decoration: underline !important;\n}\n.ExTxtDecLt {\n  text-decoration: line-through !important;\n}",
+                    "styleUrl": "./flex-messages.component.scss"
+                }
+            ],
             "stylesData": "",
             "constructorObj": {
                 "name": "constructor",
@@ -49,8 +77,9 @@
                 "line": 13
             },
             "implements": [
-                "OnInit"
-            ]
+                "AfterViewInit"
+            ],
+            "templateData": "<div class=\"flex2html-chatbox\">\n  <div #flex></div>\n</div>\n"
         }
     ],
     "modules": [
@@ -111,14 +140,6 @@
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample2",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
-                "type": "",
-                "defaultValue": "Template.bind({})"
-            },
-            {
                 "name": "require",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -134,7 +155,417 @@
                 "defaultValue": "(args: FlexMessagesComponent) => ({\n  component: FlexMessagesComponent,\n  props: args,\n})"
             }
         ],
-        "functions": [],
+        "functions": [
+            {
+                "name": "body_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "box_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "box_recursive",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "parent_box"
+                    },
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "parent_box",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "bubble_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "bubble_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "button_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "carousel_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": []
+            },
+            {
+                "name": "convert_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "filler_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "footer_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": []
+            },
+            {
+                "name": "header_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": []
+            },
+            {
+                "name": "hero_struc",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": []
+            },
+            {
+                "name": "icon_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "image_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "separator_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "spacer_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "span_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "text_object",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "json",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "json",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "upper1digit",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "str"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "str",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "upper2digit",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "str"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "str",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "upperalldigit",
+                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "str"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "str",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
         "typealiases": [],
         "enumerations": [],
         "groupedVariables": {
@@ -165,14 +596,6 @@
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample2",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
-                    "type": "",
-                    "defaultValue": "Template.bind({})"
-                },
-                {
                     "name": "Template",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
@@ -182,7 +605,419 @@
                 }
             ]
         },
-        "groupedFunctions": {},
+        "groupedFunctions": {
+            "projects/flex-messages/src/lib/flex-messages.component.ts": [
+                {
+                    "name": "body_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "box_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "box_recursive",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "parent_box"
+                        },
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "parent_box",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "bubble_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "bubble_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "button_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "carousel_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": []
+                },
+                {
+                    "name": "convert_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "filler_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "footer_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": []
+                },
+                {
+                    "name": "header_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": []
+                },
+                {
+                    "name": "hero_struc",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": []
+                },
+                {
+                    "name": "icon_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "image_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "separator_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "spacer_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "span_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "text_object",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "json",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "json",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upper1digit",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "str"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upper2digit",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "str"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upperalldigit",
+                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "str"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
         "groupedEnumerations": {},
         "groupedTypeAliases": {}
     },
@@ -197,7 +1032,196 @@
                 "linktype": "component",
                 "name": "FlexMessagesComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "body_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "box_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "box_recursive",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "bubble_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "bubble_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "button_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "carousel_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "convert_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "filler_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "footer_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "header_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "hero_struc",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "icon_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "image_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "separator_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "spacer_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "span_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "text_object",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "upper1digit",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "upper2digit",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "upperalldigit",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -226,16 +1250,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "FlexMessagesExample1",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "stories/FlexMessages.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "FlexMessagesExample2",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
