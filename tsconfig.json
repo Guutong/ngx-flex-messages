@@ -6,6 +6,12 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "paths": {
+      "flex-messages": [
+        "dist/flex-messages/flex-messages",
+        "dist/flex-messages"
+      ]
+    },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
