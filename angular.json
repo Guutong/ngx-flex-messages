@@ -6,24 +6,24 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "flex-messages": {
+    "ngx-flex-messages": {
       "projectType": "library",
-      "root": "projects/flex-messages",
-      "sourceRoot": "projects/flex-messages/src",
+      "root": "projects/ngx-flex-messages",
+      "sourceRoot": "projects/ngx-flex-messages/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/flex-messages/tsconfig.lib.json",
-            "project": "projects/flex-messages/ng-package.json"
+            "tsConfig": "projects/ngx-flex-messages/tsconfig.lib.json",
+            "project": "projects/ngx-flex-messages/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/flex-messages/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-flex-messages/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/flex-messages/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-flex-messages/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -31,13 +31,13 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/flex-messages/src/test.ts",
-            "tsConfig": "projects/flex-messages/tsconfig.spec.json",
-            "karmaConfig": "projects/flex-messages/karma.conf.js"
+            "main": "projects/ngx-flex-messages/src/test.ts",
+            "tsConfig": "projects/ngx-flex-messages/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-flex-messages/karma.conf.js"
           }
         }
       }
     }
   },
-  "defaultProject": "flex-messages"
+  "defaultProject": "ngx-flex-messages"
 }

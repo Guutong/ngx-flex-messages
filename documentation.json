@@ -6,9 +6,9 @@
     "directives": [],
     "components": [
         {
-            "name": "FlexMessagesComponent",
-            "id": "component-FlexMessagesComponent-5be217df5fb3d1aee312aa14bf5f82ba",
-            "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+            "name": "NgxFlexMessagesComponent",
+            "id": "component-NgxFlexMessagesComponent-3e8a281b0fd9cd5c4dc3d09c0a4681ea",
+            "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
@@ -17,14 +17,13 @@
             "selector": "ngx-flex-messages",
             "styleUrls": [],
             "styles": [],
-            "templateUrl": [
-                "./flex-messages.component.html"
-            ],
+            "template": "<div #flex></div>\n",
+            "templateUrl": [],
             "viewProviders": [],
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 16,
+                    "line": 13,
                     "type": "literal type | any"
                 }
             ],
@@ -35,7 +34,7 @@
                     "type": "ElementRef",
                     "optional": false,
                     "description": "",
-                    "line": 30,
+                    "line": 27,
                     "decorators": [
                         {
                             "name": "ViewChild",
@@ -46,12 +45,12 @@
             ],
             "methodsClass": [
                 {
-                    "name": "ngAfterViewInit",
+                    "name": "ngOnInit",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 34
+                    "line": 31
                 }
             ],
             "hostBindings": [],
@@ -59,7 +58,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import {\n  AfterViewInit,\n  Component,\n  ElementRef,\n  Input,\n  ViewChild,\n} from '@angular/core';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  templateUrl: './flex-messages.component.html',\n  styles: [],\n})\nexport class FlexMessagesComponent implements AfterViewInit {\n  @Input('data')\n  data: {\n    type: string;\n    altText: string;\n    contents: any | {\n      type: string;\n      contents: any;\n      header: any;\n      hero: any;\n      body: any;\n      footer: any;\n    };\n  } | any;\n\n  @ViewChild('flex')\n  flex!: ElementRef;\n\n  constructor() {}\n\n  ngAfterViewInit(): void {\n    if (this.flex) {\n      let carousel = `\n      <div class=\"LySlider\">\n        <div class=\"lyInner\">\n          <!-- inner -->\n        </div>\n      </div>\n      <br>\n      `;\n      let result = '';\n      \n      if (this.data.type === 'flex') {\n        const { contents } = this.data;\n        switch (contents.type) {\n          case 'bubble':\n            result = bubble_object(contents);\n            carousel = carousel.replace('<!-- inner -->', result); \n            break;\n          case 'carousel':\n            contents.contents.forEach((obj: any, index: any) => {\n              let result = bubble_object(obj);\n              result = result.replace('<!-- content -->', '');\n              result = result.replace('<!-- inner -->', '');\n              carousel = carousel.replace('<!-- inner -->', result + '<!-- inner -->');\n            });\n            break;\n          default:\n            break;\n        }\n      \n      }\n      this.flex.nativeElement.innerHTML = carousel;\n    }\n  }\n}\n\nfunction bubble_object(json: any) {\n  let { hero, header, body, footer } = json;\n  let hero_object = hero_struc();\n  let header_object = header_struc();\n  let body_object = body_struc(json);\n  let footer_object = footer_struc();\n  let bubble = bubble_struc(json);\n\n  let box: any = '';\n  for (let key in hero) {\n    if (hero.hasOwnProperty(key)) {\n      if (key === 'type' && hero[key] === 'box') {\n        box = box_object(hero);\n        let box_inner = box_recursive(box, hero['contents']);\n        box = box_inner;\n      } else {\n        box = convert_object(hero);\n      }\n    }\n  }\n  hero_object = hero_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in header) {\n    if (header.hasOwnProperty(key)) {\n      if (key === 'type' && header[key] === 'box') {\n        box = box_object(header);\n        let box_inner = box_recursive(box, header['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  header_object = header_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in body) {\n    if (body.hasOwnProperty(key)) {\n      if (key === 'type' && body[key] === 'box') {\n        box = box_object(body);\n        let box_inner = box_recursive(box, body['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  body_object = body_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in footer) {\n    if (footer.hasOwnProperty(key)) {\n      if (key === 'type' && footer[key] === 'box') {\n        box = box_object(footer);\n        let box_inner = box_recursive(box, footer['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  footer_object = footer_object.replace('<!-- inner -->', box);\n\n  bubble = bubble.replace('<!-- hero -->', hero_object);\n  bubble = bubble.replace('<!-- header -->', header_object);\n  bubble = bubble.replace('<!-- body -->', body_object);\n  bubble = bubble.replace('<!-- footer -->', footer_object);\n\n  return bubble;\n}\n\nfunction box_recursive(parent_box: string, json: any) {\n  let result: any[] = [];\n  json.forEach((obj: any, index: any) => {\n    let temp;\n    if (obj['type'] === 'box') {\n      let temp2 = box_object(obj);\n      temp = box_recursive(temp2, obj['contents']);\n    } else if (\n      obj['type'] === 'text' &&\n      obj['contents'] &&\n      obj['contents'].length > 0\n    ) {\n      let temp2 = convert_object(obj);\n      temp = box_recursive(temp2 || '', obj['contents']);\n    } else {\n      temp = convert_object(obj);\n    }\n    result[index] = temp;\n  });\n\n  json.forEach((obj: any, index: any) => {\n    result[index] = result[index].replace('<!-- content -->', '');\n    parent_box = parent_box.replace('<!-- content -->', result[index] + '<!-- content -->');\n  });  \n  return parent_box;\n}\n\nfunction convert_object(json: any) {\n  let object;\n  switch (json['type']) {\n    case 'image':\n      object = image_object(json);\n      break;\n    case 'icon':\n      object = icon_object(json);\n      break;\n    case 'text':\n      object = text_object(json);\n      break;\n    case 'span':\n      object = span_object(json);\n      break;\n    case 'button':\n      object = button_object(json);\n      break;\n    case 'filler':\n      object = filler_object(json);\n      break;\n    case 'spacer':\n      object = spacer_object(json);\n      break;\n    case 'separator':\n      object = separator_object(json);\n      break;\n    default:\n      object = null;\n  }\n  return object;\n}\n\nfunction box_object(json: any) {\n  let layout1 = '';\n  let layout2 = '';\n  let style = '';\n  let {\n    layout,\n    position,\n    flex,\n    spacing,\n    margin,\n    width,\n    height,\n    backgroundColor,\n    borderColor,\n    borderWidth,\n    cornerRadius,\n    justifyContent,\n    alignItems,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    paddingAll,\n    paddingTop,\n    paddingBottom,\n    paddingStart,\n    paddingEnd,\n    background,\n  } = json;\n  if (layout === 'baseline') {\n    layout1 = 'hr';\n    layout2 = 'bl';\n  } else if (layout === 'horizontal') {\n    layout1 = 'hr';\n    layout2 = '';\n  } else if (layout === 'vertical') {\n    layout1 = 'vr';\n    layout2 = '';\n  }\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let spc = '';\n  if (spacing && spacing.indexOf('px') >= 0) {\n    spc = '';\n  } else {\n    spc = spacing ? 'spc' + upperalldigit(spacing) : '';\n  }\n\n  let exmgn;\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n  if (width && width !== '') {\n    style += `width:${width};`;\n  }\n  if (height && height !== '') {\n    style += `height:${height};`;\n  }\n  if (backgroundColor) {\n    style += `background-color:${backgroundColor} !important;`;\n  }\n  if (borderColor) {\n    style += `border-color:${borderColor} !important;`;\n  }\n\n  let ExBdr = '';\n  if (borderWidth && borderWidth.indexOf('px') >= 0) {\n    style += `border-width:${borderWidth};`;\n    ExBdr = '';\n  } else {\n    switch (borderWidth) {\n      case 'none':\n        ExBdr = 'ExBdrWdtNone';\n        break;\n      case 'light':\n        ExBdr = 'ExBdrWdtLgh';\n        break;\n      case 'normal':\n        ExBdr = 'ExBdrWdtNml';\n        break;\n      case 'medium':\n        ExBdr = 'ExBdrWdtMdm';\n        break;\n      case 'semi-bold':\n        ExBdr = 'ExBdrWdtSbd';\n        break;\n      case 'bold':\n        ExBdr = 'ExBdrWdtBld';\n        break;\n      default:\n        ExBdr = '';\n      // code block\n    }\n  }\n  let ExBdrRad = '';\n  if (cornerRadius && cornerRadius.indexOf('px') >= 0) {\n    style += `border-radius:${cornerRadius};`;\n    ExBdrRad = '';\n  } else {\n    ExBdrRad = cornerRadius ? 'ExBdrRad' + upperalldigit(cornerRadius) : '';\n  }\n\n  let jfc = '';\n  if (justifyContent && justifyContent !== '') {\n    switch (justifyContent) {\n      case 'center':\n        jfc = 'itms-jfcC';\n        break;\n      case 'flex-start':\n        jfc = 'itms-jfcS';\n        break;\n      case 'flex-end':\n        jfc = 'itms-jfcE';\n        break;\n      case 'space-between':\n        jfc = 'itms-jfcSB';\n        break;\n      case 'space-around':\n        jfc = 'itms-jfcSA';\n        break;\n      case 'space-evenly':\n        jfc = 'itms-jfcSE';\n        break;\n      default:\n        jfc = '';\n      // code block\n    }\n  }\n  let alg = '';\n  if (alignItems && alignItems !== '') {\n    switch (alignItems) {\n      case 'center':\n        alg = 'itms-algC';\n        break;\n      case 'flex-start':\n        alg = 'itms-algS';\n        break;\n      case 'flex-end':\n        alg = 'itms-algE';\n        break;\n      default:\n        alg = '';\n      // code block\n    }\n  }\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  let ExPadA = '';\n  if (paddingAll && paddingAll.indexOf('px') >= 0) {\n    style += `padding:${paddingAll};`;\n    ExPadA = '';\n  } else {\n    ExPadA = paddingAll ? 'ExPadA' + upperalldigit(paddingAll) : '';\n  }\n\n  let ExPadT = '';\n  if (paddingTop && paddingTop.indexOf('px') >= 0) {\n    style += `padding-top:${paddingTop};`;\n    ExPadT = '';\n  } else {\n    ExPadT = paddingTop ? 'ExPadT' + upperalldigit(paddingTop) : '';\n  }\n\n  let ExPadB = '';\n  if (paddingBottom && paddingBottom.indexOf('px') >= 0) {\n    style += `padding-bottom:${paddingBottom};`;\n    ExPadB = '';\n  } else {\n    ExPadB = paddingBottom ? 'ExPadB' + upperalldigit(paddingBottom) : '';\n  }\n\n  let ExPadL = '';\n  if (paddingStart && paddingStart.indexOf('px') >= 0) {\n    style += `padding-left:${paddingStart};`;\n    ExPadL = '';\n  } else {\n    ExPadL = paddingStart ? 'ExPadL' + upperalldigit(paddingStart) : '';\n  }\n\n  let ExPadR = '';\n  if (paddingEnd && paddingEnd.indexOf('px') >= 0) {\n    style += `padding-right:${paddingEnd};`;\n    ExPadR = '';\n  } else {\n    ExPadR = paddingEnd ? 'ExPadR' + upperalldigit(paddingEnd) : '';\n  }\n\n  let centerPosition = '';\n  if (background && background.type === 'linearGradient') {\n    centerPosition = background.centerPosition\n      ? background.centerPosition\n      : '50%';\n    if (background.centerColor) {\n      style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n    } else {\n      style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n    }\n  }\n\n  return `<div class=\"MdBx ${layout1} ${layout2} ${fl} ${exabs} ${exmgn} ${spc} ${ExBdr} ${ExBdrRad} ${jfc} ${alg} ${ext} ${exb} ${exl} ${exr} ${ExPadA} ${ExPadT} ${ExPadB} ${ExPadL} ${ExPadR}\" style=\"${style}\"><!-- content --></div>`;\n}\n\nfunction button_object(json: any) {\n  let style2 = '';\n  let style3 = '';\n\n  let {\n    flex,\n    margin,\n    position,\n    height,\n    style,\n    color,\n    gravity,\n    adjustMode,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    action,\n  } = json;\n\n  let fl = '';\n  if (flex > 3) {\n    style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  height =\n    !height || height === '' || height === 'md'\n      ? ''\n      : 'Ex' + upperalldigit(height);\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n\n  let ExBtn = 'ExBtnL';\n  let ExBtnfc = '';\n  if (style && style !== '') {\n    switch (style) {\n      case 'link':\n        ExBtnfc = 'ExBtnL';\n        break;\n      case 'primary':\n        ExBtn = 'ExBtn1';\n        break;\n      case 'secondary':\n        ExBtn = 'ExBtn2';\n        break;\n      default:\n        ExBtn = 'ExBtnL';\n      // code block\n    }\n  }\n\n  if (color) {\n    style3 += `background-color:${color} !important;`;\n  }\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  action = !action ? { type: 'none' } : action;\n  if (action.type === 'uri') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a href=\"${action.uri}\" target=\"_blank\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else if (action.type === 'message') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('message: ${action.text}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else if (action.type === 'postback') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('postback data: ${action.data}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  }\n}\n\nfunction filler_object(json: any) {\n  let style = '';\n  let { flex } = json;\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  return `<div class=\"mdBxFiller ${fl}\" style=\"${style}\" ></div>`;\n}\n\nfunction icon_object(json: any) {\n  let style2 = '';\n  let {\n    size,\n    aspectRatio,\n    url,\n    position,\n    margin,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n  } = json;\n  let styleimg = `background-image:url('${url}');`;\n\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    style2 += `font-size:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  let ratio: any = '100';\n  if (!aspectRatio || aspectRatio === '') {\n    styleimg += `width:1em;`;\n  } else {\n    ratio = ratio[0] / ratio[1];\n    styleimg += `width:${ratio}em;`;\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  return `<div class=\"MdIco fl0 ${size} ${exabs} ${exmgn} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" ><div><span style=\"${styleimg}\"></span></div></div>`;\n}\nfunction image_object(json: any) {\n  let style = '';\n  let style2 = '';\n  let {\n    aspectMode,\n    size,\n    aspectRatio,\n    url,\n    position,\n    flex,\n    margin,\n    align,\n    gravity,\n    backgroundColor,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    action,\n  } = json;\n  let styleimg = `background-image:url('${url}');`;\n  if (backgroundColor) {\n    styleimg += `background-color:${backgroundColor} !important;`;\n  }\n\n  aspectMode = !aspectMode || aspectMode === '' ? 'fit' : aspectMode;\n  size = !size || size === '' ? 'md' : size;\n  aspectMode = upperalldigit(aspectMode);\n  if (size.indexOf('px') >= 0) {\n    style2 += `width:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  let ratio;\n  if (!aspectRatio || aspectRatio === '') {\n    ratio = '100';\n  } else {\n    ratio = aspectRatio.split(':');\n    ratio = (ratio[1] * 100) / ratio[0];\n  }\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  let alg =\n    align === 'start' || align === 'end' ? 'alg' + upper1digit(align) : '';\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n  action = !action ? { type: 'none' } : action;\n  if (action.type === 'uri') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a href=\"${action.uri}\" target=\"_blank\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else if (action.type === 'message') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('message: ${action.text}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else if (action.type === 'postback') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('postback data: ${action.data}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  }\n}\nfunction separator_object(json: any) {\n  let style = '';\n  let { margin, color } = json;\n\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n  if (color) {\n    style += `border-color:${color} !important;`;\n  }\n\n  return `<div class=\"fl0 MdSep ${exmgn}\" style=\"${style}\" ></div>`;\n}\nfunction spacer_object(json: any) {\n  let { size } = json;\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    size = '';\n  } else {\n    size = 'spc' + upperalldigit(size);\n  }\n  return `<div class=\"mdBxSpacer ${size} fl0\" ></div>`;\n}\nfunction span_object(json: any) {\n  let style2 = '';\n  let { text, size, color, weight, style, decoration } = json;\n\n  if (size && size !== '') {\n    if (size.indexOf('px') >= 0) {\n      style2 += `font-size:${size};`;\n      size = '';\n    } else {\n      size = 'Ex' + upperalldigit(size);\n    }\n  } else {\n    size = '';\n  }\n\n  if (color && color !== '') {\n    style2 += `color:${color};`;\n  }\n  let ExWB = weight === 'bold' ? 'ExWB' : '';\n  let ExFntSty =\n    style === 'normal' ? 'ExFntStyNml' : style === 'italic' ? 'ExFntStyIt' : '';\n  let ExTxtDec =\n    decoration === 'line-through'\n      ? 'ExTxtDecLt'\n      : decoration === 'underline'\n      ? 'ExTxtDecUl'\n      : decoration === 'none'\n      ? 'ExTxtDecNone'\n      : '';\n\n  return `<span class=\"MdSpn ${ExWB} ${size} ${ExFntSty} ${ExTxtDec}\" style=\"${style2}\" >${text}</span>`;\n}\n\nfunction bubble_struc(json: any) {\n  let { size, direction, action } = json;\n  size = !size || size === '' ? 'medium' : size;\n  direction = !direction || direction == '' ? 'ltr' : direction;\n  size = upper2digit(size);\n\n  return `<div class=\"lyItem Ly${size}\"><div class=\"T1 fx${direction.toUpperCase()}\" dir=\"${direction}\"><!-- hero --><!-- header --><!-- body --><!-- footer --></div></div>`;\n}\nfunction hero_struc() {\n  return `<div class=\"t1Hero\"><!-- inner --></div>`;\n}\nfunction header_struc() {\n  return `<div class=\"t1Header\"><!-- inner --></div>`;\n}\nfunction body_struc(json: any) {\n  let { footer } = json;\n  let ExHasFooter = json ? 'ExHasFooter' : '';\n  return `<div class=\"t1Body ${ExHasFooter}\"><!-- inner --></div>`;\n}\nfunction footer_struc() {\n  return `<div class=\"t1Footer\"><!-- inner --></div>`;\n}\nfunction text_object(json: any) {\n  let style2 = '';\n  let {\n    flex,\n    margin,\n    size,\n    position,\n    align,\n    gravity,\n    text,\n    color,\n    weight,\n    style,\n    decoration,\n    wrap,\n    maxLines,\n    adjustMode,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n  } = json;\n\n  let fl = '';\n  if (flex > 3) {\n    style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnL' + upperalldigit(margin) : '';\n  }\n\n  let alg =\n    align === 'start' || align === 'end' || align === 'center'\n      ? 'ExAlg' + upper1digit(align)\n      : '';\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    style2 += `font-size:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  if (color && color !== '') {\n    style2 += `color:${color};`;\n  }\n  let ext;\n  let ExWB = weight === 'bold' ? 'ExWB' : '';\n  let ExFntSty =\n    style === 'normal' ? 'ExFntStyNml' : style === 'italic' ? 'ExFntStyIt' : '';\n  let ExTxtDec =\n    decoration === 'line-through'\n      ? 'ExTxtDecLt'\n      : decoration === 'underline'\n      ? 'ExTxtDecUl'\n      : decoration === 'none'\n      ? 'ExTxtDecNone'\n      : '';\n  let ExWrap = wrap === true ? 'ExWrap' : '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n  let exb;\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n  let exl;\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n  let exr;\n\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n  text = !text ? '' : text;\n  return `<div class=\"MdTxt ${fl} ${exabs} ${exmgn} ${alg} ${grv} ${size} ${ExWB} ${ExFntSty} ${ExTxtDec} ${ExWrap} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\"><p>${text}<!-- content --></p></div>`;\n}\n\nfunction upper1digit(str: string) {\n  return str.charAt(0).toUpperCase();\n}\nfunction upper2digit(str: string) {\n  return str.charAt(0).toUpperCase() + str.substring(1, 2);\n}\nfunction upperalldigit(str: string) {\n  return str.charAt(0).toUpperCase() + str.slice(1);\n}\n",
+            "sourceCode": "import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  template: `\n    <div #flex></div>\n  `,\n  styles: [\n  ]\n})\nexport class NgxFlexMessagesComponent implements OnInit {\n  @Input('data')\n  data: {\n    type: string;\n    altText: string;\n    contents: any | {\n      type: string;\n      contents: any;\n      header: any;\n      hero: any;\n      body: any;\n      footer: any;\n    };\n  } | any;\n\n  @ViewChild('flex')\n  flex!: ElementRef;\n  \n  constructor() { }\n\n  ngOnInit(): void {\n    if (this.flex) {\n      let carousel = `\n      <div class=\"LySlider\">\n        <div class=\"lyInner\">\n          <!-- inner -->\n        </div>\n      </div>\n      <br>\n      `;\n      let result = '';\n      \n      if (this.data.type === 'flex') {\n        const { contents } = this.data;\n        switch (contents.type) {\n          case 'bubble':\n            result = bubble_object(contents);\n            carousel = carousel.replace('<!-- inner -->', result); \n            break;\n          case 'carousel':\n            contents.contents.forEach((obj: any, index: any) => {\n              let result = bubble_object(obj);\n              result = result.replace('<!-- content -->', '');\n              result = result.replace('<!-- inner -->', '');\n              carousel = carousel.replace('<!-- inner -->', result + '<!-- inner -->');\n            });\n            break;\n          default:\n            break;\n        }\n      \n      }\n      this.flex.nativeElement.innerHTML = carousel;\n    }\n  }\n\n}\n\nfunction bubble_object(json: any) {\n  let { hero, header, body, footer } = json;\n  let hero_object = hero_struc();\n  let header_object = header_struc();\n  let body_object = body_struc(json);\n  let footer_object = footer_struc();\n  let bubble = bubble_struc(json);\n\n  let box: any = '';\n  for (let key in hero) {\n    if (hero.hasOwnProperty(key)) {\n      if (key === 'type' && hero[key] === 'box') {\n        box = box_object(hero);\n        let box_inner = box_recursive(box, hero['contents']);\n        box = box_inner;\n      } else {\n        box = convert_object(hero);\n      }\n    }\n  }\n  hero_object = hero_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in header) {\n    if (header.hasOwnProperty(key)) {\n      if (key === 'type' && header[key] === 'box') {\n        box = box_object(header);\n        let box_inner = box_recursive(box, header['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  header_object = header_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in body) {\n    if (body.hasOwnProperty(key)) {\n      if (key === 'type' && body[key] === 'box') {\n        box = box_object(body);\n        let box_inner = box_recursive(box, body['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  body_object = body_object.replace('<!-- inner -->', box);\n\n  box = '';\n  for (let key in footer) {\n    if (footer.hasOwnProperty(key)) {\n      if (key === 'type' && footer[key] === 'box') {\n        box = box_object(footer);\n        let box_inner = box_recursive(box, footer['contents']);\n        box = box_inner;\n      }\n    }\n  }\n  footer_object = footer_object.replace('<!-- inner -->', box);\n\n  bubble = bubble.replace('<!-- hero -->', hero_object);\n  bubble = bubble.replace('<!-- header -->', header_object);\n  bubble = bubble.replace('<!-- body -->', body_object);\n  bubble = bubble.replace('<!-- footer -->', footer_object);\n\n  return bubble;\n}\n\nfunction box_recursive(parent_box: string, json: any) {\n  let result: any[] = [];\n  json.forEach((obj: any, index: any) => {\n    let temp;\n    if (obj['type'] === 'box') {\n      let temp2 = box_object(obj);\n      temp = box_recursive(temp2, obj['contents']);\n    } else if (\n      obj['type'] === 'text' &&\n      obj['contents'] &&\n      obj['contents'].length > 0\n    ) {\n      let temp2 = convert_object(obj);\n      temp = box_recursive(temp2 || '', obj['contents']);\n    } else {\n      temp = convert_object(obj);\n    }\n    result[index] = temp;\n  });\n\n  json.forEach((obj: any, index: any) => {\n    result[index] = result[index].replace('<!-- content -->', '');\n    parent_box = parent_box.replace('<!-- content -->', result[index] + '<!-- content -->');\n  });  \n  return parent_box;\n}\n\nfunction convert_object(json: any) {\n  let object;\n  switch (json['type']) {\n    case 'image':\n      object = image_object(json);\n      break;\n    case 'icon':\n      object = icon_object(json);\n      break;\n    case 'text':\n      object = text_object(json);\n      break;\n    case 'span':\n      object = span_object(json);\n      break;\n    case 'button':\n      object = button_object(json);\n      break;\n    case 'filler':\n      object = filler_object(json);\n      break;\n    case 'spacer':\n      object = spacer_object(json);\n      break;\n    case 'separator':\n      object = separator_object(json);\n      break;\n    default:\n      object = null;\n  }\n  return object;\n}\n\nfunction box_object(json: any) {\n  let layout1 = '';\n  let layout2 = '';\n  let style = '';\n  let {\n    layout,\n    position,\n    flex,\n    spacing,\n    margin,\n    width,\n    height,\n    backgroundColor,\n    borderColor,\n    borderWidth,\n    cornerRadius,\n    justifyContent,\n    alignItems,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    paddingAll,\n    paddingTop,\n    paddingBottom,\n    paddingStart,\n    paddingEnd,\n    background,\n  } = json;\n  if (layout === 'baseline') {\n    layout1 = 'hr';\n    layout2 = 'bl';\n  } else if (layout === 'horizontal') {\n    layout1 = 'hr';\n    layout2 = '';\n  } else if (layout === 'vertical') {\n    layout1 = 'vr';\n    layout2 = '';\n  }\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let spc = '';\n  if (spacing && spacing.indexOf('px') >= 0) {\n    spc = '';\n  } else {\n    spc = spacing ? 'spc' + upperalldigit(spacing) : '';\n  }\n\n  let exmgn;\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n  if (width && width !== '') {\n    style += `width:${width};`;\n  }\n  if (height && height !== '') {\n    style += `height:${height};`;\n  }\n  if (backgroundColor) {\n    style += `background-color:${backgroundColor} !important;`;\n  }\n  if (borderColor) {\n    style += `border-color:${borderColor} !important;`;\n  }\n\n  let ExBdr = '';\n  if (borderWidth && borderWidth.indexOf('px') >= 0) {\n    style += `border-width:${borderWidth};`;\n    ExBdr = '';\n  } else {\n    switch (borderWidth) {\n      case 'none':\n        ExBdr = 'ExBdrWdtNone';\n        break;\n      case 'light':\n        ExBdr = 'ExBdrWdtLgh';\n        break;\n      case 'normal':\n        ExBdr = 'ExBdrWdtNml';\n        break;\n      case 'medium':\n        ExBdr = 'ExBdrWdtMdm';\n        break;\n      case 'semi-bold':\n        ExBdr = 'ExBdrWdtSbd';\n        break;\n      case 'bold':\n        ExBdr = 'ExBdrWdtBld';\n        break;\n      default:\n        ExBdr = '';\n      // code block\n    }\n  }\n  let ExBdrRad = '';\n  if (cornerRadius && cornerRadius.indexOf('px') >= 0) {\n    style += `border-radius:${cornerRadius};`;\n    ExBdrRad = '';\n  } else {\n    ExBdrRad = cornerRadius ? 'ExBdrRad' + upperalldigit(cornerRadius) : '';\n  }\n\n  let jfc = '';\n  if (justifyContent && justifyContent !== '') {\n    switch (justifyContent) {\n      case 'center':\n        jfc = 'itms-jfcC';\n        break;\n      case 'flex-start':\n        jfc = 'itms-jfcS';\n        break;\n      case 'flex-end':\n        jfc = 'itms-jfcE';\n        break;\n      case 'space-between':\n        jfc = 'itms-jfcSB';\n        break;\n      case 'space-around':\n        jfc = 'itms-jfcSA';\n        break;\n      case 'space-evenly':\n        jfc = 'itms-jfcSE';\n        break;\n      default:\n        jfc = '';\n      // code block\n    }\n  }\n  let alg = '';\n  if (alignItems && alignItems !== '') {\n    switch (alignItems) {\n      case 'center':\n        alg = 'itms-algC';\n        break;\n      case 'flex-start':\n        alg = 'itms-algS';\n        break;\n      case 'flex-end':\n        alg = 'itms-algE';\n        break;\n      default:\n        alg = '';\n      // code block\n    }\n  }\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  let ExPadA = '';\n  if (paddingAll && paddingAll.indexOf('px') >= 0) {\n    style += `padding:${paddingAll};`;\n    ExPadA = '';\n  } else {\n    ExPadA = paddingAll ? 'ExPadA' + upperalldigit(paddingAll) : '';\n  }\n\n  let ExPadT = '';\n  if (paddingTop && paddingTop.indexOf('px') >= 0) {\n    style += `padding-top:${paddingTop};`;\n    ExPadT = '';\n  } else {\n    ExPadT = paddingTop ? 'ExPadT' + upperalldigit(paddingTop) : '';\n  }\n\n  let ExPadB = '';\n  if (paddingBottom && paddingBottom.indexOf('px') >= 0) {\n    style += `padding-bottom:${paddingBottom};`;\n    ExPadB = '';\n  } else {\n    ExPadB = paddingBottom ? 'ExPadB' + upperalldigit(paddingBottom) : '';\n  }\n\n  let ExPadL = '';\n  if (paddingStart && paddingStart.indexOf('px') >= 0) {\n    style += `padding-left:${paddingStart};`;\n    ExPadL = '';\n  } else {\n    ExPadL = paddingStart ? 'ExPadL' + upperalldigit(paddingStart) : '';\n  }\n\n  let ExPadR = '';\n  if (paddingEnd && paddingEnd.indexOf('px') >= 0) {\n    style += `padding-right:${paddingEnd};`;\n    ExPadR = '';\n  } else {\n    ExPadR = paddingEnd ? 'ExPadR' + upperalldigit(paddingEnd) : '';\n  }\n\n  let centerPosition = '';\n  if (background && background.type === 'linearGradient') {\n    centerPosition = background.centerPosition\n      ? background.centerPosition\n      : '50%';\n    if (background.centerColor) {\n      style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n    } else {\n      style += `background: linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n    }\n  }\n\n  return `<div class=\"MdBx ${layout1} ${layout2} ${fl} ${exabs} ${exmgn} ${spc} ${ExBdr} ${ExBdrRad} ${jfc} ${alg} ${ext} ${exb} ${exl} ${exr} ${ExPadA} ${ExPadT} ${ExPadB} ${ExPadL} ${ExPadR}\" style=\"${style}\"><!-- content --></div>`;\n}\n\nfunction button_object(json: any) {\n  let style2 = '';\n  let style3 = '';\n\n  let {\n    flex,\n    margin,\n    position,\n    height,\n    style,\n    color,\n    gravity,\n    adjustMode,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    action,\n  } = json;\n\n  let fl = '';\n  if (flex > 3) {\n    style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  height =\n    !height || height === '' || height === 'md'\n      ? ''\n      : 'Ex' + upperalldigit(height);\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n\n  let ExBtn = 'ExBtnL';\n  let ExBtnfc = '';\n  if (style && style !== '') {\n    switch (style) {\n      case 'link':\n        ExBtnfc = 'ExBtnL';\n        break;\n      case 'primary':\n        ExBtn = 'ExBtn1';\n        break;\n      case 'secondary':\n        ExBtn = 'ExBtn2';\n        break;\n      default:\n        ExBtn = 'ExBtnL';\n      // code block\n    }\n  }\n\n  if (color) {\n    style3 += `background-color:${color} !important;`;\n  }\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  action = !action ? { type: 'none' } : action;\n  if (action.type === 'uri') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a href=\"${action.uri}\" target=\"_blank\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else if (action.type === 'message') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('message: ${action.text}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else if (action.type === 'postback') {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a onclick=\"alert('postback data: ${action.data}')\" style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  } else {\n    return `<div class=\"MdBtn ${ExBtn} ${height} ${fl} ${exabs} ${exmgn} ${grv} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" id=\"8d1efea2-4017-4c89-8931-98a5f4f141f2\"><a style=\"${style3}\"><div>${action.label}</div></a></div>`;\n  }\n}\n\nfunction filler_object(json: any) {\n  let style = '';\n  let { flex } = json;\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  return `<div class=\"mdBxFiller ${fl}\" style=\"${style}\" ></div>`;\n}\n\nfunction icon_object(json: any) {\n  let style2 = '';\n  let {\n    size,\n    aspectRatio,\n    url,\n    position,\n    margin,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n  } = json;\n  let styleimg = `background-image:url('${url}');`;\n\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    style2 += `font-size:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  let ratio: any = '100';\n  if (!aspectRatio || aspectRatio === '') {\n    styleimg += `width:1em;`;\n  } else {\n    ratio = ratio[0] / ratio[1];\n    styleimg += `width:${ratio}em;`;\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n\n  return `<div class=\"MdIco fl0 ${size} ${exabs} ${exmgn} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\" ><div><span style=\"${styleimg}\"></span></div></div>`;\n}\nfunction image_object(json: any) {\n  let style = '';\n  let style2 = '';\n  let {\n    aspectMode,\n    size,\n    aspectRatio,\n    url,\n    position,\n    flex,\n    margin,\n    align,\n    gravity,\n    backgroundColor,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n    action,\n  } = json;\n  let styleimg = `background-image:url('${url}');`;\n  if (backgroundColor) {\n    styleimg += `background-color:${backgroundColor} !important;`;\n  }\n\n  aspectMode = !aspectMode || aspectMode === '' ? 'fit' : aspectMode;\n  size = !size || size === '' ? 'md' : size;\n  aspectMode = upperalldigit(aspectMode);\n  if (size.indexOf('px') >= 0) {\n    style2 += `width:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  let ratio;\n  if (!aspectRatio || aspectRatio === '') {\n    ratio = '100';\n  } else {\n    ratio = aspectRatio.split(':');\n    ratio = (ratio[1] * 100) / ratio[0];\n  }\n  let fl = '';\n  if (flex > 3) {\n    style += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n\n  let alg =\n    align === 'start' || align === 'end' ? 'alg' + upper1digit(align) : '';\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n\n  let ext = '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n\n  let exb = '';\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n\n  let exl = '';\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n\n  let exr = '';\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n  action = !action ? { type: 'none' } : action;\n  if (action.type === 'uri') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a href=\"${action.uri}\" target=\"_blank\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else if (action.type === 'message') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('message: ${action.text}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else if (action.type === 'postback') {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a onclick=\"alert('postback data: ${action.data}')\" style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  } else {\n    return `<div class=\"MdImg Ex${aspectMode} ${fl} ${size} ${exabs} ${exmgn} ${alg} ${grv} ${ext} ${exb} ${exl} ${exr}\"  style=\"${style}\">\n                 <div style=\"${style2}\">\n                    <a style=\"padding-bottom:${ratio}%;\">\n                       <span style=\"${styleimg}\"></span>\n                    </a>\n                 </div>\n              </div>`;\n  }\n}\nfunction separator_object(json: any) {\n  let style = '';\n  let { margin, color } = json;\n\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnT' + upperalldigit(margin) : '';\n  }\n  if (color) {\n    style += `border-color:${color} !important;`;\n  }\n\n  return `<div class=\"fl0 MdSep ${exmgn}\" style=\"${style}\" ></div>`;\n}\nfunction spacer_object(json: any) {\n  let { size } = json;\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    size = '';\n  } else {\n    size = 'spc' + upperalldigit(size);\n  }\n  return `<div class=\"mdBxSpacer ${size} fl0\" ></div>`;\n}\nfunction span_object(json: any) {\n  let style2 = '';\n  let { text, size, color, weight, style, decoration } = json;\n\n  if (size && size !== '') {\n    if (size.indexOf('px') >= 0) {\n      style2 += `font-size:${size};`;\n      size = '';\n    } else {\n      size = 'Ex' + upperalldigit(size);\n    }\n  } else {\n    size = '';\n  }\n\n  if (color && color !== '') {\n    style2 += `color:${color};`;\n  }\n  let ExWB = weight === 'bold' ? 'ExWB' : '';\n  let ExFntSty =\n    style === 'normal' ? 'ExFntStyNml' : style === 'italic' ? 'ExFntStyIt' : '';\n  let ExTxtDec =\n    decoration === 'line-through'\n      ? 'ExTxtDecLt'\n      : decoration === 'underline'\n      ? 'ExTxtDecUl'\n      : decoration === 'none'\n      ? 'ExTxtDecNone'\n      : '';\n\n  return `<span class=\"MdSpn ${ExWB} ${size} ${ExFntSty} ${ExTxtDec}\" style=\"${style2}\" >${text}</span>`;\n}\n\nfunction bubble_struc(json: any) {\n  let { size, direction, action } = json;\n  size = !size || size === '' ? 'medium' : size;\n  direction = !direction || direction == '' ? 'ltr' : direction;\n  size = upper2digit(size);\n\n  return `<div class=\"lyItem Ly${size}\"><div class=\"T1 fx${direction.toUpperCase()}\" dir=\"${direction}\"><!-- hero --><!-- header --><!-- body --><!-- footer --></div></div>`;\n}\nfunction hero_struc() {\n  return `<div class=\"t1Hero\"><!-- inner --></div>`;\n}\nfunction header_struc() {\n  return `<div class=\"t1Header\"><!-- inner --></div>`;\n}\nfunction body_struc(json: any) {\n  let { footer } = json;\n  let ExHasFooter = json ? 'ExHasFooter' : '';\n  return `<div class=\"t1Body ${ExHasFooter}\"><!-- inner --></div>`;\n}\nfunction footer_struc() {\n  return `<div class=\"t1Footer\"><!-- inner --></div>`;\n}\nfunction text_object(json: any) {\n  let style2 = '';\n  let {\n    flex,\n    margin,\n    size,\n    position,\n    align,\n    gravity,\n    text,\n    color,\n    weight,\n    style,\n    decoration,\n    wrap,\n    maxLines,\n    adjustMode,\n    offsetTop,\n    offsetBottom,\n    offsetStart,\n    offsetEnd,\n  } = json;\n\n  let fl = '';\n  if (flex > 3) {\n    style2 += `-webkit-box-flex:${flex};flex-grow:${flex};`;\n  } else {\n    fl = flex >= 0 ? `fl${flex}` : '';\n  }\n  let exabs = position === 'absolute' ? 'ExAbs' : '';\n  let exmgn = '';\n  if (margin && margin.indexOf('px') >= 0) {\n    style2 += `margin-top:${margin};`;\n    exmgn = '';\n  } else {\n    exmgn = margin ? 'ExMgnL' + upperalldigit(margin) : '';\n  }\n\n  let alg =\n    align === 'start' || align === 'end' || align === 'center'\n      ? 'ExAlg' + upper1digit(align)\n      : '';\n  let grv =\n    gravity === 'bottom' || gravity === 'center'\n      ? 'grv' + upper1digit(gravity)\n      : '';\n  size = !size || size === '' ? 'md' : size;\n  if (size.indexOf('px') >= 0) {\n    style2 += `font-size:${size};`;\n    size = '';\n  } else {\n    size = 'Ex' + upperalldigit(size);\n  }\n\n  if (color && color !== '') {\n    style2 += `color:${color};`;\n  }\n  let ext;\n  let ExWB = weight === 'bold' ? 'ExWB' : '';\n  let ExFntSty =\n    style === 'normal' ? 'ExFntStyNml' : style === 'italic' ? 'ExFntStyIt' : '';\n  let ExTxtDec =\n    decoration === 'line-through'\n      ? 'ExTxtDecLt'\n      : decoration === 'underline'\n      ? 'ExTxtDecUl'\n      : decoration === 'none'\n      ? 'ExTxtDecNone'\n      : '';\n  let ExWrap = wrap === true ? 'ExWrap' : '';\n  if (offsetTop && offsetTop.indexOf('px') >= 0) {\n    style2 += `top:${offsetTop};`;\n    ext = '';\n  } else {\n    ext = offsetTop ? 'ExT' + upperalldigit(offsetTop) : '';\n  }\n  let exb;\n  if (offsetBottom && offsetBottom.indexOf('px') >= 0) {\n    style2 += `bottom:${offsetBottom};`;\n    exb = '';\n  } else {\n    exb = offsetBottom ? 'ExB' + upperalldigit(offsetBottom) : '';\n  }\n  let exl;\n  if (offsetStart && offsetStart.indexOf('px') >= 0) {\n    style2 += `left:${offsetStart};`;\n    exl = '';\n  } else {\n    exl = offsetStart ? 'ExL' + upperalldigit(offsetStart) : '';\n  }\n  let exr;\n\n  if (offsetEnd && offsetEnd.indexOf('px') >= 0) {\n    style2 += `right:${offsetEnd};`;\n    exr = '';\n  } else {\n    exr = offsetEnd ? 'ExR' + upperalldigit(offsetEnd) : '';\n  }\n  text = !text ? '' : text;\n  return `<div class=\"MdTxt ${fl} ${exabs} ${exmgn} ${alg} ${grv} ${size} ${ExWB} ${ExFntSty} ${ExTxtDec} ${ExWrap} ${ext} ${exb} ${exl} ${exr}\" style=\"${style2}\"><p>${text}<!-- content --></p></div>`;\n}\n\nfunction upper1digit(str: string) {\n  return str.charAt(0).toUpperCase();\n}\nfunction upper2digit(str: string) {\n  return str.charAt(0).toUpperCase() + str.substring(1, 2);\n}\nfunction upperalldigit(str: string) {\n  return str.charAt(0).toUpperCase() + str.slice(1);\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -67,17 +66,16 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 30
+                "line": 27
             },
             "implements": [
-                "AfterViewInit"
-            ],
-            "templateData": "<div #flex></div>\n"
+                "OnInit"
+            ]
         }
     ],
     "modules": [
         {
-            "name": "FlexMessagesModule",
+            "name": "NgxFlexMessagesModule",
             "children": [
                 {
                     "type": "providers",
@@ -87,7 +85,7 @@
                     "type": "declarations",
                     "elements": [
                         {
-                            "name": "FlexMessagesComponent"
+                            "name": "NgxFlexMessagesComponent"
                         }
                     ]
                 },
@@ -99,7 +97,7 @@
                     "type": "exports",
                     "elements": [
                         {
-                            "name": "FlexMessagesComponent"
+                            "name": "NgxFlexMessagesComponent"
                         }
                     ]
                 },
@@ -120,103 +118,103 @@
                 "name": "context",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "projects/flex-messages/src/test.ts",
+                "file": "projects/ngx-flex-messages/src/test.ts",
                 "type": "",
                 "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
             },
             {
-                "name": "FlexMessagesExample1",
+                "name": "NgxFlexMessagesExample1",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample10",
+                "name": "NgxFlexMessagesExample10",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample11",
+                "name": "NgxFlexMessagesExample11",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample12",
+                "name": "NgxFlexMessagesExample12",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample2",
+                "name": "NgxFlexMessagesExample2",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample3",
+                "name": "NgxFlexMessagesExample3",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample4",
+                "name": "NgxFlexMessagesExample4",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample5",
+                "name": "NgxFlexMessagesExample5",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample6",
+                "name": "NgxFlexMessagesExample6",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample7",
+                "name": "NgxFlexMessagesExample7",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample8",
+                "name": "NgxFlexMessagesExample8",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
             {
-                "name": "FlexMessagesExample9",
+                "name": "NgxFlexMessagesExample9",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
+                "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "",
                 "defaultValue": "Template.bind({})"
             },
@@ -224,22 +222,22 @@
                 "name": "require",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "projects/flex-messages/src/test.ts",
+                "file": "projects/ngx-flex-messages/src/test.ts",
                 "type": "literal type"
             },
             {
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "stories/FlexMessages.stories.ts",
-                "type": "Story<FlexMessagesComponent>",
-                "defaultValue": "(args: FlexMessagesComponent) => ({\n  component: FlexMessagesComponent,\n  props: args,\n})"
+                "file": "stories/NgxFlexMessages.stories.ts",
+                "type": "Story<NgxFlexMessagesComponent>",
+                "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n})"
             }
         ],
         "functions": [
             {
                 "name": "body_struc",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -261,7 +259,7 @@
             },
             {
                 "name": "box_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -283,7 +281,7 @@
             },
             {
                 "name": "box_recursive",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -314,7 +312,7 @@
             },
             {
                 "name": "bubble_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -336,7 +334,7 @@
             },
             {
                 "name": "bubble_struc",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -358,7 +356,7 @@
             },
             {
                 "name": "button_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -380,7 +378,7 @@
             },
             {
                 "name": "convert_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -402,7 +400,7 @@
             },
             {
                 "name": "filler_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -424,7 +422,7 @@
             },
             {
                 "name": "footer_struc",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -432,7 +430,7 @@
             },
             {
                 "name": "header_struc",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -440,7 +438,7 @@
             },
             {
                 "name": "hero_struc",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -448,7 +446,7 @@
             },
             {
                 "name": "icon_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -470,7 +468,7 @@
             },
             {
                 "name": "image_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -492,7 +490,7 @@
             },
             {
                 "name": "separator_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -514,7 +512,7 @@
             },
             {
                 "name": "spacer_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -536,7 +534,7 @@
             },
             {
                 "name": "span_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -558,7 +556,7 @@
             },
             {
                 "name": "text_object",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -580,7 +578,7 @@
             },
             {
                 "name": "upper1digit",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -600,7 +598,7 @@
             },
             {
                 "name": "upper2digit",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -620,7 +618,7 @@
             },
             {
                 "name": "upperalldigit",
-                "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "ctype": "miscellaneous",
                 "subtype": "function",
                 "description": "",
@@ -642,12 +640,12 @@
         "typealiases": [],
         "enumerations": [],
         "groupedVariables": {
-            "projects/flex-messages/src/test.ts": [
+            "projects/ngx-flex-messages/src/test.ts": [
                 {
                     "name": "context",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "projects/flex-messages/src/test.ts",
+                    "file": "projects/ngx-flex-messages/src/test.ts",
                     "type": "",
                     "defaultValue": "require.context('./', true, /\\.spec\\.ts$/)"
                 },
@@ -655,104 +653,104 @@
                     "name": "require",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "projects/flex-messages/src/test.ts",
+                    "file": "projects/ngx-flex-messages/src/test.ts",
                     "type": "literal type"
                 }
             ],
-            "stories/FlexMessages.stories.ts": [
+            "stories/NgxFlexMessages.stories.ts": [
                 {
-                    "name": "FlexMessagesExample1",
+                    "name": "NgxFlexMessagesExample1",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample10",
+                    "name": "NgxFlexMessagesExample10",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample11",
+                    "name": "NgxFlexMessagesExample11",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample12",
+                    "name": "NgxFlexMessagesExample12",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample2",
+                    "name": "NgxFlexMessagesExample2",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample3",
+                    "name": "NgxFlexMessagesExample3",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample4",
+                    "name": "NgxFlexMessagesExample4",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample5",
+                    "name": "NgxFlexMessagesExample5",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample6",
+                    "name": "NgxFlexMessagesExample6",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample7",
+                    "name": "NgxFlexMessagesExample7",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample8",
+                    "name": "NgxFlexMessagesExample8",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
                 {
-                    "name": "FlexMessagesExample9",
+                    "name": "NgxFlexMessagesExample9",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
+                    "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "",
                     "defaultValue": "Template.bind({})"
                 },
@@ -760,17 +758,17 @@
                     "name": "Template",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
-                    "file": "stories/FlexMessages.stories.ts",
-                    "type": "Story<FlexMessagesComponent>",
-                    "defaultValue": "(args: FlexMessagesComponent) => ({\n  component: FlexMessagesComponent,\n  props: args,\n})"
+                    "file": "stories/NgxFlexMessages.stories.ts",
+                    "type": "Story<NgxFlexMessagesComponent>",
+                    "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n})"
                 }
             ]
         },
         "groupedFunctions": {
-            "projects/flex-messages/src/lib/flex-messages.component.ts": [
+            "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts": [
                 {
                     "name": "body_struc",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -792,7 +790,7 @@
                 },
                 {
                     "name": "box_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -814,7 +812,7 @@
                 },
                 {
                     "name": "box_recursive",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -845,7 +843,7 @@
                 },
                 {
                     "name": "bubble_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -867,7 +865,7 @@
                 },
                 {
                     "name": "bubble_struc",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -889,7 +887,7 @@
                 },
                 {
                     "name": "button_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -911,7 +909,7 @@
                 },
                 {
                     "name": "convert_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -933,7 +931,7 @@
                 },
                 {
                     "name": "filler_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -955,7 +953,7 @@
                 },
                 {
                     "name": "footer_struc",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -963,7 +961,7 @@
                 },
                 {
                     "name": "header_struc",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -971,7 +969,7 @@
                 },
                 {
                     "name": "hero_struc",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -979,7 +977,7 @@
                 },
                 {
                     "name": "icon_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1001,7 +999,7 @@
                 },
                 {
                     "name": "image_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1023,7 +1021,7 @@
                 },
                 {
                     "name": "separator_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1045,7 +1043,7 @@
                 },
                 {
                     "name": "spacer_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1067,7 +1065,7 @@
                 },
                 {
                     "name": "span_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1089,7 +1087,7 @@
                 },
                 {
                     "name": "text_object",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1111,7 +1109,7 @@
                 },
                 {
                     "name": "upper1digit",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1131,7 +1129,7 @@
                 },
                 {
                     "name": "upper2digit",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1151,7 +1149,7 @@
                 },
                 {
                     "name": "upperalldigit",
-                    "file": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                    "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                     "ctype": "miscellaneous",
                     "subtype": "function",
                     "description": "",
@@ -1180,16 +1178,16 @@
         "status": "low",
         "files": [
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "component",
                 "linktype": "component",
-                "name": "FlexMessagesComponent",
+                "name": "NgxFlexMessagesComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/5",
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "body_struc",
@@ -1198,7 +1196,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "box_object",
@@ -1207,7 +1205,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "box_recursive",
@@ -1216,7 +1214,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "bubble_object",
@@ -1225,7 +1223,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "bubble_struc",
@@ -1234,7 +1232,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "button_object",
@@ -1243,7 +1241,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "convert_object",
@@ -1252,7 +1250,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "filler_object",
@@ -1261,7 +1259,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "footer_struc",
@@ -1270,7 +1268,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "header_struc",
@@ -1279,7 +1277,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "hero_struc",
@@ -1288,7 +1286,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "icon_object",
@@ -1297,7 +1295,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "image_object",
@@ -1306,7 +1304,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "separator_object",
@@ -1315,7 +1313,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "spacer_object",
@@ -1324,7 +1322,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "span_object",
@@ -1333,7 +1331,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "text_object",
@@ -1342,7 +1340,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "upper1digit",
@@ -1351,7 +1349,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "upper2digit",
@@ -1360,7 +1358,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/lib/flex-messages.component.ts",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
                 "type": "function",
                 "linksubtype": "function",
                 "name": "upperalldigit",
@@ -1369,7 +1367,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/test.ts",
+                "filePath": "projects/ngx-flex-messages/src/test.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -1379,7 +1377,7 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/flex-messages/src/test.ts",
+                "filePath": "projects/ngx-flex-messages/src/test.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
@@ -1389,127 +1387,127 @@
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample1",
+                "name": "NgxFlexMessagesExample1",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample10",
+                "name": "NgxFlexMessagesExample10",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample11",
+                "name": "NgxFlexMessagesExample11",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample12",
+                "name": "NgxFlexMessagesExample12",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample2",
+                "name": "NgxFlexMessagesExample2",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample3",
+                "name": "NgxFlexMessagesExample3",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample4",
+                "name": "NgxFlexMessagesExample4",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample5",
+                "name": "NgxFlexMessagesExample5",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample6",
+                "name": "NgxFlexMessagesExample6",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample7",
+                "name": "NgxFlexMessagesExample7",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample8",
+                "name": "NgxFlexMessagesExample8",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "FlexMessagesExample9",
+                "name": "NgxFlexMessagesExample9",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
             },
             {
-                "filePath": "stories/FlexMessages.stories.ts",
+                "filePath": "stories/NgxFlexMessages.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",

@@ -1,5 +1,5 @@
 {
-  "extends": "../projects/flex-messages/tsconfig.lib.json",
+  "extends": "../projects/ngx-flex-messages/tsconfig.lib.json",
   "compilerOptions": {
     "types": [
       "node"

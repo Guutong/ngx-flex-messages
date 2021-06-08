@@ -10,6 +10,10 @@
       "flex-messages": [
         "dist/flex-messages/flex-messages",
         "dist/flex-messages"
+      ],
+      "ngx-flex-messages": [
+        "dist/ngx-flex-messages/ngx-flex-messages",
+        "dist/ngx-flex-messages"
       ]
     },
     "noImplicitReturns": true,

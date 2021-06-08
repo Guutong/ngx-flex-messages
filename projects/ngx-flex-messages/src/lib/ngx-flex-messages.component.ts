@@ -1,17 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'ngx-flex-messages',
-  templateUrl: './flex-messages.component.html',
-  styles: [],
+  template: `
+    <div #flex></div>
+  `,
+  styles: [
+  ]
 })
-export class FlexMessagesComponent implements AfterViewInit {
+export class NgxFlexMessagesComponent implements OnInit, AfterViewInit {
   @Input('data')
   data: {
     type: string;
@@ -28,9 +25,8 @@ export class FlexMessagesComponent implements AfterViewInit {
 
   @ViewChild('flex')
   flex!: ElementRef;
-
-  constructor() {}
-
+  
+  constructor() { }
   ngAfterViewInit(): void {
     if (this.flex) {
       let carousel = `
@@ -66,6 +62,11 @@ export class FlexMessagesComponent implements AfterViewInit {
       this.flex.nativeElement.innerHTML = carousel;
     }
   }
+
+  ngOnInit(): void {
+    
+  }
+
 }
 
 function bubble_object(json: any) {
