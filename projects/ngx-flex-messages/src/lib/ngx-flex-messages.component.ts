@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FlexMessage } from './model';
 
 @Component({
   selector: 'ngx-flex-messages',
@@ -9,22 +10,8 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
   ]
 })
 export class NgxFlexMessagesComponent implements OnInit, AfterViewInit {
-  @Input('data')
-  data: {
-    type: string;
-    altText: string;
-    contents: any | {
-      type: string;
-      contents: any;
-      header: any;
-      hero: any;
-      body: any;
-      footer: any;
-    };
-  } | any;
-
-  @ViewChild('flex')
-  flex!: ElementRef;
+  @Input('data') data!: FlexMessage;
+  @ViewChild('flex') flex!: ElementRef;
   
   constructor() { }
   ngAfterViewInit(): void {
