@@ -1219,7 +1219,7 @@
         },
         {
             "name": "FlexMessageComponent",
-            "id": "component-FlexMessageComponent-2733a3f0bbe9191de5ded29854760d54",
+            "id": "component-FlexMessageComponent-73f6b16a6383e451abaf3b9f22e5af7e",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-message/flex-message.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1259,7 +1259,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBubble, FlexCarousel, FlexContainer } from '../../model';\n\n@Component({\n  selector: 'flex-message',\n  templateUrl: './flex-message.component.html',\n  styleUrls: ['./flex-message.component.scss'],\n})\nexport class FlexMessageComponent implements OnInit {\n  @Input('data') data?: FlexContainer;\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get flexCarousel(): FlexCarousel {\n    return this.data as FlexCarousel;\n  }\n\n  get flexBubble(): FlexBubble {\n    return this.data as FlexBubble;\n  }\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBubble, FlexCarousel, FlexContainer } from '../../model';\n\n@Component({\n  selector: 'flex-message',\n  templateUrl: './flex-message.component.html',\n  styleUrls: ['./flex-message.component.scss'],\n})\nexport class FlexMessageComponent implements OnInit {\n  @Input() data?: FlexContainer;\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get flexCarousel(): FlexCarousel {\n    return this.data as FlexCarousel;\n  }\n\n  get flexBubble(): FlexBubble {\n    return this.data as FlexBubble;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1771,7 +1771,7 @@
         },
         {
             "name": "NgxFlexMessagesComponent",
-            "id": "component-NgxFlexMessagesComponent-8fab03d7bb6340320d20e1a39d49b76b",
+            "id": "component-NgxFlexMessagesComponent-b38e6eae15e8bb13f410897a717ea09a",
             "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1781,13 +1781,14 @@
             "selector": "ngx-flex-messages",
             "styleUrls": [],
             "styles": [],
-            "template": "<div *ngIf=\"data?.type === 'flex'\">\n  <flex-message></flex-message>\n</div>\n",
-            "templateUrl": [],
+            "templateUrl": [
+                "./ngx-flex-messages.component.html"
+            ],
             "viewProviders": [],
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 14,
+                    "line": 10,
                     "type": "FlexMessage"
                 }
             ],
@@ -1799,7 +1800,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexContainer, FlexMessage } from './model';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  template: `\n  <div *ngIf=\"data?.type === 'flex'\">\n    <flex-message></flex-message>\n  </div>\n  `,\n  styles: []\n})\nexport class NgxFlexMessagesComponent {\n  @Input('data') data?: FlexMessage;\n  \n  constructor() { }\n\n  get flexContainer(): FlexContainer {\n    return this.data?.contents as FlexContainer;\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexContainer, FlexMessage } from './model';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  templateUrl: './ngx-flex-messages.component.html',\n  styles: []\n})\nexport class NgxFlexMessagesComponent {\n  @Input('data') data?: FlexMessage;\n  \n  constructor() { }\n\n  get flexContainer(): FlexContainer {\n    return this.data?.contents as FlexContainer;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -1807,7 +1808,7 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 14
+                "line": 10
             },
             "accessors": {
                 "flexContainer": {
@@ -1816,10 +1817,11 @@
                         "name": "flexContainer",
                         "type": "",
                         "returnType": "FlexContainer",
-                        "line": 18
+                        "line": 14
                     }
                 }
-            }
+            },
+            "templateData": "<div *ngIf=\"data?.type === 'flex'\">\n  <flex-message [data]=\"flexContainer\"></flex-message>\n</div>"
         }
     ],
     "modules": [
@@ -2064,7 +2066,7 @@
                 "subtype": "variable",
                 "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "Story<NgxFlexMessagesComponent>",
-                "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n})"
+                "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  }\n})"
             }
         ],
         "functions": [],
@@ -2453,7 +2455,7 @@
                     "subtype": "variable",
                     "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "Story<NgxFlexMessagesComponent>",
-                    "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n})"
+                    "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  }\n})"
                 }
             ]
         },
