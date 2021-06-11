@@ -1,0 +1,14 @@
+<div
+  [ngClass]="buttonClass"
+  [style.-webkit-box-flex]="flex"
+  [style.flex-grow]="flex"
+  [style.margin-top]="marginTop"
+  [style.left]="offsetStart"
+  [style.right]="offsetEnd"
+  [style.bottom]="offsetBottom"
+  [style.top]="offsetTop"
+>
+  <a [style.background-color]="backgroundColor">
+    <div>{{ data?.action?.label }}</div>
+  </a>
+</div>

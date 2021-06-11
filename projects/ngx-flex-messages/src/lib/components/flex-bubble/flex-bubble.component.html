@@ -1,0 +1,8 @@
+<div [ngClass]="customBubbleClass">
+  <div [ngClass]="customDirectionClass" dir="{{ data?.direction }}">
+    <div class="t1Hero" flex-component [data]="data?.hero"></div>
+    <div class="t1Header" flex-component [data]="data?.header"></div>
+    <div class="t1Body ExHasFooter" flex-component [data]="data?.body"></div>
+    <div class="t1Footer" flex-component [data]="data?.footer"></div>
+  </div>
+</div>

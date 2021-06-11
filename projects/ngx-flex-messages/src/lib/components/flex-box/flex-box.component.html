@@ -1,0 +1,29 @@
+<div
+  [ngClass]="customClass"
+  [style.padding-right]="paddingEnd"
+  [style.padding-left]="paddingStart"
+  [style.padding-bottom]="paddingBottom"
+  [style.padding-top]="paddingTop"
+  [style.padding]="padding"
+  [style.left]="offsetStart"
+  [style.right]="offsetEnd"
+  [style.bottom]="offsetBottom"
+  [style.top]="offsetTop"
+  [style.border-radius]="cornerRadius"
+  [style.border-width]="borderWidth"
+  [style.border-color]="borderColor"
+  [style.background-color]="backgroundColor"
+  [style]="{ background: background }"
+  [style.height]="height"
+  [style.width]="width"
+  [style.margin-top]="marginTop"
+  [style.-webkit-box-flex]="flex"
+  [style.flex-grow]="flex"
+>
+  <div
+    *ngFor="let item of data?.contents"
+    flex-component
+    [data]="item"
+    remove-host
+  ></div>
+</div>

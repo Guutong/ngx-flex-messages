@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/angular/types-6-0';
+import { NgxFlexMessagesModule } from '../projects/ngx-flex-messages/src/lib/ngx-flex-messages.module';
 import { NgxFlexMessagesComponent } from '../projects/ngx-flex-messages/src/lib/ngx-flex-messages.component';
 
 export default {
@@ -6,12 +7,18 @@ export default {
   component: NgxFlexMessagesComponent,
   argTypes: {
     data: {}
+  },
+  moduleMetadata: {
+    imports: [NgxFlexMessagesModule],
   }
 } as Meta;
 
 const Template: Story<NgxFlexMessagesComponent> = (args: NgxFlexMessagesComponent) => ({
   component: NgxFlexMessagesComponent,
   props: args,
+  moduleMetadata: {
+    imports: [NgxFlexMessagesModule],
+  }
 });
 
 export const NgxFlexMessagesExample1 = Template.bind({});
