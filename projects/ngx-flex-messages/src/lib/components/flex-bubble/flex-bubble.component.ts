@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FlexBubble } from '../../model';
+import { FlexBox, FlexBubble, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
 
 @Component({
   selector: '[flex-bubble]',
@@ -41,4 +41,14 @@ export class FlexBubbleComponent {
   upperToDigit(str: string) {
     return str.charAt(0).toUpperCase() + str.substring(1, 2);
   }
+
+  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {
+    switch (data.type) {
+      case 'box':
+        return data as FlexBox;
+      case 'image':
+        return data as FlexImage;
+    }
+  }
+
 }

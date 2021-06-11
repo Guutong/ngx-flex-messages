@@ -7,7 +7,7 @@
         {
             "name": "RemoveHostDirective",
             "id": "directive-RemoveHostDirective-fc973d55e429b6ba44956f62653d8b22",
-            "file": "projects/ngx-flex-messages/src/lib/remove-host.directive.ts",
+            "file": "projects/ngx-flex-messages/src/lib/directives/remove-host.directive.ts",
             "type": "directive",
             "description": "",
             "sourceCode": "import { ElementRef } from '@angular/core';\nimport { Directive } from '@angular/core';\n\n//remove the host of avatar to be rendered as svg\n@Directive({\n  selector: '[remove-host]',\n})\nexport class RemoveHostDirective {\n  constructor(private el: ElementRef) {}\n\n  //wait for the component to render completely\n  ngOnInit() {\n    const nativeElement: HTMLElement = this.el.nativeElement;\n    const parentElement: HTMLElement | any = nativeElement.parentElement;\n    // move all children out of the element\n    while (nativeElement.firstChild) {\n      parentElement.insertBefore(nativeElement.firstChild, nativeElement);\n    }\n    // remove the empty element(the host)\n    parentElement.removeChild(nativeElement);\n  }\n}\n",
@@ -53,7 +53,7 @@
     "components": [
         {
             "name": "FlexBoxComponent",
-            "id": "component-FlexBoxComponent-9e6bef70588e160b8601e9f8f7873c11",
+            "id": "component-FlexBoxComponent-7af8ce0a5b1983bd4f9e1402e06af124",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-box/flex-box.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -80,6 +80,28 @@
             "propertiesClass": [],
             "methodsClass": [
                 {
+                    "name": "getFlexData",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexComponent"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "FlexBox | FlexButton | FlexImage | FlexIcon | FlexText | FlexSpan | FlexSeparator | FlexFiller | FlexSpacer | any",
+                    "typeParameters": [],
+                    "line": 259,
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexComponent",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "ngOnInit",
                     "args": [],
                     "optional": false,
@@ -98,7 +120,7 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 257,
+                    "line": 297,
                     "jsdoctags": [
                         {
                             "name": "str",
@@ -120,7 +142,7 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 250,
+                    "line": 290,
                     "jsdoctags": [
                         {
                             "name": "str",
@@ -137,7 +159,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBox } from '../../model';\n\n@Component({\n  selector: '[flex-box]',\n  templateUrl: './flex-box.component.html',\n  styleUrls: ['./flex-box.component.scss'],\n})\nexport class FlexBoxComponent implements OnInit {\n  @Input('data') data?: FlexBox;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get customClass(): string[] {\n    const customClass = ['MdBx'];\n    let {\n      layout,\n      position,\n      flex,\n      spacing,\n      margin,\n      borderWidth,\n      cornerRadius,\n      justifyContent,\n      alignItems,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n      paddingAll,\n      paddingTop,\n      paddingBottom,\n      paddingStart,\n      paddingEnd,\n    }: FlexBox | any = this.data;\n\n    if (layout === 'baseline') {\n      customClass.push('hr');\n      customClass.push('bl');\n    }\n    if (layout === 'horizontal') {\n      customClass.push('hr');\n    }\n    if (layout === 'vertical') {\n      customClass.push('vr');\n    }\n\n    if (flex <= 3) {\n      customClass.push(flex >= 0 ? `fl${flex}` : '');\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    if (spacing && spacing.indexOf('px') < 0) {\n      customClass.push(spacing ? 'spc' + this.upperAllDigit(spacing) : '');\n    }\n\n    if (margin && margin.indexOf('px') < 0) {\n      customClass.push(margin ? 'ExMgnT' + this.upperAllDigit(margin) : '');\n    }\n\n    if (borderWidth && borderWidth.indexOf('px') < 0) {\n      const ExBdr: any = {\n        none: 'ExBdrWdtNone',\n        light: 'ExBdrWdtLgh',\n        normal: 'ExBdrWdtNml',\n        medium: 'ExBdrWdtMdm',\n        'semi-bold': 'ExBdrWdtSbd',\n        bold: 'ExBdrWdtBld',\n      };\n      customClass.push(ExBdr[borderWidth] || '');\n    }\n\n    if (cornerRadius && cornerRadius.indexOf('px') < 0) {\n      customClass.push(\n        cornerRadius ? 'ExBdrRad' + this.upperAllDigit(cornerRadius) : ''\n      );\n    }\n    if (justifyContent) {\n      const jfc: any = {\n        center: 'itms-jfcC',\n        'flex-start': 'itms-jfcS',\n        'flex-end': 'itms-jfcE',\n        'space-between': 'itms-jfcSB',\n        'space-around': 'itms-jfcSA',\n        'space-evenly': 'itms-jfcSE',\n      };\n      customClass.push(jfc[justifyContent] || '');\n    }\n\n    if (alignItems) {\n      const alg: any = {\n        center: 'itms-algC',\n        'flex-start': 'itms-algS',\n        'flex-end': 'itms-algE',\n      };\n      customClass.push(alg[alignItems] || '');\n    }\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    if (paddingAll && paddingAll.indexOf('px') < 0) {\n      customClass.push(\n        paddingAll ? 'ExPadA' + this.upperAllDigit(paddingAll) : ''\n      );\n    }\n\n    if (paddingTop && paddingTop.indexOf('px') < 0) {\n      customClass.push(\n        paddingTop ? 'ExPadT' + this.upperAllDigit(paddingTop) : ''\n      );\n    }\n\n    if (paddingBottom && paddingBottom.indexOf('px') < 0) {\n      customClass.push(\n        paddingBottom ? 'ExPadB' + this.upperAllDigit(paddingBottom) : ''\n      );\n    }\n\n    if (paddingStart && paddingStart.indexOf('px') < 0) {\n      customClass.push(\n        paddingStart ? 'ExPadL' + this.upperAllDigit(paddingStart) : ''\n      );\n    }\n\n    if (paddingEnd && paddingEnd.indexOf('px') < 0) {\n      customClass.push(\n        paddingEnd ? 'ExPadR' + this.upperAllDigit(paddingEnd) : ''\n      );\n    }\n\n    return customClass;\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    }\n    return null;\n  }\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';\n\n@Component({\n  selector: '[flex-box]',\n  templateUrl: './flex-box.component.html',\n  styleUrls: ['./flex-box.component.scss'],\n})\nexport class FlexBoxComponent implements OnInit {\n  @Input('data') data?: FlexBox;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get customClass(): string[] {\n    const customClass = ['MdBx'];\n    let {\n      layout,\n      position,\n      flex,\n      spacing,\n      margin,\n      borderWidth,\n      cornerRadius,\n      justifyContent,\n      alignItems,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n      paddingAll,\n      paddingTop,\n      paddingBottom,\n      paddingStart,\n      paddingEnd,\n    }: FlexBox | any = this.data;\n\n    if (layout === 'baseline') {\n      customClass.push('hr');\n      customClass.push('bl');\n    }\n    if (layout === 'horizontal') {\n      customClass.push('hr');\n    }\n    if (layout === 'vertical') {\n      customClass.push('vr');\n    }\n\n    if (flex <= 3) {\n      customClass.push(flex >= 0 ? `fl${flex}` : '');\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    if (spacing && spacing.indexOf('px') < 0) {\n      customClass.push(spacing ? 'spc' + this.upperAllDigit(spacing) : '');\n    }\n\n    if (margin && margin.indexOf('px') < 0) {\n      const ExMgnT: any = {\n        'none': 'ExMgnTNone',\n        'xs': 'ExMgnTXs',\n        'sm': 'ExMgnTSm',\n        'md': 'ExMgnTMd',\n        'lg': 'ExMgnTLg',\n        'xl': 'ExMgnTXl',\n        'xxl': 'ExMgnTXXl',\n      };\n      customClass.push(ExMgnT[margin] || '');\n    }\n\n    if (borderWidth && borderWidth.indexOf('px') < 0) {\n      const ExBdr: any = {\n        none: 'ExBdrWdtNone',\n        light: 'ExBdrWdtLgh',\n        normal: 'ExBdrWdtNml',\n        medium: 'ExBdrWdtMdm',\n        'semi-bold': 'ExBdrWdtSbd',\n        bold: 'ExBdrWdtBld',\n      };\n      customClass.push(ExBdr[borderWidth] || '');\n    }\n\n    if (cornerRadius && cornerRadius.indexOf('px') < 0) {\n      customClass.push(\n        cornerRadius ? 'ExBdrRad' + this.upperAllDigit(cornerRadius) : ''\n      );\n    }\n    if (justifyContent) {\n      const jfc: any = {\n        center: 'itms-jfcC',\n        'flex-start': 'itms-jfcS',\n        'flex-end': 'itms-jfcE',\n        'space-between': 'itms-jfcSB',\n        'space-around': 'itms-jfcSA',\n        'space-evenly': 'itms-jfcSE',\n      };\n      customClass.push(jfc[justifyContent] || '');\n    }\n\n    if (alignItems) {\n      const alg: any = {\n        center: 'itms-algC',\n        'flex-start': 'itms-algS',\n        'flex-end': 'itms-algE',\n      };\n      customClass.push(alg[alignItems] || '');\n    }\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    if (paddingAll && paddingAll.indexOf('px') < 0) {\n      customClass.push(\n        paddingAll ? 'ExPadA' + this.upperAllDigit(paddingAll) : ''\n      );\n    }\n\n    if (paddingTop && paddingTop.indexOf('px') < 0) {\n      customClass.push(\n        paddingTop ? 'ExPadT' + this.upperAllDigit(paddingTop) : ''\n      );\n    }\n\n    if (paddingBottom && paddingBottom.indexOf('px') < 0) {\n      customClass.push(\n        paddingBottom ? 'ExPadB' + this.upperAllDigit(paddingBottom) : ''\n      );\n    }\n\n    if (paddingStart && paddingStart.indexOf('px') < 0) {\n      customClass.push(\n        paddingStart ? 'ExPadL' + this.upperAllDigit(paddingStart) : ''\n      );\n    }\n\n    if (paddingEnd && paddingEnd.indexOf('px') < 0) {\n      customClass.push(\n        paddingEnd ? 'ExPadR' + this.upperAllDigit(paddingEnd) : ''\n      );\n    }\n\n    return customClass;\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    }\n    return null;\n  }\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  getFlexData(data: FlexComponent): FlexBox\n    | FlexButton\n    | FlexImage\n    | FlexIcon\n    | FlexText\n    | FlexSpan\n    | FlexSeparator\n    | FlexFiller\n    | FlexSpacer | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'button':\n        return data as FlexButton;\n      case 'image':\n        return data as FlexImage;\n      case 'icon':\n        return data as FlexIcon;\n      case 'span':\n        return data as FlexSpan;\n      case 'separator':\n        return data as FlexSeparator;\n      case 'filler':\n        return data as FlexFiller;\n      case 'spacer':\n        return data as FlexSpacer;\n      case 'text':\n        return data as FlexText;\n    }\n  }\n  \n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -171,7 +193,7 @@
                         "name": "background",
                         "type": "",
                         "returnType": "",
-                        "line": 151
+                        "line": 160
                     }
                 },
                 "padding": {
@@ -180,7 +202,7 @@
                         "name": "padding",
                         "type": "",
                         "returnType": "",
-                        "line": 165
+                        "line": 174
                     }
                 },
                 "paddingTop": {
@@ -189,7 +211,7 @@
                         "name": "paddingTop",
                         "type": "",
                         "returnType": "",
-                        "line": 170
+                        "line": 179
                     }
                 },
                 "paddingBottom": {
@@ -198,7 +220,7 @@
                         "name": "paddingBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 175
+                        "line": 184
                     }
                 },
                 "paddingStart": {
@@ -207,7 +229,7 @@
                         "name": "paddingStart",
                         "type": "",
                         "returnType": "",
-                        "line": 181
+                        "line": 190
                     }
                 },
                 "paddingEnd": {
@@ -216,7 +238,7 @@
                         "name": "paddingEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 186
+                        "line": 195
                     }
                 },
                 "offsetTop": {
@@ -225,7 +247,7 @@
                         "name": "offsetTop",
                         "type": "",
                         "returnType": "",
-                        "line": 191
+                        "line": 200
                     }
                 },
                 "offsetBottom": {
@@ -234,7 +256,7 @@
                         "name": "offsetBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 196
+                        "line": 205
                     }
                 },
                 "offsetStart": {
@@ -243,7 +265,7 @@
                         "name": "offsetStart",
                         "type": "",
                         "returnType": "",
-                        "line": 201
+                        "line": 210
                     }
                 },
                 "offsetEnd": {
@@ -252,7 +274,7 @@
                         "name": "offsetEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 206
+                        "line": 215
                     }
                 },
                 "width": {
@@ -261,7 +283,7 @@
                         "name": "width",
                         "type": "",
                         "returnType": "",
-                        "line": 212
+                        "line": 221
                     }
                 },
                 "height": {
@@ -270,7 +292,7 @@
                         "name": "height",
                         "type": "",
                         "returnType": "",
-                        "line": 216
+                        "line": 225
                     }
                 },
                 "backgroundColor": {
@@ -279,7 +301,7 @@
                         "name": "backgroundColor",
                         "type": "",
                         "returnType": "",
-                        "line": 220
+                        "line": 229
                     }
                 },
                 "borderColor": {
@@ -288,7 +310,7 @@
                         "name": "borderColor",
                         "type": "",
                         "returnType": "",
-                        "line": 224
+                        "line": 233
                     }
                 },
                 "borderWidth": {
@@ -297,7 +319,7 @@
                         "name": "borderWidth",
                         "type": "",
                         "returnType": "",
-                        "line": 228
+                        "line": 237
                     }
                 },
                 "cornerRadius": {
@@ -306,7 +328,7 @@
                         "name": "cornerRadius",
                         "type": "",
                         "returnType": "",
-                        "line": 234
+                        "line": 243
                     }
                 },
                 "marginTop": {
@@ -315,7 +337,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 240
+                        "line": 249
                     }
                 },
                 "flex": {
@@ -324,15 +346,15 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 246
+                        "line": 255
                     }
                 }
             },
-            "templateData": "<div\n  [ngClass]=\"customClass\"\n  [style.padding-right]=\"paddingEnd\"\n  [style.padding-left]=\"paddingStart\"\n  [style.padding-bottom]=\"paddingBottom\"\n  [style.padding-top]=\"paddingTop\"\n  [style.padding]=\"padding\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.border-radius]=\"cornerRadius\"\n  [style.border-width]=\"borderWidth\"\n  [style.border-color]=\"borderColor\"\n  [style.background-color]=\"backgroundColor\"\n  [style]=\"{ background: background }\"\n  [style.height]=\"height\"\n  [style.width]=\"width\"\n  [style.margin-top]=\"marginTop\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <div\n    *ngFor=\"let item of data?.contents\"\n    flex-component\n    [data]=\"item\"\n    remove-host\n  ></div>\n</div>\n"
+            "templateData": "<div\n  [ngClass]=\"customClass\"\n  [style.padding-right]=\"paddingEnd\"\n  [style.padding-left]=\"paddingStart\"\n  [style.padding-bottom]=\"paddingBottom\"\n  [style.padding-top]=\"paddingTop\"\n  [style.padding]=\"padding\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.border-radius]=\"cornerRadius\"\n  [style.border-width]=\"borderWidth\"\n  [style.border-color]=\"borderColor\"\n  [style.background-color]=\"backgroundColor\"\n  [style]=\"{ background: background }\"\n  [style.height]=\"height\"\n  [style.width]=\"width\"\n  [style.margin-top]=\"marginTop\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <ng-container *ngFor=\"let item of data?.contents\" remove-host>\n    <div *ngIf=\"item?.type == 'box'\" flex-box [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'image'\" flex-image [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'icon'\" flex-icon [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'text'\" flex-text [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'button'\" flex-button [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'filler'\" flex-filler [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'separator'\" flex-separator [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'spacer'\" flex-spacer [data]=\"getFlexData(item)\" remove-host></div>\n  </ng-container>\n</div>\n"
         },
         {
             "name": "FlexBubbleComponent",
-            "id": "component-FlexBubbleComponent-f382d04774e59a276a73c3c25c29ae15",
+            "id": "component-FlexBubbleComponent-7f1c1ab4e1f2220ea12311c40e5098f3",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-bubble/flex-bubble.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -358,6 +380,28 @@
             "outputsClass": [],
             "propertiesClass": [],
             "methodsClass": [
+                {
+                    "name": "getFlexContent",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexBox | FlexImage | any"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "FlexBox | FlexImage | any",
+                    "typeParameters": [],
+                    "line": 45,
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexBox | FlexImage | any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
                 {
                     "name": "getFlexData",
                     "args": [
@@ -408,7 +452,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexBubble } from '../../model';\n\n@Component({\n  selector: '[flex-bubble]',\n  templateUrl: './flex-bubble.component.html',\n  styleUrls: ['./flex-bubble.component.scss'],\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n\n  constructor() {}\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  get customBubbleClass() {\n    const customClass = ['lyItem'];\n    customClass.push(`Ly${this.upperToDigit(this.data?.size || 'medium')}`);\n    return customClass;\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  upperToDigit(str: string) {\n    return str.charAt(0).toUpperCase() + str.substring(1, 2);\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexBox, FlexBubble, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';\n\n@Component({\n  selector: '[flex-bubble]',\n  templateUrl: './flex-bubble.component.html',\n  styleUrls: ['./flex-bubble.component.scss'],\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n\n  constructor() {}\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  get customBubbleClass() {\n    const customClass = ['lyItem'];\n    customClass.push(`Ly${this.upperToDigit(this.data?.size || 'medium')}`);\n    return customClass;\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  upperToDigit(str: string) {\n    return str.charAt(0).toUpperCase() + str.substring(1, 2);\n  }\n\n  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'image':\n        return data as FlexImage;\n    }\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -452,7 +496,7 @@
                     }
                 }
             },
-            "templateData": "<div [ngClass]=\"customBubbleClass\">\n  <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n    <div class=\"t1Hero\" flex-component [data]=\"data?.hero\"></div>\n    <div class=\"t1Header\" flex-component [data]=\"data?.header\"></div>\n    <div class=\"t1Body ExHasFooter\" flex-component [data]=\"data?.body\"></div>\n    <div class=\"t1Footer\" flex-component [data]=\"data?.footer\"></div>\n  </div>\n</div>\n"
+            "templateData": "<div [ngClass]=\"customBubbleClass\">\n  <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n    <div class=\"t1Hero\">\n      <div *ngIf=\"data?.hero?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.hero)\" remove-host></div>\n      <div *ngIf=\"data?.hero?.type == 'image'\" flex-image [data]=\"getFlexContent(data?.hero)\" remove-host></div>\n    </div>\n    <div class=\"t1Header\">\n      <div *ngIf=\"data?.header?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.header)\" remove-host></div>\n    </div>\n    <div class=\"t1Body ExHasFooter\">\n      <div *ngIf=\"data?.body?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.body)\" remove-host></div>\n    </div>\n    <div class=\"t1Footer\">\n      <div *ngIf=\"data?.footer?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.footer)\" remove-host></div>\n    </div>\n  </div>\n</div>\n"
         },
         {
             "name": "FlexButtonComponent",
@@ -672,133 +716,6 @@
                 "line": 10
             },
             "templateData": "<div\n  *ngFor=\"let item of data?.contents\"\n  flex-bubble\n  [data]=\"item\"\n  remove-host\n></div>\n"
-        },
-        {
-            "name": "FlexComponentComponent",
-            "id": "component-FlexComponentComponent-beaa6cfb64446843418432a14dd61d56",
-            "file": "projects/ngx-flex-messages/src/lib/components/flex-component/flex-component.component.ts",
-            "encapsulation": [],
-            "entryComponents": [],
-            "inputs": [],
-            "outputs": [],
-            "providers": [],
-            "selector": "[flex-component]",
-            "styleUrls": [
-                "./flex-component.component.scss"
-            ],
-            "styles": [],
-            "templateUrl": [
-                "./flex-component.component.html"
-            ],
-            "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "data",
-                    "line": 21,
-                    "type": "FlexComponent"
-                }
-            ],
-            "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [],
-            "hostBindings": [],
-            "hostListeners": [],
-            "description": "",
-            "rawdescription": "",
-            "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport {\n  FlexBox,\n  FlexButton,\n  FlexComponent,\n  FlexFiller,\n  FlexIcon,\n  FlexImage,\n  FlexSeparator,\n  FlexSpacer,\n  FlexSpan,\n  FlexText,\n} from '../../model';\n\n@Component({\n  selector: '[flex-component]',\n  templateUrl: './flex-component.component.html',\n  styleUrls: ['./flex-component.component.scss'],\n})\nexport class FlexComponentComponent {\n  @Input('data') data?: FlexComponent;\n\n  get flexImage(): FlexImage {\n    return this.data as FlexImage;\n  }\n\n  get flexBox(): FlexBox {\n    return this.data as FlexBox;\n  }\n\n  get flexIcon(): FlexIcon {\n    return this.data as FlexIcon;\n  }\n\n  get flexText(): FlexText {\n    return this.data as FlexText;\n  }\n\n  get flexButton(): FlexButton {\n    return this.data as FlexButton;\n  }\n\n  get flexFiller(): FlexFiller {\n    return this.data as FlexFiller;\n  }\n\n  get flexSpan(): FlexSpan {\n    return this.data as FlexSpan;\n  }\n\n  get flexSpacer(): FlexSpacer {\n    return this.data as FlexSpacer;\n  }\n\n  get flexSeparator(): FlexSeparator {\n    return this.data as FlexSeparator;\n  }\n}\n",
-            "assetsDirs": [],
-            "styleUrlsData": [
-                {
-                    "data": "",
-                    "styleUrl": "./flex-component.component.scss"
-                }
-            ],
-            "stylesData": "",
-            "accessors": {
-                "flexImage": {
-                    "name": "flexImage",
-                    "getSignature": {
-                        "name": "flexImage",
-                        "type": "",
-                        "returnType": "FlexImage",
-                        "line": 23
-                    }
-                },
-                "flexBox": {
-                    "name": "flexBox",
-                    "getSignature": {
-                        "name": "flexBox",
-                        "type": "",
-                        "returnType": "FlexBox",
-                        "line": 27
-                    }
-                },
-                "flexIcon": {
-                    "name": "flexIcon",
-                    "getSignature": {
-                        "name": "flexIcon",
-                        "type": "",
-                        "returnType": "FlexIcon",
-                        "line": 31
-                    }
-                },
-                "flexText": {
-                    "name": "flexText",
-                    "getSignature": {
-                        "name": "flexText",
-                        "type": "",
-                        "returnType": "FlexText",
-                        "line": 35
-                    }
-                },
-                "flexButton": {
-                    "name": "flexButton",
-                    "getSignature": {
-                        "name": "flexButton",
-                        "type": "",
-                        "returnType": "FlexButton",
-                        "line": 39
-                    }
-                },
-                "flexFiller": {
-                    "name": "flexFiller",
-                    "getSignature": {
-                        "name": "flexFiller",
-                        "type": "",
-                        "returnType": "FlexFiller",
-                        "line": 43
-                    }
-                },
-                "flexSpan": {
-                    "name": "flexSpan",
-                    "getSignature": {
-                        "name": "flexSpan",
-                        "type": "",
-                        "returnType": "FlexSpan",
-                        "line": 47
-                    }
-                },
-                "flexSpacer": {
-                    "name": "flexSpacer",
-                    "getSignature": {
-                        "name": "flexSpacer",
-                        "type": "",
-                        "returnType": "FlexSpacer",
-                        "line": 51
-                    }
-                },
-                "flexSeparator": {
-                    "name": "flexSeparator",
-                    "getSignature": {
-                        "name": "flexSeparator",
-                        "type": "",
-                        "returnType": "FlexSeparator",
-                        "line": 55
-                    }
-                }
-            },
-            "templateData": "<div *ngIf=\"data?.type == 'box'\" flex-box [data]=\"flexBox\" remove-host></div>\n<div\n  *ngIf=\"data?.type == 'image'\"\n  flex-image\n  [data]=\"flexImage\"\n  remove-host\n></div>\n<div *ngIf=\"data?.type == 'icon'\" flex-icon [data]=\"flexIcon\" remove-host></div>\n<div *ngIf=\"data?.type == 'text'\" flex-text [data]=\"flexText\" remove-host></div>\n<div\n  *ngIf=\"data?.type == 'button'\"\n  flex-button\n  [data]=\"flexButton\"\n  remove-host\n></div>\n<div\n  *ngIf=\"data?.type == 'filler'\"\n  flex-filler\n  [data]=\"flexFiller\"\n  remove-host\n></div>\n<div *ngIf=\"data?.type == 'span'\" flex-span [data]=\"flexSpan\" remove-host></div>\n<div\n  *ngIf=\"data?.type == 'spacer'\"\n  flex-spacer\n  [data]=\"flexSpacer\"\n  remove-host\n></div>\n<div\n  *ngIf=\"data?.type == 'separator'\"\n  flex-separator\n  [data]=\"flexSeparator\"\n  remove-host\n></div>\n"
         },
         {
             "name": "FlexFillerComponent",
@@ -1767,7 +1684,7 @@
                     }
                 }
             },
-            "templateData": "<div\n  [ngClass]=\"textClass\"\n  [style.margin-top]=\"marginTop\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.color]=\"color\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <p>\n    {{ data?.text }}\n    <ng-container *ngFor=\"let item of data?.contents\" remove-host>\n      <div flex-component [data]=\"item\" remove-host></div>\n    </ng-container>\n  </p>\n</div>\n"
+            "templateData": "<div\n  [ngClass]=\"textClass\"\n  [style.margin-top]=\"marginTop\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.color]=\"color\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <p>\n    {{ data?.text }}\n    <ng-container *ngFor=\"let item of data?.contents\" remove-host>\n      <div flex-span [data]=\"item\" remove-host></div>\n    </ng-container>\n  </p>\n</div>\n"
         },
         {
             "name": "NgxFlexMessagesComponent",
@@ -1848,9 +1765,6 @@
                             "name": "FlexCarouselComponent"
                         },
                         {
-                            "name": "FlexComponentComponent"
-                        },
-                        {
                             "name": "FlexFillerComponent"
                         },
                         {
@@ -1900,9 +1814,6 @@
                         },
                         {
                             "name": "FlexCarouselComponent"
-                        },
-                        {
-                            "name": "FlexComponentComponent"
                         },
                         {
                             "name": "FlexFillerComponent"
@@ -2738,7 +2649,7 @@
                 "linktype": "component",
                 "name": "FlexBoxComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/7",
                 "status": "low"
             },
             {
@@ -2747,7 +2658,7 @@
                 "linktype": "component",
                 "name": "FlexBubbleComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/6",
                 "status": "low"
             },
             {
@@ -2766,15 +2677,6 @@
                 "name": "FlexCarouselComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
-                "status": "low"
-            },
-            {
-                "filePath": "projects/ngx-flex-messages/src/lib/components/flex-component/flex-component.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "FlexComponentComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2850,19 +2752,19 @@
                 "status": "low"
             },
             {
-                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "NgxFlexMessagesComponent",
+                "filePath": "projects/ngx-flex-messages/src/lib/directives/remove-host.directive.ts",
+                "type": "directive",
+                "linktype": "directive",
+                "name": "RemoveHostDirective",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
                 "status": "low"
             },
             {
-                "filePath": "projects/ngx-flex-messages/src/lib/remove-host.directive.ts",
-                "type": "directive",
-                "linktype": "directive",
-                "name": "RemoveHostDirective",
+                "filePath": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "NgxFlexMessagesComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
                 "status": "low"

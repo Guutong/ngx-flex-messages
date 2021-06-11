@@ -12,7 +12,7 @@
   <p>
     {{ data?.text }}
     <ng-container *ngFor="let item of data?.contents" remove-host>
-      <div flex-component [data]="item" remove-host></div>
+      <div flex-span [data]="item" remove-host></div>
     </ng-container>
   </p>
 </div>

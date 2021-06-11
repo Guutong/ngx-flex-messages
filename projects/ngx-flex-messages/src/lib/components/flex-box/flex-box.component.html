@@ -20,10 +20,14 @@
   [style.-webkit-box-flex]="flex"
   [style.flex-grow]="flex"
 >
-  <div
-    *ngFor="let item of data?.contents"
-    flex-component
-    [data]="item"
-    remove-host
-  ></div>
+  <ng-container *ngFor="let item of data?.contents" remove-host>
+    <div *ngIf="item?.type == 'box'" flex-box [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'image'" flex-image [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'icon'" flex-icon [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'text'" flex-text [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'button'" flex-button [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'filler'" flex-filler [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'separator'" flex-separator [data]="getFlexData(item)" remove-host></div>
+    <div *ngIf="item?.type == 'spacer'" flex-spacer [data]="getFlexData(item)" remove-host></div>
+  </ng-container>
 </div>

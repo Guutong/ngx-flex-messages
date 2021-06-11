@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FlexBox } from '../../model';
+import { FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
 
 @Component({
   selector: '[flex-box]',
@@ -57,7 +57,16 @@ export class FlexBoxComponent implements OnInit {
     }
 
     if (margin && margin.indexOf('px') < 0) {
-      customClass.push(margin ? 'ExMgnT' + this.upperAllDigit(margin) : '');
+      const ExMgnT: any = {
+        'none': 'ExMgnTNone',
+        'xs': 'ExMgnTXs',
+        'sm': 'ExMgnTSm',
+        'md': 'ExMgnTMd',
+        'lg': 'ExMgnTLg',
+        'xl': 'ExMgnTXl',
+        'xxl': 'ExMgnTXXl',
+      };
+      customClass.push(ExMgnT[margin] || '');
     }
 
     if (borderWidth && borderWidth.indexOf('px') < 0) {
@@ -247,11 +256,42 @@ export class FlexBoxComponent implements OnInit {
     return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;
   }
 
+  getFlexData(data: FlexComponent): FlexBox
+    | FlexButton
+    | FlexImage
+    | FlexIcon
+    | FlexText
+    | FlexSpan
+    | FlexSeparator
+    | FlexFiller
+    | FlexSpacer | any {
+    switch (data.type) {
+      case 'box':
+        return data as FlexBox;
+      case 'button':
+        return data as FlexButton;
+      case 'image':
+        return data as FlexImage;
+      case 'icon':
+        return data as FlexIcon;
+      case 'span':
+        return data as FlexSpan;
+      case 'separator':
+        return data as FlexSeparator;
+      case 'filler':
+        return data as FlexFiller;
+      case 'spacer':
+        return data as FlexSpacer;
+      case 'text':
+        return data as FlexText;
+    }
+  }
+  
   upperAllDigit(str: string) {
     if (isNaN(Number(str.charAt(0)))) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
-    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);
+    return str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2);
   }
 
   upper1Digit(str: string) {
