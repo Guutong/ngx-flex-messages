@@ -2,5 +2,6 @@
   *ngFor="let item of data?.contents"
   flex-bubble
   [data]="item"
+  (action)="onClickAction($event)"
   remove-host
 ></div>

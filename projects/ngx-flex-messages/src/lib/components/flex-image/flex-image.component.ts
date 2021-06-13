@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Action, FlexImage } from '../../model';
 import Utils from '../../utils';
 
@@ -9,9 +9,10 @@ import Utils from '../../utils';
 })
 export class FlexImageComponent {
   @Input('data') data?: FlexImage;
-
-  onClick(action?: Action) {
-    console.log(action);
+  @Output() action: EventEmitter<Action> = new EventEmitter();
+  
+  onClickAction(action?: Action) {
+    this.action.emit(action);
   }
 
   get customClass() {

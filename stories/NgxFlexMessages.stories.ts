@@ -1,12 +1,13 @@
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { NgxFlexMessagesModule } from '../projects/ngx-flex-messages/src/lib/ngx-flex-messages.module';
 import { NgxFlexMessagesComponent } from '../projects/ngx-flex-messages/src/lib/ngx-flex-messages.component';
+import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Atomics/NgxFlexMessages',
   component: NgxFlexMessagesComponent,
   argTypes: {
-    data: {}
+    data: {},
   },
   moduleMetadata: {
     imports: [NgxFlexMessagesModule],
@@ -15,7 +16,10 @@ export default {
 
 const Template: Story<NgxFlexMessagesComponent> = (args: NgxFlexMessagesComponent) => ({
   component: NgxFlexMessagesComponent,
-  props: args,
+  props: {
+    ...args,
+    action: action('action'),
+  },
   moduleMetadata: {
     imports: [NgxFlexMessagesModule],
   }

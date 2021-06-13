@@ -2,7 +2,373 @@
     "pipes": [],
     "interfaces": [],
     "injectables": [],
-    "classes": [],
+    "classes": [
+        {
+            "name": "Utils",
+            "id": "class-Utils-b7edc87458be5b94855e702980450f1b",
+            "file": "projects/ngx-flex-messages/src/lib/utils.ts",
+            "type": "class",
+            "sourceCode": "import { FlexComponent, FlexBox, FlexButton, FlexImage, FlexIcon, FlexText, FlexSpan, FlexSeparator, FlexFiller, FlexSpacer, FlexBubble } from './model';\n\nexport default class Utils {\n    static upperAllDigit(str: string) {\n        if (isNaN(Number(str.charAt(0)))) {\n            return str.charAt(0).toUpperCase() + str.slice(1);\n        }\n        return str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2);\n    }\n\n    static upper1Digit(str: string) {\n        return str.charAt(0).toUpperCase();\n    }\n\n    static upperToDigit(str: string) {\n        return str.charAt(0).toUpperCase() + str.substring(1, 2);\n    }\n\n    static getFlexBoxClass(data: FlexBox) {\n        const customClass = ['MdBx'];\n        let {\n            layout,\n            position,\n            flex,\n            spacing,\n            margin,\n            borderWidth,\n            cornerRadius,\n            justifyContent,\n            alignItems,\n            offsetTop,\n            offsetBottom,\n            offsetStart,\n            offsetEnd,\n            paddingAll,\n            paddingTop,\n            paddingBottom,\n            paddingStart,\n            paddingEnd,\n        }: FlexBox | any = data;\n\n        if (layout === 'baseline') {\n        customClass.push('hr');\n        customClass.push('bl');\n        }\n        if (layout === 'horizontal') {\n        customClass.push('hr');\n        }\n        if (layout === 'vertical') {\n        customClass.push('vr');\n        }\n\n        if (flex <= 3) {\n        customClass.push(flex >= 0 ? `fl${flex}` : '');\n        }\n\n        customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n        if (spacing && spacing.indexOf('px') < 0) {\n        customClass.push(spacing ? 'spc' + this.upperAllDigit(spacing) : '');\n        }\n\n        if (margin && margin.indexOf('px') < 0) {\n        const ExMgnT: any = {\n            'none': 'ExMgnTNone',\n            'xs': 'ExMgnTXs',\n            'sm': 'ExMgnTSm',\n            'md': 'ExMgnTMd',\n            'lg': 'ExMgnTLg',\n            'xl': 'ExMgnTXl',\n            'xxl': 'ExMgnTXXl',\n        };\n        customClass.push(ExMgnT[margin] || '');\n        }\n\n        if (borderWidth && borderWidth.indexOf('px') < 0) {\n        const ExBdr: any = {\n            none: 'ExBdrWdtNone',\n            light: 'ExBdrWdtLgh',\n            normal: 'ExBdrWdtNml',\n            medium: 'ExBdrWdtMdm',\n            'semi-bold': 'ExBdrWdtSbd',\n            bold: 'ExBdrWdtBld',\n        };\n        customClass.push(ExBdr[borderWidth] || '');\n        }\n\n        if (cornerRadius && cornerRadius.indexOf('px') < 0) {\n        customClass.push(\n            cornerRadius ? 'ExBdrRad' + this.upperAllDigit(cornerRadius) : ''\n        );\n        }\n        if (justifyContent) {\n        const jfc: any = {\n            center: 'itms-jfcC',\n            'flex-start': 'itms-jfcS',\n            'flex-end': 'itms-jfcE',\n            'space-between': 'itms-jfcSB',\n            'space-around': 'itms-jfcSA',\n            'space-evenly': 'itms-jfcSE',\n        };\n        customClass.push(jfc[justifyContent] || '');\n        }\n\n        if (alignItems) {\n        const alg: any = {\n            center: 'itms-algC',\n            'flex-start': 'itms-algS',\n            'flex-end': 'itms-algE',\n        };\n        customClass.push(alg[alignItems] || '');\n        }\n\n        if (offsetTop && offsetTop.indexOf('px') < 0) {\n        customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n        }\n        if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n        customClass.push(\n            offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n        );\n        }\n        if (offsetStart && offsetStart.indexOf('px') < 0) {\n        customClass.push(\n            offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n        );\n        }\n        if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n        customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n        }\n\n        if (paddingAll && paddingAll.indexOf('px') < 0) {\n        customClass.push(\n            paddingAll ? 'ExPadA' + this.upperAllDigit(paddingAll) : ''\n        );\n        }\n\n        if (paddingTop && paddingTop.indexOf('px') < 0) {\n        customClass.push(\n            paddingTop ? 'ExPadT' + this.upperAllDigit(paddingTop) : ''\n        );\n        }\n\n        if (paddingBottom && paddingBottom.indexOf('px') < 0) {\n        customClass.push(\n            paddingBottom ? 'ExPadB' + this.upperAllDigit(paddingBottom) : ''\n        );\n        }\n\n        if (paddingStart && paddingStart.indexOf('px') < 0) {\n        customClass.push(\n            paddingStart ? 'ExPadL' + this.upperAllDigit(paddingStart) : ''\n        );\n        }\n\n        if (paddingEnd && paddingEnd.indexOf('px') < 0) {\n        customClass.push(\n            paddingEnd ? 'ExPadR' + this.upperAllDigit(paddingEnd) : ''\n        );\n        }\n        return customClass;\n\n    }\n\n    static getFlexBubbleClass(data: FlexBubble) {\n        const customClass = ['lyItem'];\n        customClass.push(`Ly${this.upperToDigit(data?.size || 'medium')}`);\n        return customClass;\n    }\n\n    static getFlexButtonClass(data: FlexButton) {\n        const customClass = ['MdBtn'];\n        let {\n          flex,\n          margin,\n          position,\n          height,\n          style,\n          gravity,\n          offsetTop,\n          offsetBottom,\n          offsetStart,\n          offsetEnd,\n        }: FlexButton | any = data;\n    \n        if (flex <= 3) {\n          customClass.push(flex >= 0 ? `fl${flex}` : '');\n        }\n    \n        customClass.push(position === 'absolute' ? 'ExAbs' : '');\n    \n        customClass.push(\n          gravity === 'bottom' || gravity === 'center'\n            ? `grv${this.upper1Digit(gravity)}`\n            : ''\n        );\n    \n        if (margin && margin.indexOf('px') < 0) {\n          customClass.push(margin ? 'ExMgnT' + this.upperAllDigit(margin) : '');\n        }\n    \n        if (offsetTop && offsetTop.indexOf('px') < 0) {\n          customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n        }\n    \n        if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n          customClass.push(\n            offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n          );\n        }\n    \n        if (offsetStart && offsetStart.indexOf('px') < 0) {\n          customClass.push(\n            offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n          );\n        }\n    \n        if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n          customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n        }\n    \n        const FntSty: any = {\n          link: 'ExBtnL',\n          primary: 'ExBtn1',\n          secondary: 'ExBtn2',\n        };\n        customClass.push(FntSty[style] || 'ExBtnL');\n    \n        customClass.push(\n          !height || height === 'md' ? '' : 'Ex' + this.upperAllDigit(height)\n        );\n    \n        return customClass;\n    }\n\n    static getFlexFillerClass(data: FlexFiller) {\n        const { flex }: FlexFiller | any = data;\n        const customClass = ['mdBxFiller'];\n        if (flex >= 0 && flex <= 3) {\n          customClass.push(`fl${flex}`);\n        }\n    \n        return customClass;\n    }\n\n    static getFlexIconClass(data: FlexIcon) {\n        const {\n          size,\n          aspectRatio,\n          position,\n          margin,\n          offsetTop,\n          offsetBottom,\n          offsetStart,\n          offsetEnd,\n        }: FlexIcon | any = data;\n        const customClass = ['MdIco', 'fl0'];\n    \n        if (!(size && size.indexOf('px') >= 0)) {\n          customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n        }\n        customClass.push(position === 'absolute' ? 'ExAbs' : '');\n    \n        if (!(margin && margin.indexOf('px') >= 0)) {\n          customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n        }\n        if (offsetTop && offsetTop.indexOf('px') < 0) {\n          customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n        }\n        if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n          customClass.push(\n            offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n          );\n        }\n        if (offsetStart && offsetStart.indexOf('px') < 0) {\n          customClass.push(\n            offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n          );\n        }\n        if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n          customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n        }\n    \n        return customClass;\n    }\n\n    static getFlexImageClass(data: FlexImage) {\n        const {\n          aspectMode,\n          size,\n          position,\n          flex,\n          margin,\n          align,\n          gravity,\n          offsetTop,\n          offsetBottom,\n          offsetStart,\n          offsetEnd,\n        }: FlexImage | any = data;\n        const customClass = ['MdImg'];\n    \n        customClass.push(`Ex${this.upperAllDigit(aspectMode || 'fit')}`);\n        customClass.push(flex && flex >= 0 ? `fl${flex}` : '');\n    \n        if (size && size.indexOf('px') < 0) {\n          customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n        }\n    \n        customClass.push(position === 'absolute' ? 'ExAbs' : '');\n        if (!(margin && margin.indexOf('px') >= 0)) {\n          customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n        }\n        customClass.push(\n          align === 'start' || align === 'end'\n            ? `alg${this.upper1Digit(align)}`\n            : ''\n        );\n        customClass.push(\n          gravity === 'bottom' || gravity === 'center'\n            ? `grv${this.upper1Digit(gravity)}`\n            : ''\n        );\n    \n        if (offsetTop && offsetTop.indexOf('px') < 0) {\n          customClass.push(offsetTop ? `ExT${this.upperAllDigit(offsetTop)}` : '');\n        }\n    \n        if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n          customClass.push(\n            offsetBottom ? `ExB${this.upperAllDigit(offsetBottom)}` : ''\n          );\n        }\n    \n        if (offsetStart && offsetStart.indexOf('px') < 0) {\n          customClass.push(\n            offsetStart ? `ExB${this.upperAllDigit(offsetStart)}` : ''\n          );\n        }\n    \n        if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n          customClass.push(offsetEnd ? `ExB${this.upperAllDigit(offsetEnd)}` : '');\n        }\n    \n        return customClass;\n    }\n\n    static getFlexSeparatorClass(data: FlexSeparator) {\n        const customClass = ['fl0', 'MdSep'];\n        const { margin }: FlexSeparator | any = data;\n        if (!(margin && margin.indexOf('px') >= 0)) {\n          customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n        }\n        return customClass;\n    }\n\n    static getFlexSpacerClass(data: FlexSpacer) {\n        const customClass = ['mdBxSpacer', 'fl0'];\n        const { size }: FlexSpacer | any = data;\n        if (size && size.indexOf('px') < 0) {\n          customClass.push('spc' + this.upperAllDigit(size || 'md'));\n        }\n        return customClass;\n    }\n\n    static getFlexSpanClass(data: FlexSpan) {\n        const { size, color, weight, style, decoration }: FlexSpan | any = data;\n        const customClass = ['MdSpn'];\n    \n        if (size && size.indexOf('px') < 0) {\n          customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n        }\n    \n        customClass.push(weight === 'bold' ? 'ExWB' : '');\n    \n        if (style) {\n          const FntSty: any = {\n            normal: 'ExFntStyNml',\n            italic: 'ExFntStyIt',\n          };\n          customClass.push(FntSty[style] || '');\n        }\n    \n        if (decoration) {\n          const ExTxtDec: any = {\n            'line-through': 'ExTxtDecLt',\n            underline: 'ExTxtDecUl',\n            none: 'ExTxtDecNone',\n          };\n          customClass.push(ExTxtDec[decoration] || '');\n        }\n        return customClass;\n    }\n\n    static getFlexTextClass(data: FlexText) {\n        const {\n          flex,\n          margin,\n          size,\n          position,\n          align,\n          gravity,\n          weight,\n          style,\n          decoration,\n          wrap,\n          offsetTop,\n          offsetBottom,\n          offsetStart,\n          offsetEnd,\n        }: FlexText | any = data;\n        const customClass = ['MdTxt'];\n        if (flex >= 0) {\n          customClass.push(`fl${flex}`);\n        }\n    \n        if (!(size && size.indexOf('px') >= 0)) {\n          customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n        }\n    \n        customClass.push(position === 'absolute' ? 'ExAbs' : '');\n    \n        if (!(margin && margin.indexOf('px') >= 0)) {\n          customClass.push(margin ? `ExMgnL${this.upperAllDigit(margin)}` : '');\n        }\n    \n        if (align === 'start' || align === 'end' || align === 'center') {\n          customClass.push(`ExAlg${this.upper1Digit(align)}`);\n        }\n    \n        if (gravity === 'bottom' || gravity === 'center') {\n          customClass.push(`grv${this.upper1Digit(gravity)}`);\n        }\n    \n        if (offsetTop && offsetTop.indexOf('px') < 0) {\n          customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n        }\n        if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n          customClass.push(\n            offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n          );\n        }\n        if (offsetStart && offsetStart.indexOf('px') < 0) {\n          customClass.push(\n            offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n          );\n        }\n        if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n          customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n        }\n    \n        if (weight === 'bold') {\n          customClass.push('ExWB');\n        }\n    \n        if (style) {\n          const FntSty: any = {\n            normal: 'ExFntStyNml',\n            italic: 'ExFntStyIt',\n          };\n          customClass.push(FntSty[style] || '');\n        }\n    \n        if (decoration) {\n          const ExTxtDec: any = {\n            'line-through': 'ExTxtDecLt',\n            underline: 'ExTxtDecUl',\n            none: 'ExTxtDecNone',\n          };\n          customClass.push(ExTxtDec[decoration] || '');\n        }\n    \n        if (wrap) {\n          customClass.push('ExWrap');\n        }\n    \n        return customClass;\n      }\n\n    static getFlexData(data: FlexComponent): FlexBox | FlexButton | FlexImage | FlexIcon | FlexText | FlexSpan | FlexSeparator | FlexFiller | FlexSpacer | any {\n        switch (data.type) {\n        case 'box':\n            return data as FlexBox;\n        case 'button':\n            return data as FlexButton;\n        case 'image':\n            return data as FlexImage;\n        case 'icon':\n            return data as FlexIcon;\n        case 'span':\n            return data as FlexSpan;\n        case 'separator':\n            return data as FlexSeparator;\n        case 'filler':\n            return data as FlexFiller;\n        case 'spacer':\n            return data as FlexSpacer;\n        case 'text':\n            return data as FlexText;\n        }\n    }\n}",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getFlexBoxClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexBox"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 19,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexBox",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexBubbleClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexBubble"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 164,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexBubble",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexButtonClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexButton"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 170,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexButton",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexData",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexComponent"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "FlexBox | FlexButton | FlexImage | FlexIcon | FlexText | FlexSpan | FlexSeparator | FlexFiller | FlexSpacer | any",
+                    "typeParameters": [],
+                    "line": 479,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexComponent",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexFillerClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexFiller"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 235,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexFiller",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexIconClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexIcon"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 245,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexIcon",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexImageClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexImage"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 286,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexImage",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexSeparatorClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexSeparator"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 347,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexSeparator",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexSpacerClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexSpacer"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 356,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexSpacer",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexSpanClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexSpan"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 365,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexSpan",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getFlexTextClass",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "FlexText"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 394,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "FlexText",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upper1Digit",
+                    "args": [
+                        {
+                            "name": "str",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 11,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upperAllDigit",
+                    "args": [
+                        {
+                            "name": "str",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 4,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "upperToDigit",
+                    "args": [
+                        {
+                            "name": "str",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 15,
+                    "modifierKind": [
+                        115
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "str",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
     "directives": [
         {
             "name": "RemoveHostDirective",
@@ -53,7 +419,7 @@
     "components": [
         {
             "name": "FlexBoxComponent",
-            "id": "component-FlexBoxComponent-7af8ce0a5b1983bd4f9e1402e06af124",
+            "id": "component-FlexBoxComponent-0ee8fe53bc0afbb4b978b7384f0c9029",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-box/flex-box.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -76,7 +442,14 @@
                     "type": "FlexBox"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 11,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
             "methodsClass": [
                 {
@@ -90,7 +463,7 @@
                     "optional": false,
                     "returnType": "FlexBox | FlexButton | FlexImage | FlexIcon | FlexText | FlexSpan | FlexSeparator | FlexFiller | FlexSpacer | any",
                     "typeParameters": [],
-                    "line": 259,
+                    "line": 121,
                     "jsdoctags": [
                         {
                             "name": "data",
@@ -102,51 +475,21 @@
                     ]
                 },
                 {
-                    "name": "ngOnInit",
-                    "args": [],
+                    "name": "onClickAction",
+                    "args": [
+                        {
+                            "name": "action",
+                            "type": "Action"
+                        }
+                    ],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 13
-                },
-                {
-                    "name": "upper1Digit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 297,
+                    "line": 13,
                     "jsdoctags": [
                         {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 290,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
+                            "name": "action",
+                            "type": "Action",
                             "tagName": {
                                 "text": "param"
                             }
@@ -159,7 +502,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';\n\n@Component({\n  selector: '[flex-box]',\n  templateUrl: './flex-box.component.html',\n  styleUrls: ['./flex-box.component.scss'],\n})\nexport class FlexBoxComponent implements OnInit {\n  @Input('data') data?: FlexBox;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get customClass(): string[] {\n    const customClass = ['MdBx'];\n    let {\n      layout,\n      position,\n      flex,\n      spacing,\n      margin,\n      borderWidth,\n      cornerRadius,\n      justifyContent,\n      alignItems,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n      paddingAll,\n      paddingTop,\n      paddingBottom,\n      paddingStart,\n      paddingEnd,\n    }: FlexBox | any = this.data;\n\n    if (layout === 'baseline') {\n      customClass.push('hr');\n      customClass.push('bl');\n    }\n    if (layout === 'horizontal') {\n      customClass.push('hr');\n    }\n    if (layout === 'vertical') {\n      customClass.push('vr');\n    }\n\n    if (flex <= 3) {\n      customClass.push(flex >= 0 ? `fl${flex}` : '');\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    if (spacing && spacing.indexOf('px') < 0) {\n      customClass.push(spacing ? 'spc' + this.upperAllDigit(spacing) : '');\n    }\n\n    if (margin && margin.indexOf('px') < 0) {\n      const ExMgnT: any = {\n        'none': 'ExMgnTNone',\n        'xs': 'ExMgnTXs',\n        'sm': 'ExMgnTSm',\n        'md': 'ExMgnTMd',\n        'lg': 'ExMgnTLg',\n        'xl': 'ExMgnTXl',\n        'xxl': 'ExMgnTXXl',\n      };\n      customClass.push(ExMgnT[margin] || '');\n    }\n\n    if (borderWidth && borderWidth.indexOf('px') < 0) {\n      const ExBdr: any = {\n        none: 'ExBdrWdtNone',\n        light: 'ExBdrWdtLgh',\n        normal: 'ExBdrWdtNml',\n        medium: 'ExBdrWdtMdm',\n        'semi-bold': 'ExBdrWdtSbd',\n        bold: 'ExBdrWdtBld',\n      };\n      customClass.push(ExBdr[borderWidth] || '');\n    }\n\n    if (cornerRadius && cornerRadius.indexOf('px') < 0) {\n      customClass.push(\n        cornerRadius ? 'ExBdrRad' + this.upperAllDigit(cornerRadius) : ''\n      );\n    }\n    if (justifyContent) {\n      const jfc: any = {\n        center: 'itms-jfcC',\n        'flex-start': 'itms-jfcS',\n        'flex-end': 'itms-jfcE',\n        'space-between': 'itms-jfcSB',\n        'space-around': 'itms-jfcSA',\n        'space-evenly': 'itms-jfcSE',\n      };\n      customClass.push(jfc[justifyContent] || '');\n    }\n\n    if (alignItems) {\n      const alg: any = {\n        center: 'itms-algC',\n        'flex-start': 'itms-algS',\n        'flex-end': 'itms-algE',\n      };\n      customClass.push(alg[alignItems] || '');\n    }\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    if (paddingAll && paddingAll.indexOf('px') < 0) {\n      customClass.push(\n        paddingAll ? 'ExPadA' + this.upperAllDigit(paddingAll) : ''\n      );\n    }\n\n    if (paddingTop && paddingTop.indexOf('px') < 0) {\n      customClass.push(\n        paddingTop ? 'ExPadT' + this.upperAllDigit(paddingTop) : ''\n      );\n    }\n\n    if (paddingBottom && paddingBottom.indexOf('px') < 0) {\n      customClass.push(\n        paddingBottom ? 'ExPadB' + this.upperAllDigit(paddingBottom) : ''\n      );\n    }\n\n    if (paddingStart && paddingStart.indexOf('px') < 0) {\n      customClass.push(\n        paddingStart ? 'ExPadL' + this.upperAllDigit(paddingStart) : ''\n      );\n    }\n\n    if (paddingEnd && paddingEnd.indexOf('px') < 0) {\n      customClass.push(\n        paddingEnd ? 'ExPadR' + this.upperAllDigit(paddingEnd) : ''\n      );\n    }\n\n    return customClass;\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    }\n    return null;\n  }\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  getFlexData(data: FlexComponent): FlexBox\n    | FlexButton\n    | FlexImage\n    | FlexIcon\n    | FlexText\n    | FlexSpan\n    | FlexSeparator\n    | FlexFiller\n    | FlexSpacer | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'button':\n        return data as FlexButton;\n      case 'image':\n        return data as FlexImage;\n      case 'icon':\n        return data as FlexIcon;\n      case 'span':\n        return data as FlexSpan;\n      case 'separator':\n        return data as FlexSeparator;\n      case 'filler':\n        return data as FlexFiller;\n      case 'spacer':\n        return data as FlexSpacer;\n      case 'text':\n        return data as FlexText;\n    }\n  }\n  \n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';\nimport Utils from '../../utils'\n@Component({\n  selector: '[flex-box]',\n  templateUrl: './flex-box.component.html',\n  styleUrls: ['./flex-box.component.scss'],\n})\nexport class FlexBoxComponent {\n  @Input('data') data?: FlexBox;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n\n  onClickAction(action: Action) {\n    this.action.emit(action);\n  }\n  \n  get customClass(): string[] {\n    return Utils.getFlexBoxClass(this.data as FlexBox);\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    }\n    return null;\n  }\n\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  getFlexData(data: FlexComponent): FlexBox\n    | FlexButton\n    | FlexImage\n    | FlexIcon\n    | FlexText\n    | FlexSpan\n    | FlexSeparator\n    | FlexFiller\n    | FlexSpacer | any {\n    return Utils.getFlexData(data);\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -168,15 +511,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
-            "implements": [
-                "OnInit"
-            ],
             "accessors": {
                 "customClass": {
                     "name": "customClass",
@@ -184,7 +518,7 @@
                         "name": "customClass",
                         "type": "[]",
                         "returnType": "string[]",
-                        "line": 15
+                        "line": 17
                     }
                 },
                 "background": {
@@ -193,7 +527,7 @@
                         "name": "background",
                         "type": "",
                         "returnType": "",
-                        "line": 160
+                        "line": 21
                     }
                 },
                 "padding": {
@@ -202,7 +536,7 @@
                         "name": "padding",
                         "type": "",
                         "returnType": "",
-                        "line": 174
+                        "line": 36
                     }
                 },
                 "paddingTop": {
@@ -211,7 +545,7 @@
                         "name": "paddingTop",
                         "type": "",
                         "returnType": "",
-                        "line": 179
+                        "line": 41
                     }
                 },
                 "paddingBottom": {
@@ -220,7 +554,7 @@
                         "name": "paddingBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 184
+                        "line": 46
                     }
                 },
                 "paddingStart": {
@@ -229,7 +563,7 @@
                         "name": "paddingStart",
                         "type": "",
                         "returnType": "",
-                        "line": 190
+                        "line": 52
                     }
                 },
                 "paddingEnd": {
@@ -238,7 +572,7 @@
                         "name": "paddingEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 195
+                        "line": 57
                     }
                 },
                 "offsetTop": {
@@ -247,7 +581,7 @@
                         "name": "offsetTop",
                         "type": "",
                         "returnType": "",
-                        "line": 200
+                        "line": 62
                     }
                 },
                 "offsetBottom": {
@@ -256,7 +590,7 @@
                         "name": "offsetBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 205
+                        "line": 67
                     }
                 },
                 "offsetStart": {
@@ -265,7 +599,7 @@
                         "name": "offsetStart",
                         "type": "",
                         "returnType": "",
-                        "line": 210
+                        "line": 72
                     }
                 },
                 "offsetEnd": {
@@ -274,7 +608,7 @@
                         "name": "offsetEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 215
+                        "line": 77
                     }
                 },
                 "width": {
@@ -283,7 +617,7 @@
                         "name": "width",
                         "type": "",
                         "returnType": "",
-                        "line": 221
+                        "line": 83
                     }
                 },
                 "height": {
@@ -292,7 +626,7 @@
                         "name": "height",
                         "type": "",
                         "returnType": "",
-                        "line": 225
+                        "line": 87
                     }
                 },
                 "backgroundColor": {
@@ -301,7 +635,7 @@
                         "name": "backgroundColor",
                         "type": "",
                         "returnType": "",
-                        "line": 229
+                        "line": 91
                     }
                 },
                 "borderColor": {
@@ -310,7 +644,7 @@
                         "name": "borderColor",
                         "type": "",
                         "returnType": "",
-                        "line": 233
+                        "line": 95
                     }
                 },
                 "borderWidth": {
@@ -319,7 +653,7 @@
                         "name": "borderWidth",
                         "type": "",
                         "returnType": "",
-                        "line": 237
+                        "line": 99
                     }
                 },
                 "cornerRadius": {
@@ -328,7 +662,7 @@
                         "name": "cornerRadius",
                         "type": "",
                         "returnType": "",
-                        "line": 243
+                        "line": 105
                     }
                 },
                 "marginTop": {
@@ -337,7 +671,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 249
+                        "line": 111
                     }
                 },
                 "flex": {
@@ -346,15 +680,15 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 255
+                        "line": 117
                     }
                 }
             },
-            "templateData": "<div\n  [ngClass]=\"customClass\"\n  [style.padding-right]=\"paddingEnd\"\n  [style.padding-left]=\"paddingStart\"\n  [style.padding-bottom]=\"paddingBottom\"\n  [style.padding-top]=\"paddingTop\"\n  [style.padding]=\"padding\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.border-radius]=\"cornerRadius\"\n  [style.border-width]=\"borderWidth\"\n  [style.border-color]=\"borderColor\"\n  [style.background-color]=\"backgroundColor\"\n  [style]=\"{ background: background }\"\n  [style.height]=\"height\"\n  [style.width]=\"width\"\n  [style.margin-top]=\"marginTop\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <ng-container *ngFor=\"let item of data?.contents\" remove-host>\n    <div *ngIf=\"item?.type == 'box'\" flex-box [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'image'\" flex-image [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'icon'\" flex-icon [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'text'\" flex-text [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'button'\" flex-button [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'filler'\" flex-filler [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'separator'\" flex-separator [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'spacer'\" flex-spacer [data]=\"getFlexData(item)\" remove-host></div>\n  </ng-container>\n</div>\n"
+            "templateData": "<div\n  [ngClass]=\"customClass\"\n  [style.padding-right]=\"paddingEnd\"\n  [style.padding-left]=\"paddingStart\"\n  [style.padding-bottom]=\"paddingBottom\"\n  [style.padding-top]=\"paddingTop\"\n  [style.padding]=\"padding\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n  [style.border-radius]=\"cornerRadius\"\n  [style.border-width]=\"borderWidth\"\n  [style.border-color]=\"borderColor\"\n  [style.background-color]=\"backgroundColor\"\n  [style]=\"{ background: background }\"\n  [style.height]=\"height\"\n  [style.width]=\"width\"\n  [style.margin-top]=\"marginTop\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n>\n  <ng-container *ngFor=\"let item of data?.contents\" remove-host>\n    <div *ngIf=\"item?.type == 'box'\" flex-box [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'image'\" flex-image [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'icon'\" flex-icon [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'text'\" flex-text [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'button'\" flex-button [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'filler'\" flex-filler [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'separator'\" flex-separator [data]=\"getFlexData(item)\" remove-host></div>\n    <div *ngIf=\"item?.type == 'spacer'\" flex-spacer [data]=\"getFlexData(item)\" remove-host></div>\n  </ng-container>\n</div>\n"
         },
         {
             "name": "FlexBubbleComponent",
-            "id": "component-FlexBubbleComponent-7f1c1ab4e1f2220ea12311c40e5098f3",
+            "id": "component-FlexBubbleComponent-8fb0385643c7a2e77dfada362eaee19c",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-bubble/flex-bubble.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -373,11 +707,18 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexBubble"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 12,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
             "methodsClass": [
                 {
@@ -391,7 +732,7 @@
                     "optional": false,
                     "returnType": "FlexBox | FlexImage | any",
                     "typeParameters": [],
-                    "line": 45,
+                    "line": 43,
                     "jsdoctags": [
                         {
                             "name": "data",
@@ -413,7 +754,7 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 25,
+                    "line": 29,
                     "jsdoctags": [
                         {
                             "name": "key",
@@ -425,21 +766,21 @@
                     ]
                 },
                 {
-                    "name": "upperToDigit",
+                    "name": "onClickAction",
                     "args": [
                         {
-                            "name": "str",
-                            "type": "string"
+                            "name": "action",
+                            "type": "Action"
                         }
                     ],
                     "optional": false,
-                    "returnType": "any",
+                    "returnType": "void",
                     "typeParameters": [],
-                    "line": 41,
+                    "line": 14,
                     "jsdoctags": [
                         {
-                            "name": "str",
-                            "type": "string",
+                            "name": "action",
+                            "type": "Action",
                             "tagName": {
                                 "text": "param"
                             }
@@ -452,7 +793,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexBox, FlexBubble, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';\n\n@Component({\n  selector: '[flex-bubble]',\n  templateUrl: './flex-bubble.component.html',\n  styleUrls: ['./flex-bubble.component.scss'],\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n\n  constructor() {}\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  get customBubbleClass() {\n    const customClass = ['lyItem'];\n    customClass.push(`Ly${this.upperToDigit(this.data?.size || 'medium')}`);\n    return customClass;\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  upperToDigit(str: string) {\n    return str.charAt(0).toUpperCase() + str.substring(1, 2);\n  }\n\n  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'image':\n        return data as FlexImage;\n    }\n  }\n\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexBox, FlexBubble, FlexImage } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-bubble]',\n  templateUrl: './flex-bubble.component.html',\n  styleUrls: ['./flex-bubble.component.scss'],\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n\n  onClickAction(action: Action) {\n    this.action.emit(action);\n  }\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  get customBubbleClass() {\n    return Utils.getFlexBubbleClass(this.data as FlexBubble);\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'image':\n        return data as FlexImage;\n    }\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -461,12 +802,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "flexData": {
                     "name": "flexData",
@@ -474,7 +809,7 @@
                         "name": "flexData",
                         "type": "",
                         "returnType": "",
-                        "line": 14
+                        "line": 18
                     }
                 },
                 "customBubbleClass": {
@@ -483,7 +818,7 @@
                         "name": "customBubbleClass",
                         "type": "",
                         "returnType": "",
-                        "line": 29
+                        "line": 33
                     }
                 },
                 "customDirectionClass": {
@@ -492,15 +827,15 @@
                         "name": "customDirectionClass",
                         "type": "",
                         "returnType": "",
-                        "line": 35
+                        "line": 37
                     }
                 }
             },
-            "templateData": "<div [ngClass]=\"customBubbleClass\">\n  <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n    <div class=\"t1Hero\">\n      <div *ngIf=\"data?.hero?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.hero)\" remove-host></div>\n      <div *ngIf=\"data?.hero?.type == 'image'\" flex-image [data]=\"getFlexContent(data?.hero)\" remove-host></div>\n    </div>\n    <div class=\"t1Header\">\n      <div *ngIf=\"data?.header?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.header)\" remove-host></div>\n    </div>\n    <div class=\"t1Body ExHasFooter\">\n      <div *ngIf=\"data?.body?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.body)\" remove-host></div>\n    </div>\n    <div class=\"t1Footer\">\n      <div *ngIf=\"data?.footer?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.footer)\" remove-host></div>\n    </div>\n  </div>\n</div>\n"
+            "templateData": "<div [ngClass]=\"customBubbleClass\">\n  <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n    <div class=\"t1Hero\">\n      <div *ngIf=\"data?.hero?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.hero)\" (action)=\"onClickAction($event)\" remove-host></div>\n      <div *ngIf=\"data?.hero?.type == 'image'\" flex-image [data]=\"getFlexContent(data?.hero)\" (action)=\"onClickAction($event)\" remove-host></div>\n    </div>\n    <div class=\"t1Header\">\n      <div *ngIf=\"data?.header?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.header)\" (action)=\"onClickAction($event)\" remove-host></div>\n    </div>\n    <div class=\"t1Body ExHasFooter\">\n      <div *ngIf=\"data?.body?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.body)\" (action)=\"onClickAction($event)\" remove-host></div>\n    </div>\n    <div class=\"t1Footer\">\n      <div *ngIf=\"data?.footer?.type == 'box'\" flex-box [data]=\"getFlexContent(data?.footer)\" (action)=\"onClickAction($event)\" remove-host></div>\n    </div>\n  </div>\n</div>\n"
         },
         {
             "name": "FlexButtonComponent",
-            "id": "component-FlexButtonComponent-8d827590a49784c5bf5ee58d2bcf38e8",
+            "id": "component-FlexButtonComponent-7426e8bfe7ef9fb0d0b8c1136084749a",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-button/flex-button.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -519,51 +854,36 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexButton"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 12,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
             "methodsClass": [
                 {
-                    "name": "upper1Digit",
+                    "name": "onClick",
                     "args": [
                         {
-                            "name": "str",
-                            "type": "string"
+                            "name": "action",
+                            "type": "Action"
                         }
                     ],
                     "optional": false,
-                    "returnType": "any",
+                    "returnType": "void",
                     "typeParameters": [],
-                    "line": 124,
+                    "line": 14,
                     "jsdoctags": [
                         {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 117,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
+                            "name": "action",
+                            "type": "Action",
                             "tagName": {
                                 "text": "param"
                             }
@@ -576,7 +896,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexButton } from '../../model';\n\n@Component({\n  selector: '[flex-button]',\n  templateUrl: './flex-button.component.html',\n  styleUrls: ['./flex-button.component.scss'],\n})\nexport class FlexButtonComponent {\n  @Input('data') data?: FlexButton;\n\n  constructor() {}\n\n  get buttonClass() {\n    const customClass = ['MdBtn'];\n    let {\n      flex,\n      margin,\n      position,\n      height,\n      style,\n      gravity,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n    }: FlexButton | any = this.data;\n\n    if (flex <= 3) {\n      customClass.push(flex >= 0 ? `fl${flex}` : '');\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    customClass.push(\n      gravity === 'bottom' || gravity === 'center'\n        ? `grv${this.upper1Digit(gravity)}`\n        : ''\n    );\n\n    if (margin && margin.indexOf('px') < 0) {\n      customClass.push(margin ? 'ExMgnT' + this.upperAllDigit(margin) : '');\n    }\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    const FntSty: any = {\n      link: 'ExBtnL',\n      primary: 'ExBtn1',\n      secondary: 'ExBtn2',\n    };\n    customClass.push(FntSty[style] || 'ExBtnL');\n\n    customClass.push(\n      !height || height === 'md' ? '' : 'Ex' + this.upperAllDigit(height)\n    );\n\n    return customClass;\n  }\n\n  get backgroundColor() {\n    return this.data?.color ? this.data?.color : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexButton } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-button]',\n  templateUrl: './flex-button.component.html',\n  styleUrls: ['./flex-button.component.scss'],\n})\nexport class FlexButtonComponent {\n  @Input('data') data?: FlexButton;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n\n  onClick(action: Action) {\n    this.action.emit(action);\n  }\n\n  get buttonClass() {\n    return Utils.getFlexButtonClass(this.data as FlexButton);\n  }\n\n  get backgroundColor() {\n    return this.data?.color ? this.data?.color : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -585,12 +905,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "buttonClass": {
                     "name": "buttonClass",
@@ -598,7 +912,7 @@
                         "name": "buttonClass",
                         "type": "",
                         "returnType": "",
-                        "line": 14
+                        "line": 18
                     }
                 },
                 "backgroundColor": {
@@ -607,7 +921,7 @@
                         "name": "backgroundColor",
                         "type": "",
                         "returnType": "",
-                        "line": 79
+                        "line": 22
                     }
                 },
                 "marginTop": {
@@ -616,7 +930,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 83
+                        "line": 26
                     }
                 },
                 "offsetTop": {
@@ -625,7 +939,7 @@
                         "name": "offsetTop",
                         "type": "",
                         "returnType": "",
-                        "line": 89
+                        "line": 32
                     }
                 },
                 "offsetBottom": {
@@ -634,7 +948,7 @@
                         "name": "offsetBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 95
+                        "line": 38
                     }
                 },
                 "offsetStart": {
@@ -643,7 +957,7 @@
                         "name": "offsetStart",
                         "type": "",
                         "returnType": "",
-                        "line": 101
+                        "line": 44
                     }
                 },
                 "offsetEnd": {
@@ -652,7 +966,7 @@
                         "name": "offsetEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 107
+                        "line": 50
                     }
                 },
                 "flex": {
@@ -661,15 +975,15 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 113
+                        "line": 56
                     }
                 }
             },
-            "templateData": "<div\n  [ngClass]=\"buttonClass\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n  [style.margin-top]=\"marginTop\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n>\n  <a [style.background-color]=\"backgroundColor\">\n    <div>{{ data?.action?.label }}</div>\n  </a>\n</div>\n"
+            "templateData": "<div\n  [ngClass]=\"buttonClass\"\n  [style.-webkit-box-flex]=\"flex\"\n  [style.flex-grow]=\"flex\"\n  [style.margin-top]=\"marginTop\"\n  [style.left]=\"offsetStart\"\n  [style.right]=\"offsetEnd\"\n  [style.bottom]=\"offsetBottom\"\n  [style.top]=\"offsetTop\"\n>\n  <a [style.background-color]=\"backgroundColor\" (click)=\"onClick(data?.action)\">\n    <div>{{ data?.action?.label }}</div>\n  </a>\n</div>\n"
         },
         {
             "name": "FlexCarouselComponent",
-            "id": "component-FlexCarouselComponent-ee28746d5beda8c349e1fcfbfdf8984f",
+            "id": "component-FlexCarouselComponent-c50175a96fcd16ec398859eba6052a83",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-carousel/flex-carousel.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -700,7 +1014,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexCarousel } from '../../model';\n\n@Component({\n  selector: '[flex-carousel]',\n  templateUrl: './flex-carousel.component.html',\n  styleUrls: ['./flex-carousel.component.scss'],\n})\nexport class FlexCarouselComponent {\n  @Input('data') data?: FlexCarousel;\n\n  constructor() {}\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexCarousel } from '../../model';\n\n@Component({\n  selector: '[flex-carousel]',\n  templateUrl: './flex-carousel.component.html',\n  styleUrls: ['./flex-carousel.component.scss'],\n})\nexport class FlexCarouselComponent {\n  @Input('data') data?: FlexCarousel;\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -709,17 +1023,11 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "templateData": "<div\n  *ngFor=\"let item of data?.contents\"\n  flex-bubble\n  [data]=\"item\"\n  remove-host\n></div>\n"
         },
         {
             "name": "FlexFillerComponent",
-            "id": "component-FlexFillerComponent-ce77d9acf1301b7a7a034d46144cea19",
+            "id": "component-FlexFillerComponent-36930381aba53cd4b56da4a069d13950",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-filler/flex-filler.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -738,7 +1046,7 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexFiller"
                 }
             ],
@@ -750,7 +1058,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexFiller } from '../../model';\n\n@Component({\n  selector: '[flex-filler]',\n  templateUrl: './flex-filler.component.html',\n  styleUrls: ['./flex-filler.component.scss'],\n})\nexport class FlexFillerComponent {\n  @Input('data') data?: FlexFiller;\n\n  constructor() {}\n\n  get fillerClass() {\n    const { flex }: FlexFiller | any = this.data;\n    const customClass = ['mdBxFiller'];\n    if (flex >= 0 && flex <= 3) {\n      customClass.push(`fl${flex}`);\n    }\n\n    return customClass;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexFiller } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-filler]',\n  templateUrl: './flex-filler.component.html',\n  styleUrls: ['./flex-filler.component.scss'],\n})\nexport class FlexFillerComponent {\n  @Input('data') data?: FlexFiller;\n\n  get fillerClass() {\n    return Utils.getFlexFillerClass(this.data as FlexFiller);\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -759,12 +1067,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "fillerClass": {
                     "name": "fillerClass",
@@ -772,7 +1074,7 @@
                         "name": "fillerClass",
                         "type": "",
                         "returnType": "",
-                        "line": 14
+                        "line": 13
                     }
                 },
                 "flex": {
@@ -781,7 +1083,7 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 24
+                        "line": 17
                     }
                 }
             },
@@ -789,7 +1091,7 @@
         },
         {
             "name": "FlexIconComponent",
-            "id": "component-FlexIconComponent-f934a6f21dc014d81cc43ae01c8671a7",
+            "id": "component-FlexIconComponent-6c69d1d0074887cefc42b6005dff1a2e",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-icon/flex-icon.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -808,64 +1110,19 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexIcon"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "upper1Digit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 108,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 101,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methodsClass": [],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexIcon } from '../../model';\n\n@Component({\n  selector: '[flex-icon]',\n  templateUrl: './flex-icon.component.html',\n  styleUrls: ['./flex-icon.component.scss'],\n})\nexport class FlexIconComponent {\n  @Input('data') data?: FlexIcon;\n\n  constructor() {}\n\n  get iconClass() {\n    const {\n      size,\n      aspectRatio,\n      position,\n      margin,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n    }: FlexIcon | any = this.data;\n    const customClass = ['MdIco', 'fl0'];\n\n    if (!(size && size.indexOf('px') >= 0)) {\n      customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n    }\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    if (!(margin && margin.indexOf('px') >= 0)) {\n      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n    }\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    return customClass;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get backgroundImage() {\n    return this.data?.url ? 'url(' + this.data?.url + ')' : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get fontSize() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n\n  get width() {\n    const ratio = '100';\n    if (!this.data?.aspectRatio) {\n      return 1;\n    } else {\n      return Number(ratio[0]) / Number(ratio[1]);\n    }\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexIcon } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-icon]',\n  templateUrl: './flex-icon.component.html',\n  styleUrls: ['./flex-icon.component.scss'],\n})\nexport class FlexIconComponent {\n  @Input('data') data?: FlexIcon;\n\n  constructor() {}\n\n  get iconClass() {\n    return Utils.getFlexIconClass(this.data as FlexIcon);\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get backgroundImage() {\n    return this.data?.url ? 'url(' + this.data?.url + ')' : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get fontSize() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n\n  get width() {\n    const ratio = '100';\n    if (!this.data?.aspectRatio) {\n      return 1;\n    } else {\n      return Number(ratio[0]) / Number(ratio[1]);\n    }\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -878,7 +1135,7 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 10
+                "line": 11
             },
             "accessors": {
                 "iconClass": {
@@ -887,7 +1144,7 @@
                         "name": "iconClass",
                         "type": "",
                         "returnType": "",
-                        "line": 14
+                        "line": 15
                     }
                 },
                 "marginTop": {
@@ -896,7 +1153,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 55
+                        "line": 19
                     }
                 },
                 "backgroundImage": {
@@ -905,7 +1162,7 @@
                         "name": "backgroundImage",
                         "type": "",
                         "returnType": "",
-                        "line": 61
+                        "line": 25
                     }
                 },
                 "offsetTop": {
@@ -914,7 +1171,7 @@
                         "name": "offsetTop",
                         "type": "",
                         "returnType": "",
-                        "line": 65
+                        "line": 29
                     }
                 },
                 "offsetBottom": {
@@ -923,7 +1180,7 @@
                         "name": "offsetBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 70
+                        "line": 34
                     }
                 },
                 "offsetStart": {
@@ -932,7 +1189,7 @@
                         "name": "offsetStart",
                         "type": "",
                         "returnType": "",
-                        "line": 75
+                        "line": 39
                     }
                 },
                 "offsetEnd": {
@@ -941,7 +1198,7 @@
                         "name": "offsetEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 80
+                        "line": 44
                     }
                 },
                 "fontSize": {
@@ -950,7 +1207,7 @@
                         "name": "fontSize",
                         "type": "",
                         "returnType": "",
-                        "line": 86
+                        "line": 50
                     }
                 },
                 "width": {
@@ -959,7 +1216,7 @@
                         "name": "width",
                         "type": "",
                         "returnType": "",
-                        "line": 92
+                        "line": 56
                     }
                 }
             },
@@ -967,7 +1224,7 @@
         },
         {
             "name": "FlexImageComponent",
-            "id": "component-FlexImageComponent-8ad560de416be973c8577c8a0b82e845",
+            "id": "component-FlexImageComponent-a93622d52ece11d92b14b169da42674e",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-image/flex-image.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -986,11 +1243,18 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexImage"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 12,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
             "methodsClass": [
                 {
@@ -1005,56 +1269,12 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 12,
+                    "line": 14,
                     "jsdoctags": [
                         {
                             "name": "action",
                             "type": "Action",
                             "optional": true,
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upper1Digit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 23,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 16,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
                             "tagName": {
                                 "text": "param"
                             }
@@ -1067,7 +1287,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { Action, FlexImage } from '../../model';\n\n@Component({\n  selector: '[flex-image]',\n  templateUrl: './flex-image.component.html',\n  styleUrls: ['./flex-image.component.scss'],\n})\nexport class FlexImageComponent {\n  @Input('data') data?: FlexImage;\n\n  onClick(action?: Action) {\n    console.log(action);\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n  get customClass() {\n    const {\n      aspectMode,\n      size,\n      position,\n      flex,\n      margin,\n      align,\n      gravity,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n    }: FlexImage | any = this.data;\n    const customClass = ['MdImg'];\n\n    customClass.push(`Ex${this.upperAllDigit(aspectMode || 'fit')}`);\n    customClass.push(flex && flex >= 0 ? `fl${flex}` : '');\n\n    if (size && size.indexOf('px') < 0) {\n      customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n    if (!(margin && margin.indexOf('px') >= 0)) {\n      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n    }\n    customClass.push(\n      align === 'start' || align === 'end'\n        ? `alg${this.upper1Digit(align)}`\n        : ''\n    );\n    customClass.push(\n      gravity === 'bottom' || gravity === 'center'\n        ? `grv${this.upper1Digit(gravity)}`\n        : ''\n    );\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? `ExT${this.upperAllDigit(offsetTop)}` : '');\n    }\n\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? `ExB${this.upperAllDigit(offsetBottom)}` : ''\n      );\n    }\n\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? `ExB${this.upperAllDigit(offsetStart)}` : ''\n      );\n    }\n\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? `ExB${this.upperAllDigit(offsetEnd)}` : '');\n    }\n\n    return customClass;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  get width() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n\n  get backgroundImage() {\n    return this.data?.url ? 'url(' + this.data?.url + ')' : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor\n      ? this.data?.backgroundColor + ' !important;'\n      : null;\n  }\n\n  get paddingBottom() {\n    if (this.data?.aspectRatio) {\n      const ratio = this.data?.aspectRatio.split(':');\n      return (Number(ratio[1]) * 100) / Number(ratio[0]);\n    }\n    return 100;\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexImage } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-image]',\n  templateUrl: './flex-image.component.html',\n  styleUrls: ['./flex-image.component.scss'],\n})\nexport class FlexImageComponent {\n  @Input('data') data?: FlexImage;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n  \n  onClick(action?: Action) {\n    this.action.emit(action);\n  }\n\n  get customClass() {\n    return Utils.getFlexImageClass(this.data as FlexImage);\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  get width() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n\n  get backgroundImage() {\n    return this.data?.url ? 'url(' + this.data?.url + ')' : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor\n      ? this.data?.backgroundColor + ' !important;'\n      : null;\n  }\n\n  get paddingBottom() {\n    if (this.data?.aspectRatio) {\n      const ratio = this.data?.aspectRatio.split(':');\n      return (Number(ratio[1]) * 100) / Number(ratio[0]);\n    }\n    return 100;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1083,7 +1303,7 @@
                         "name": "customClass",
                         "type": "",
                         "returnType": "",
-                        "line": 26
+                        "line": 18
                     }
                 },
                 "flex": {
@@ -1092,7 +1312,7 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 87
+                        "line": 22
                     }
                 },
                 "width": {
@@ -1101,7 +1321,7 @@
                         "name": "width",
                         "type": "",
                         "returnType": "",
-                        "line": 91
+                        "line": 26
                     }
                 },
                 "backgroundImage": {
@@ -1110,7 +1330,7 @@
                         "name": "backgroundImage",
                         "type": "",
                         "returnType": "",
-                        "line": 97
+                        "line": 32
                     }
                 },
                 "backgroundColor": {
@@ -1119,7 +1339,7 @@
                         "name": "backgroundColor",
                         "type": "",
                         "returnType": "",
-                        "line": 101
+                        "line": 36
                     }
                 },
                 "paddingBottom": {
@@ -1128,7 +1348,7 @@
                         "name": "paddingBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 107
+                        "line": 42
                     }
                 }
             },
@@ -1136,7 +1356,7 @@
         },
         {
             "name": "FlexMessageComponent",
-            "id": "component-FlexMessageComponent-73f6b16a6383e451abaf3b9f22e5af7e",
+            "id": "component-FlexMessageComponent-8c9218a4fb91e5d620987d90481f434a",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-message/flex-message.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1159,16 +1379,37 @@
                     "type": "FlexContainer"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 11,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
             "methodsClass": [
                 {
-                    "name": "ngOnInit",
-                    "args": [],
+                    "name": "onClickAction",
+                    "args": [
+                        {
+                            "name": "action",
+                            "type": "Action"
+                        }
+                    ],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 14
+                    "line": 13,
+                    "jsdoctags": [
+                        {
+                            "name": "action",
+                            "type": "Action",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
                 }
             ],
             "hostBindings": [],
@@ -1176,7 +1417,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexBubble, FlexCarousel, FlexContainer } from '../../model';\n\n@Component({\n  selector: 'flex-message',\n  templateUrl: './flex-message.component.html',\n  styleUrls: ['./flex-message.component.scss'],\n})\nexport class FlexMessageComponent implements OnInit {\n  @Input() data?: FlexContainer;\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  get flexCarousel(): FlexCarousel {\n    return this.data as FlexCarousel;\n  }\n\n  get flexBubble(): FlexBubble {\n    return this.data as FlexBubble;\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexBubble, FlexCarousel, FlexContainer } from '../../model';\n\n@Component({\n  selector: 'flex-message',\n  templateUrl: './flex-message.component.html',\n  styleUrls: ['./flex-message.component.scss'],\n})\nexport class FlexMessageComponent {\n  @Input() data?: FlexContainer;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n\n  onClickAction(action: Action) {\n    this.action.emit(action);\n  }\n  \n  get flexCarousel(): FlexCarousel {\n    return this.data as FlexCarousel;\n  }\n\n  get flexBubble(): FlexBubble {\n    return this.data as FlexBubble;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1185,15 +1426,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
-            "implements": [
-                "OnInit"
-            ],
             "accessors": {
                 "flexCarousel": {
                     "name": "flexCarousel",
@@ -1201,7 +1433,7 @@
                         "name": "flexCarousel",
                         "type": "",
                         "returnType": "FlexCarousel",
-                        "line": 16
+                        "line": 17
                     }
                 },
                 "flexBubble": {
@@ -1210,7 +1442,7 @@
                         "name": "flexBubble",
                         "type": "",
                         "returnType": "FlexBubble",
-                        "line": 20
+                        "line": 21
                     }
                 }
             },
@@ -1218,7 +1450,7 @@
         },
         {
             "name": "FlexSeparatorComponent",
-            "id": "component-FlexSeparatorComponent-792334fd360e050a9a9e2861594ef172",
+            "id": "component-FlexSeparatorComponent-ad55371f6fbf5bec1aba17ed3c892a94",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-separator/flex-separator.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1237,42 +1469,19 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexSeparator"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 14,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methodsClass": [],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexSeparator } from '../../model';\n\n@Component({\n  selector: '[flex-separator]',\n  templateUrl: './flex-separator.component.html',\n  styleUrls: ['./flex-separator.component.scss'],\n})\nexport class FlexSeparatorComponent {\n  @Input('data') data?: FlexSeparator;\n\n  constructor() {}\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  get separatorClass() {\n    const customClass = ['fl0', 'MdSep'];\n    const { margin }: FlexSeparator | any = this.data;\n    if (!(margin && margin.indexOf('px') >= 0)) {\n      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');\n    }\n    return customClass;\n  }\n\n  get borderColor() {\n    return this.data?.color ? this.data?.color : null;\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexSeparator } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-separator]',\n  templateUrl: './flex-separator.component.html',\n  styleUrls: ['./flex-separator.component.scss'],\n})\nexport class FlexSeparatorComponent {\n  @Input('data') data?: FlexSeparator;\n\n  get separatorClass() {\n    return Utils.getFlexSeparatorClass(this.data as FlexSeparator);\n  }\n\n  get borderColor() {\n    return this.data?.color ? this.data?.color : null;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1281,12 +1490,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "separatorClass": {
                     "name": "separatorClass",
@@ -1294,7 +1497,7 @@
                         "name": "separatorClass",
                         "type": "",
                         "returnType": "",
-                        "line": 21
+                        "line": 13
                     }
                 },
                 "borderColor": {
@@ -1303,7 +1506,7 @@
                         "name": "borderColor",
                         "type": "",
                         "returnType": "",
-                        "line": 30
+                        "line": 17
                     }
                 }
             },
@@ -1311,7 +1514,7 @@
         },
         {
             "name": "FlexSpacerComponent",
-            "id": "component-FlexSpacerComponent-72a8872588e2b5c20fd7d96f60c52d03",
+            "id": "component-FlexSpacerComponent-36b348cc0ee1c9922e710b3f5ba1d9ff",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-spacer/flex-spacer.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1330,42 +1533,19 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexSpacer"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 23,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methodsClass": [],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexSpacer } from '../../model';\n\n@Component({\n  selector: '[flex-spacer]',\n  templateUrl: './flex-spacer.component.html',\n  styleUrls: ['./flex-spacer.component.scss'],\n})\nexport class FlexSpacerComponent {\n  @Input('data') data?: FlexSpacer;\n\n  constructor() {}\n\n  get spacerClass() {\n    const customClass = ['mdBxSpacer', 'fl0'];\n    const { size }: FlexSpacer | any = this.data;\n    if (size && size.indexOf('px') < 0) {\n      customClass.push('spc' + this.upperAllDigit(size || 'md'));\n    }\n    return customClass;\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return (\n      str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2)\n    );\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexSpacer } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-spacer]',\n  templateUrl: './flex-spacer.component.html',\n  styleUrls: ['./flex-spacer.component.scss'],\n})\nexport class FlexSpacerComponent {\n  @Input('data') data?: FlexSpacer;\n\n  get spacerClass() {\n    return Utils.getFlexSpacerClass(this.data as FlexSpacer);\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1374,12 +1554,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "spacerClass": {
                     "name": "spacerClass",
@@ -1387,7 +1561,7 @@
                         "name": "spacerClass",
                         "type": "",
                         "returnType": "",
-                        "line": 14
+                        "line": 13
                     }
                 }
             },
@@ -1395,7 +1569,7 @@
         },
         {
             "name": "FlexSpanComponent",
-            "id": "component-FlexSpanComponent-2cd820d8f429c4e232cf28daf78a2c9f",
+            "id": "component-FlexSpanComponent-50df7b0c3b12e09f3e28ba658cc3c8c1",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-span/flex-span.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1414,64 +1588,19 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexSpan"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "upper1Digit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 60,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 53,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methodsClass": [],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\nimport { FlexSpan } from '../../model';\n\n@Component({\n  selector: '[flex-span]',\n  templateUrl: './flex-span.component.html',\n  styleUrls: ['./flex-span.component.scss'],\n})\nexport class FlexSpanComponent {\n  @Input('data') data?: FlexSpan;\n  constructor() {}\n\n  get spanClass() {\n    const { size, color, weight, style, decoration }: FlexSpan | any =\n      this.data;\n    const customClass = ['MdSpn'];\n\n    if (size && size.indexOf('px') < 0) {\n      customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n    }\n\n    customClass.push(weight === 'bold' ? 'ExWB' : '');\n\n    if (style) {\n      const FntSty: any = {\n        normal: 'ExFntStyNml',\n        italic: 'ExFntStyIt',\n      };\n      customClass.push(FntSty[style] || '');\n    }\n\n    if (decoration) {\n      const ExTxtDec: any = {\n        'line-through': 'ExTxtDecLt',\n        underline: 'ExTxtDecUl',\n        none: 'ExTxtDecNone',\n      };\n      customClass.push(ExTxtDec[decoration] || '');\n    }\n\n    return customClass;\n  }\n\n  get color() {\n    return this.data?.color ? this.data?.color : null;\n  }\n  get fontSize() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexSpan } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-span]',\n  templateUrl: './flex-span.component.html',\n  styleUrls: ['./flex-span.component.scss'],\n})\nexport class FlexSpanComponent {\n  @Input('data') data?: FlexSpan;\n\n  get spanClass() {\n    return Utils.getFlexSpanClass(this.data as FlexSpan);\n  }\n\n  get color() {\n    return this.data?.color ? this.data?.color : null;\n  }\n\n  get fontSize() {\n    return this.data?.size && this.data?.size.indexOf('px') >= 0\n      ? this.data?.size\n      : null;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1480,12 +1609,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "spanClass": {
                     "name": "spanClass",
@@ -1502,7 +1625,7 @@
                         "name": "color",
                         "type": "",
                         "returnType": "",
-                        "line": 44
+                        "line": 17
                     }
                 },
                 "fontSize": {
@@ -1511,7 +1634,7 @@
                         "name": "fontSize",
                         "type": "",
                         "returnType": "",
-                        "line": 47
+                        "line": 21
                     }
                 }
             },
@@ -1519,7 +1642,7 @@
         },
         {
             "name": "FlexTextComponent",
-            "id": "component-FlexTextComponent-3fbba9d3f9cc1368f262c4860d15ac6a",
+            "id": "component-FlexTextComponent-35c2877f10c987d977dbb1ef144c54e5",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-text/flex-text.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1538,64 +1661,19 @@
             "inputsClass": [
                 {
                     "name": "data",
-                    "line": 10,
+                    "line": 11,
                     "type": "FlexText"
                 }
             ],
             "outputsClass": [],
             "propertiesClass": [],
-            "methodsClass": [
-                {
-                    "name": "upper1Digit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 143,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "upperAllDigit",
-                    "args": [
-                        {
-                            "name": "str",
-                            "type": "string"
-                        }
-                    ],
-                    "optional": false,
-                    "returnType": "any",
-                    "typeParameters": [],
-                    "line": 136,
-                    "jsdoctags": [
-                        {
-                            "name": "str",
-                            "type": "string",
-                            "tagName": {
-                                "text": "param"
-                            }
-                        }
-                    ]
-                }
-            ],
+            "methodsClass": [],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexText } from '../../model';\n\n@Component({\n  selector: '[flex-text]',\n  templateUrl: './flex-text.component.html',\n  styleUrls: ['./flex-text.component.scss'],\n})\nexport class FlexTextComponent {\n  @Input('data') data?: FlexText;\n  constructor() {}\n\n  get textClass() {\n    const {\n      flex,\n      margin,\n      size,\n      position,\n      align,\n      gravity,\n      weight,\n      style,\n      decoration,\n      wrap,\n      offsetTop,\n      offsetBottom,\n      offsetStart,\n      offsetEnd,\n    }: FlexText | any = this.data;\n    const customClass = ['MdTxt'];\n    if (flex >= 0) {\n      customClass.push(`fl${flex}`);\n    }\n\n    if (!(size && size.indexOf('px') >= 0)) {\n      customClass.push('Ex' + this.upperAllDigit(size || 'md'));\n    }\n\n    customClass.push(position === 'absolute' ? 'ExAbs' : '');\n\n    if (!(margin && margin.indexOf('px') >= 0)) {\n      customClass.push(margin ? `ExMgnL${this.upperAllDigit(margin)}` : '');\n    }\n\n    if (align === 'start' || align === 'end' || align === 'center') {\n      customClass.push(`ExAlg${this.upper1Digit(align)}`);\n    }\n\n    if (gravity === 'bottom' || gravity === 'center') {\n      customClass.push(`grv${this.upper1Digit(gravity)}`);\n    }\n\n    if (offsetTop && offsetTop.indexOf('px') < 0) {\n      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');\n    }\n    if (offsetBottom && offsetBottom.indexOf('px') < 0) {\n      customClass.push(\n        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''\n      );\n    }\n    if (offsetStart && offsetStart.indexOf('px') < 0) {\n      customClass.push(\n        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''\n      );\n    }\n    if (offsetEnd && offsetEnd.indexOf('px') < 0) {\n      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');\n    }\n\n    if (weight === 'bold') {\n      customClass.push('ExWB');\n    }\n\n    if (style) {\n      const FntSty: any = {\n        normal: 'ExFntStyNml',\n        italic: 'ExFntStyIt',\n      };\n      customClass.push(FntSty[style] || '');\n    }\n\n    if (decoration) {\n      const ExTxtDec: any = {\n        'line-through': 'ExTxtDecLt',\n        underline: 'ExTxtDecUl',\n        none: 'ExTxtDecNone',\n      };\n      customClass.push(ExTxtDec[decoration] || '');\n    }\n\n    if (wrap) {\n      customClass.push('ExWrap');\n    }\n\n    return customClass;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get color() {\n    return this.data?.color ? this.data?.color : null;\n  }\n\n  upperAllDigit(str: string) {\n    if (isNaN(Number(str.charAt(0)))) {\n      return str.charAt(0).toUpperCase() + str.slice(1);\n    }\n    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);\n  }\n\n  upper1Digit(str: string) {\n    return str.charAt(0).toUpperCase();\n  }\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexText } from '../../model';\nimport Utils from '../../utils';\n\n@Component({\n  selector: '[flex-text]',\n  templateUrl: './flex-text.component.html',\n  styleUrls: ['./flex-text.component.scss'],\n})\nexport class FlexTextComponent {\n  @Input('data') data?: FlexText;\n\n  get textClass() {\n    return Utils.getFlexTextClass(this.data as FlexText);\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get color() {\n    return this.data?.color ? this.data?.color : null;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1604,12 +1682,6 @@
                 }
             ],
             "stylesData": "",
-            "constructorObj": {
-                "name": "constructor",
-                "description": "",
-                "args": [],
-                "line": 10
-            },
             "accessors": {
                 "textClass": {
                     "name": "textClass",
@@ -1626,7 +1698,7 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 98
+                        "line": 17
                     }
                 },
                 "offsetTop": {
@@ -1635,7 +1707,7 @@
                         "name": "offsetTop",
                         "type": "",
                         "returnType": "",
-                        "line": 102
+                        "line": 21
                     }
                 },
                 "offsetBottom": {
@@ -1644,7 +1716,7 @@
                         "name": "offsetBottom",
                         "type": "",
                         "returnType": "",
-                        "line": 108
+                        "line": 27
                     }
                 },
                 "offsetStart": {
@@ -1653,7 +1725,7 @@
                         "name": "offsetStart",
                         "type": "",
                         "returnType": "",
-                        "line": 114
+                        "line": 33
                     }
                 },
                 "offsetEnd": {
@@ -1662,7 +1734,7 @@
                         "name": "offsetEnd",
                         "type": "",
                         "returnType": "",
-                        "line": 120
+                        "line": 39
                     }
                 },
                 "marginTop": {
@@ -1671,7 +1743,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 126
+                        "line": 45
                     }
                 },
                 "color": {
@@ -1680,7 +1752,7 @@
                         "name": "color",
                         "type": "",
                         "returnType": "",
-                        "line": 132
+                        "line": 51
                     }
                 }
             },
@@ -1688,7 +1760,7 @@
         },
         {
             "name": "NgxFlexMessagesComponent",
-            "id": "component-NgxFlexMessagesComponent-b38e6eae15e8bb13f410897a717ea09a",
+            "id": "component-NgxFlexMessagesComponent-e6e10e9b16bd735ec1d8f9e3e4d65b04",
             "file": "projects/ngx-flex-messages/src/lib/ngx-flex-messages.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1709,15 +1781,45 @@
                     "type": "FlexMessage"
                 }
             ],
-            "outputsClass": [],
+            "outputsClass": [
+                {
+                    "name": "action",
+                    "defaultValue": "new EventEmitter()",
+                    "line": 11,
+                    "type": "EventEmitter<Action>"
+                }
+            ],
             "propertiesClass": [],
-            "methodsClass": [],
+            "methodsClass": [
+                {
+                    "name": "onClickAction",
+                    "args": [
+                        {
+                            "name": "action",
+                            "type": "Action"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13,
+                    "jsdoctags": [
+                        {
+                            "name": "action",
+                            "type": "Action",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
             "hostBindings": [],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\nimport { FlexContainer, FlexMessage } from './model';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  templateUrl: './ngx-flex-messages.component.html',\n  styles: []\n})\nexport class NgxFlexMessagesComponent {\n  @Input('data') data?: FlexMessage;\n  \n  constructor() { }\n\n  get flexContainer(): FlexContainer {\n    return this.data?.contents as FlexContainer;\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, Output } from '@angular/core';\nimport { Action, FlexContainer, FlexMessage } from './model';\n\n@Component({\n  selector: 'ngx-flex-messages',\n  templateUrl: './ngx-flex-messages.component.html',\n  styles: []\n})\nexport class NgxFlexMessagesComponent {\n  @Input('data') data?: FlexMessage;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n\n  onClickAction(action: Action) {\n    this.action.emit(action);\n  }\n  \n  constructor() { }\n\n  get flexContainer(): FlexContainer {\n    return this.data?.contents as FlexContainer;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -1725,7 +1827,7 @@
                 "name": "constructor",
                 "description": "",
                 "args": [],
-                "line": 10
+                "line": 15
             },
             "accessors": {
                 "flexContainer": {
@@ -1734,11 +1836,11 @@
                         "name": "flexContainer",
                         "type": "",
                         "returnType": "FlexContainer",
-                        "line": 14
+                        "line": 19
                     }
                 }
             },
-            "templateData": "<div *ngIf=\"data?.type === 'flex'\">\n  <flex-message [data]=\"flexContainer\"></flex-message>\n</div>"
+            "templateData": "<div *ngIf=\"data?.type === 'flex'\">\n  <flex-message [data]=\"flexContainer\" (action)=\"onClickAction($event)\"></flex-message>\n</div>"
         }
     ],
     "modules": [
@@ -1977,7 +2079,7 @@
                 "subtype": "variable",
                 "file": "stories/NgxFlexMessages.stories.ts",
                 "type": "Story<NgxFlexMessagesComponent>",
-                "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  }\n})"
+                "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: {\n    ...args,\n    action: action('onAction'),\n  },\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  },\n  template: `<ngx-flex-messages [data]=\"data\" (action)=\"onAction($event)\"></ngx-flex-messages>`\n})"
             }
         ],
         "functions": [],
@@ -2366,7 +2468,7 @@
                     "subtype": "variable",
                     "file": "stories/NgxFlexMessages.stories.ts",
                     "type": "Story<NgxFlexMessagesComponent>",
-                    "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: args,\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  }\n})"
+                    "defaultValue": "(args: NgxFlexMessagesComponent) => ({\n  component: NgxFlexMessagesComponent,\n  props: {\n    ...args,\n    action: action('onAction'),\n  },\n  moduleMetadata: {\n    imports: [NgxFlexMessagesModule],\n  },\n  template: `<ngx-flex-messages [data]=\"data\" (action)=\"onAction($event)\"></ngx-flex-messages>`\n})"
                 }
             ]
         },
@@ -2649,7 +2751,7 @@
                 "linktype": "component",
                 "name": "FlexBoxComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/7",
+                "coverageCount": "0/5",
                 "status": "low"
             },
             {
@@ -2667,7 +2769,7 @@
                 "linktype": "component",
                 "name": "FlexButtonComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
@@ -2676,7 +2778,7 @@
                 "linktype": "component",
                 "name": "FlexCarouselComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2685,7 +2787,7 @@
                 "linktype": "component",
                 "name": "FlexFillerComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2694,7 +2796,7 @@
                 "linktype": "component",
                 "name": "FlexIconComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {
@@ -2703,7 +2805,7 @@
                 "linktype": "component",
                 "name": "FlexImageComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
@@ -2721,7 +2823,7 @@
                 "linktype": "component",
                 "name": "FlexSeparatorComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2730,7 +2832,7 @@
                 "linktype": "component",
                 "name": "FlexSpacerComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2739,7 +2841,7 @@
                 "linktype": "component",
                 "name": "FlexSpanComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2748,7 +2850,7 @@
                 "linktype": "component",
                 "name": "FlexTextComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/5",
+                "coverageCount": "0/2",
                 "status": "low"
             },
             {
@@ -2766,7 +2868,16 @@
                 "linktype": "component",
                 "name": "NgxFlexMessagesComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/3",
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/ngx-flex-messages/src/lib/utils.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Utils",
+                "coveragePercent": 0,
+                "coverageCount": "0/15",
                 "status": "low"
             },
             {

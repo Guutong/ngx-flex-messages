@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FlexBox, FlexBubble, FlexImage } from '../../model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Action, FlexBox, FlexBubble, FlexImage } from '../../model';
 import Utils from '../../utils';
 
 @Component({
@@ -9,6 +9,11 @@ import Utils from '../../utils';
 })
 export class FlexBubbleComponent {
   @Input('data') data?: FlexBubble;
+  @Output() action: EventEmitter<Action> = new EventEmitter();
+
+  onClickAction(action: Action) {
+    this.action.emit(action);
+  }
 
   get flexData() {
     const { header, hero, body, footer } = this.data as FlexBubble;

@@ -4,11 +4,13 @@
     *ngIf="data?.type === 'carousel'"
     flex-carousel
     [data]="flexCarousel"
+    (action)="onClickAction($event)"
   ></div>
   <div
     class="lyInner"
     *ngIf="data?.type === 'bubble'"
     flex-bubble
     [data]="flexBubble"
+    (action)="onClickAction($event)"
   ></div>
 </div>

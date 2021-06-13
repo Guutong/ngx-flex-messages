@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Action, FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
 import Utils from '../../utils'
 @Component({
   selector: '[flex-box]',
@@ -8,7 +8,12 @@ import Utils from '../../utils'
 })
 export class FlexBoxComponent {
   @Input('data') data?: FlexBox;
+  @Output() action: EventEmitter<Action> = new EventEmitter();
 
+  onClickAction(action: Action) {    
+    this.action.emit(action);
+  }
+  
   get customClass(): string[] {
     return Utils.getFlexBoxClass(this.data as FlexBox);
   }

@@ -8,7 +8,7 @@
   [style.bottom]="offsetBottom"
   [style.top]="offsetTop"
 >
-  <a [style.background-color]="backgroundColor">
+  <a [style.background-color]="backgroundColor" (click)="onClickAction(data?.action)">
     <div>{{ data?.action?.label }}</div>
   </a>
 </div>

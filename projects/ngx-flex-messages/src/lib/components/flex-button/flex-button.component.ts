@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FlexButton } from '../../model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Action, FlexButton } from '../../model';
 import Utils from '../../utils';
 
 @Component({
@@ -9,6 +9,11 @@ import Utils from '../../utils';
 })
 export class FlexButtonComponent {
   @Input('data') data?: FlexButton;
+  @Output() action: EventEmitter<Action> = new EventEmitter();
+
+  onClickAction(action: Action) {
+    this.action.emit(action);
+  }
 
   get buttonClass() {
     return Utils.getFlexButtonClass(this.data as FlexButton);
