@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FlexSeparator } from '../../model';
+import Utils from '../../utils';
 
 @Component({
   selector: '[flex-separator]',
@@ -9,22 +10,8 @@ import { FlexSeparator } from '../../model';
 export class FlexSeparatorComponent {
   @Input('data') data?: FlexSeparator;
 
-  constructor() {}
-
-  upperAllDigit(str: string) {
-    if (isNaN(Number(str.charAt(0)))) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);
-  }
-
   get separatorClass() {
-    const customClass = ['fl0', 'MdSep'];
-    const { margin }: FlexSeparator | any = this.data;
-    if (!(margin && margin.indexOf('px') >= 0)) {
-      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');
-    }
-    return customClass;
+    return Utils.getFlexSeparatorClass(this.data as FlexSeparator);
   }
 
   get borderColor() {

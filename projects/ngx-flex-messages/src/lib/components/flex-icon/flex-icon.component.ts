@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexIcon } from '../../model';
+import Utils from '../../utils';
 
 @Component({
   selector: '[flex-icon]',
@@ -12,44 +13,7 @@ export class FlexIconComponent {
   constructor() {}
 
   get iconClass() {
-    const {
-      size,
-      aspectRatio,
-      position,
-      margin,
-      offsetTop,
-      offsetBottom,
-      offsetStart,
-      offsetEnd,
-    }: FlexIcon | any = this.data;
-    const customClass = ['MdIco', 'fl0'];
-
-    if (!(size && size.indexOf('px') >= 0)) {
-      customClass.push('Ex' + this.upperAllDigit(size || 'md'));
-    }
-    customClass.push(position === 'absolute' ? 'ExAbs' : '');
-
-    if (!(margin && margin.indexOf('px') >= 0)) {
-      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');
-    }
-    if (offsetTop && offsetTop.indexOf('px') < 0) {
-      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');
-    }
-    if (offsetBottom && offsetBottom.indexOf('px') < 0) {
-      customClass.push(
-        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''
-      );
-    }
-    if (offsetStart && offsetStart.indexOf('px') < 0) {
-      customClass.push(
-        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''
-      );
-    }
-    if (offsetEnd && offsetEnd.indexOf('px') < 0) {
-      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');
-    }
-
-    return customClass;
+    return Utils.getFlexIconClass(this.data as FlexIcon);
   }
 
   get marginTop() {
@@ -96,16 +60,5 @@ export class FlexIconComponent {
     } else {
       return Number(ratio[0]) / Number(ratio[1]);
     }
-  }
-
-  upperAllDigit(str: string) {
-    if (isNaN(Number(str.charAt(0)))) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);
-  }
-
-  upper1Digit(str: string) {
-    return str.charAt(0).toUpperCase();
   }
 }

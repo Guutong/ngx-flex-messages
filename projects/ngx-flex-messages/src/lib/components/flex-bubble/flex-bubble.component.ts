@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FlexBox, FlexBubble, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
+import { FlexBox, FlexBubble, FlexImage } from '../../model';
+import Utils from '../../utils';
 
 @Component({
   selector: '[flex-bubble]',
@@ -8,8 +9,6 @@ import { FlexBox, FlexBubble, FlexButton, FlexComponent, FlexFiller, FlexIcon, F
 })
 export class FlexBubbleComponent {
   @Input('data') data?: FlexBubble;
-
-  constructor() {}
 
   get flexData() {
     const { header, hero, body, footer } = this.data as FlexBubble;
@@ -27,19 +26,13 @@ export class FlexBubbleComponent {
   }
 
   get customBubbleClass() {
-    const customClass = ['lyItem'];
-    customClass.push(`Ly${this.upperToDigit(this.data?.size || 'medium')}`);
-    return customClass;
+    return Utils.getFlexBubbleClass(this.data as FlexBubble);
   }
 
   get customDirectionClass() {
     const customClass = ['T1'];
     customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);
     return customClass;
-  }
-
-  upperToDigit(str: string) {
-    return str.charAt(0).toUpperCase() + str.substring(1, 2);
   }
 
   getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {
@@ -50,5 +43,4 @@ export class FlexBubbleComponent {
         return data as FlexImage;
     }
   }
-
 }

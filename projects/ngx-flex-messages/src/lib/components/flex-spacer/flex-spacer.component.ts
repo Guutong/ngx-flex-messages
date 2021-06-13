@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexSpacer } from '../../model';
+import Utils from '../../utils';
 
 @Component({
   selector: '[flex-spacer]',
@@ -9,23 +10,7 @@ import { FlexSpacer } from '../../model';
 export class FlexSpacerComponent {
   @Input('data') data?: FlexSpacer;
 
-  constructor() {}
-
   get spacerClass() {
-    const customClass = ['mdBxSpacer', 'fl0'];
-    const { size }: FlexSpacer | any = this.data;
-    if (size && size.indexOf('px') < 0) {
-      customClass.push('spc' + this.upperAllDigit(size || 'md'));
-    }
-    return customClass;
-  }
-
-  upperAllDigit(str: string) {
-    if (isNaN(Number(str.charAt(0)))) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    return (
-      str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2)
-    );
+    return Utils.getFlexSpacerClass(this.data as FlexSpacer);
   }
 }

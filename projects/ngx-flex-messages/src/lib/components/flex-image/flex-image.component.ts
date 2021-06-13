@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Action, FlexImage } from '../../model';
+import Utils from '../../utils';
 
 @Component({
   selector: '[flex-image]',
@@ -13,75 +14,8 @@ export class FlexImageComponent {
     console.log(action);
   }
 
-  upperAllDigit(str: string) {
-    if (isNaN(Number(str.charAt(0)))) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    return str.charAt(0) + str.charAt(1).toUpperCase() + str.slice(2);
-  }
-
-  upper1Digit(str: string) {
-    return str.charAt(0).toUpperCase();
-  }
   get customClass() {
-    const {
-      aspectMode,
-      size,
-      position,
-      flex,
-      margin,
-      align,
-      gravity,
-      offsetTop,
-      offsetBottom,
-      offsetStart,
-      offsetEnd,
-    }: FlexImage | any = this.data;
-    const customClass = ['MdImg'];
-
-    customClass.push(`Ex${this.upperAllDigit(aspectMode || 'fit')}`);
-    customClass.push(flex && flex >= 0 ? `fl${flex}` : '');
-
-    if (size && size.indexOf('px') < 0) {
-      customClass.push('Ex' + this.upperAllDigit(size || 'md'));
-    }
-
-    customClass.push(position === 'absolute' ? 'ExAbs' : '');
-    if (!(margin && margin.indexOf('px') >= 0)) {
-      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');
-    }
-    customClass.push(
-      align === 'start' || align === 'end'
-        ? `alg${this.upper1Digit(align)}`
-        : ''
-    );
-    customClass.push(
-      gravity === 'bottom' || gravity === 'center'
-        ? `grv${this.upper1Digit(gravity)}`
-        : ''
-    );
-
-    if (offsetTop && offsetTop.indexOf('px') < 0) {
-      customClass.push(offsetTop ? `ExT${this.upperAllDigit(offsetTop)}` : '');
-    }
-
-    if (offsetBottom && offsetBottom.indexOf('px') < 0) {
-      customClass.push(
-        offsetBottom ? `ExB${this.upperAllDigit(offsetBottom)}` : ''
-      );
-    }
-
-    if (offsetStart && offsetStart.indexOf('px') < 0) {
-      customClass.push(
-        offsetStart ? `ExB${this.upperAllDigit(offsetStart)}` : ''
-      );
-    }
-
-    if (offsetEnd && offsetEnd.indexOf('px') < 0) {
-      customClass.push(offsetEnd ? `ExB${this.upperAllDigit(offsetEnd)}` : '');
-    }
-
-    return customClass;
+    return Utils.getFlexImageClass(this.data as FlexImage);
   }
 
   get flex() {

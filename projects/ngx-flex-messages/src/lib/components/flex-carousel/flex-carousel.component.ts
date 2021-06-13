@@ -8,6 +8,4 @@ import { FlexCarousel } from '../../model';
 })
 export class FlexCarouselComponent {
   @Input('data') data?: FlexCarousel;
-
-  constructor() {}
 }

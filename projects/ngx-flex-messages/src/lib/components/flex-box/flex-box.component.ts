@@ -1,160 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
-
+import Utils from '../../utils'
 @Component({
   selector: '[flex-box]',
   templateUrl: './flex-box.component.html',
   styleUrls: ['./flex-box.component.scss'],
 })
-export class FlexBoxComponent implements OnInit {
+export class FlexBoxComponent {
   @Input('data') data?: FlexBox;
-  constructor() {}
-
-  ngOnInit(): void {}
 
   get customClass(): string[] {
-    const customClass = ['MdBx'];
-    let {
-      layout,
-      position,
-      flex,
-      spacing,
-      margin,
-      borderWidth,
-      cornerRadius,
-      justifyContent,
-      alignItems,
-      offsetTop,
-      offsetBottom,
-      offsetStart,
-      offsetEnd,
-      paddingAll,
-      paddingTop,
-      paddingBottom,
-      paddingStart,
-      paddingEnd,
-    }: FlexBox | any = this.data;
-
-    if (layout === 'baseline') {
-      customClass.push('hr');
-      customClass.push('bl');
-    }
-    if (layout === 'horizontal') {
-      customClass.push('hr');
-    }
-    if (layout === 'vertical') {
-      customClass.push('vr');
-    }
-
-    if (flex <= 3) {
-      customClass.push(flex >= 0 ? `fl${flex}` : '');
-    }
-
-    customClass.push(position === 'absolute' ? 'ExAbs' : '');
-
-    if (spacing && spacing.indexOf('px') < 0) {
-      customClass.push(spacing ? 'spc' + this.upperAllDigit(spacing) : '');
-    }
-
-    if (margin && margin.indexOf('px') < 0) {
-      const ExMgnT: any = {
-        'none': 'ExMgnTNone',
-        'xs': 'ExMgnTXs',
-        'sm': 'ExMgnTSm',
-        'md': 'ExMgnTMd',
-        'lg': 'ExMgnTLg',
-        'xl': 'ExMgnTXl',
-        'xxl': 'ExMgnTXXl',
-      };
-      customClass.push(ExMgnT[margin] || '');
-    }
-
-    if (borderWidth && borderWidth.indexOf('px') < 0) {
-      const ExBdr: any = {
-        none: 'ExBdrWdtNone',
-        light: 'ExBdrWdtLgh',
-        normal: 'ExBdrWdtNml',
-        medium: 'ExBdrWdtMdm',
-        'semi-bold': 'ExBdrWdtSbd',
-        bold: 'ExBdrWdtBld',
-      };
-      customClass.push(ExBdr[borderWidth] || '');
-    }
-
-    if (cornerRadius && cornerRadius.indexOf('px') < 0) {
-      customClass.push(
-        cornerRadius ? 'ExBdrRad' + this.upperAllDigit(cornerRadius) : ''
-      );
-    }
-    if (justifyContent) {
-      const jfc: any = {
-        center: 'itms-jfcC',
-        'flex-start': 'itms-jfcS',
-        'flex-end': 'itms-jfcE',
-        'space-between': 'itms-jfcSB',
-        'space-around': 'itms-jfcSA',
-        'space-evenly': 'itms-jfcSE',
-      };
-      customClass.push(jfc[justifyContent] || '');
-    }
-
-    if (alignItems) {
-      const alg: any = {
-        center: 'itms-algC',
-        'flex-start': 'itms-algS',
-        'flex-end': 'itms-algE',
-      };
-      customClass.push(alg[alignItems] || '');
-    }
-
-    if (offsetTop && offsetTop.indexOf('px') < 0) {
-      customClass.push(offsetTop ? 'ExT' + this.upperAllDigit(offsetTop) : '');
-    }
-    if (offsetBottom && offsetBottom.indexOf('px') < 0) {
-      customClass.push(
-        offsetBottom ? 'ExB' + this.upperAllDigit(offsetBottom) : ''
-      );
-    }
-    if (offsetStart && offsetStart.indexOf('px') < 0) {
-      customClass.push(
-        offsetStart ? 'ExL' + this.upperAllDigit(offsetStart) : ''
-      );
-    }
-    if (offsetEnd && offsetEnd.indexOf('px') < 0) {
-      customClass.push(offsetEnd ? 'ExR' + this.upperAllDigit(offsetEnd) : '');
-    }
-
-    if (paddingAll && paddingAll.indexOf('px') < 0) {
-      customClass.push(
-        paddingAll ? 'ExPadA' + this.upperAllDigit(paddingAll) : ''
-      );
-    }
-
-    if (paddingTop && paddingTop.indexOf('px') < 0) {
-      customClass.push(
-        paddingTop ? 'ExPadT' + this.upperAllDigit(paddingTop) : ''
-      );
-    }
-
-    if (paddingBottom && paddingBottom.indexOf('px') < 0) {
-      customClass.push(
-        paddingBottom ? 'ExPadB' + this.upperAllDigit(paddingBottom) : ''
-      );
-    }
-
-    if (paddingStart && paddingStart.indexOf('px') < 0) {
-      customClass.push(
-        paddingStart ? 'ExPadL' + this.upperAllDigit(paddingStart) : ''
-      );
-    }
-
-    if (paddingEnd && paddingEnd.indexOf('px') < 0) {
-      customClass.push(
-        paddingEnd ? 'ExPadR' + this.upperAllDigit(paddingEnd) : ''
-      );
-    }
-
-    return customClass;
+    return Utils.getFlexBoxClass(this.data as FlexBox);
   }
 
   get background() {
@@ -171,6 +27,7 @@ export class FlexBoxComponent implements OnInit {
     }
     return null;
   }
+
   get padding() {
     return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0
       ? this.data?.paddingAll
@@ -265,36 +122,7 @@ export class FlexBoxComponent implements OnInit {
     | FlexSeparator
     | FlexFiller
     | FlexSpacer | any {
-    switch (data.type) {
-      case 'box':
-        return data as FlexBox;
-      case 'button':
-        return data as FlexButton;
-      case 'image':
-        return data as FlexImage;
-      case 'icon':
-        return data as FlexIcon;
-      case 'span':
-        return data as FlexSpan;
-      case 'separator':
-        return data as FlexSeparator;
-      case 'filler':
-        return data as FlexFiller;
-      case 'spacer':
-        return data as FlexSpacer;
-      case 'text':
-        return data as FlexText;
-    }
-  }
-  
-  upperAllDigit(str: string) {
-    if (isNaN(Number(str.charAt(0)))) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    return str.charAt(0).toUpperCase() + str.charAt(1).toUpperCase() + str.slice(2);
+    return Utils.getFlexData(data);
   }
 
-  upper1Digit(str: string) {
-    return str.charAt(0).toUpperCase();
-  }
 }
