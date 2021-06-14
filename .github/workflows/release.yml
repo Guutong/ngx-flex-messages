@@ -1,8 +1,8 @@
-name: NgxFlexMessages Main 
+name: NgxFlexMessages Release 
 on:
   push:
     branches:
-      - main
+      - release
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,9 +19,16 @@ jobs:
 
       - name: Install application
         run: npm install
+      
+      - name: Build storybook
+        run: npm run storybook:build
 
-      - name: Deploy application
-        run: npm run publish:canary
+      - name: Deploy storybook
+        run: npm run storybook:deploy
+
+      - name: Release application
+        if:  false == contains('skip-deploy', ${{ github.event.head_commit.message }})
+        run: npm run publish:release
         env:
           BUILD_ID: ${{ steps.generate_unique_id.outputs.unique_id }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
