@@ -12,7 +12,15 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm install
-      - run: npm run publish:canary
+
+      - name: "Generate unique id"
+        id: generate_unique_id
+        uses: ./.github/actions/build_id
+
+      - name: Install application
+        run: npm install
+      
+      - name: Deploy application
+        run: npm run publish:canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
