@@ -23,4 +23,5 @@ jobs:
       - name: Deploy application
         run: npm run publish:canary
         env:
+          BUILD_ID: ${{ steps.generate_unique_id.outputs.unique_id }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
