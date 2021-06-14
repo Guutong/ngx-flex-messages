@@ -1,6 +1,6 @@
 {
   "packages": [
-    "projects/*"
+    "dist/*"
   ],
   "version": "independent",
   "publishConfig": {
