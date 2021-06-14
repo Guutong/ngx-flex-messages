@@ -19,12 +19,6 @@ jobs:
 
       - name: Install application
         run: npm install
-      
-      - name: Build storybook
-        run: npm run storybook:build
-
-      - name: Deploy storybook
-        run: npm run storybook:deploy
 
       - name: Release application
         if:  false == contains('skip-deploy', ${{ github.event.head_commit.message }})
