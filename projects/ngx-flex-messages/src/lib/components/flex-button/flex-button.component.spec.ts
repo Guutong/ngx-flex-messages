@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxFlexMessagesComponent } from './ngx-flex-messages.component';
+import { FlexButtonComponent } from './flex-button.component';
 
-describe('NgxFlexMessagesComponent', () => {
-  let component: NgxFlexMessagesComponent;
-  let fixture: ComponentFixture<NgxFlexMessagesComponent>;
+describe('FlexButtonComponent', () => {
+  let component: FlexButtonComponent;
+  let fixture: ComponentFixture<FlexButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NgxFlexMessagesComponent],
+      declarations: [FlexButtonComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgxFlexMessagesComponent);
+    fixture = TestBed.createComponent(FlexButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

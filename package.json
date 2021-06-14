@@ -5,15 +5,21 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:lib": "ng build ngx-flex-messages",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "cd dist/ngx-flex-messages && npm pack",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "storybook": "npm run docs:json && start-storybook -p 6006",
-    "build-storybook": "npm run docs:json && build-storybook",
-    "predeploy": "npm run build-storybook",
-    "deploy-storybook": "gh-pages -d storybook-static"
+    "storybook:build": "npm run docs:json && build-storybook",
+    "storybook:predeploy": "npm run build-storybook",
+    "storybook:deploy": "gh-pages -d storybook-static",
+    "publish:canary": "lerna publish --yes --skip-git --exact --cd-version=prerelease --pre-dist-tag canary --preid=alpha.$BUILD_ID",
+    "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes"
   },
+  "workspaces": [
+    "projects/*"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Guutong/ngx-flex-messages.git"
@@ -57,6 +63,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "lerna": "^4.0.0",
     "ng-packagr": "^12.0.0",
     "storybook-addon-angular-ivy": "0.0.1",
     "typescript": "~4.2.3"

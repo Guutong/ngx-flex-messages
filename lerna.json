@@ -1,0 +1,10 @@
+{
+  "packages": [
+    "projects/*"
+  ],
+  "version": "independent",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

@@ -1,0 +1,17 @@
+<div
+  [ngClass]="customClass"
+  [style.-webkit-box-flex]="flex"
+  [style.flex-grow]="flex"
+>
+  <div [style.width]="width">
+    <a
+      (click)="onClickAction(data?.action)"
+      [style.padding-bottom.%]="paddingBottom"
+    >
+      <span
+        [style.background-image]="backgroundImage"
+        [style.background-color]="backgroundColor"
+      ></span>
+    </a>
+  </div>
+</div>
