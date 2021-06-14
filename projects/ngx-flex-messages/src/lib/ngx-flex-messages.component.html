@@ -1,3 +1,6 @@
 <div *ngIf="data?.type === 'flex'">
-  <flex-message [data]="flexContainer" (action)="onClickAction($event)"></flex-message>
+  <flex-message
+    [data]="flexContainer"
+    (action)="onClickAction($event)"
+  ></flex-message>
 </div>

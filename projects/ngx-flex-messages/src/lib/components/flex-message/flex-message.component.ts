@@ -13,7 +13,7 @@ export class FlexMessageComponent {
   onClickAction(action: Action) {
     this.action.emit(action);
   }
-  
+
   get flexCarousel(): FlexCarousel {
     return this.data as FlexCarousel;
   }

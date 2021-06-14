@@ -1,6 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Action, FlexBox, FlexButton, FlexComponent, FlexFiller, FlexIcon, FlexImage, FlexSeparator, FlexSpacer, FlexSpan, FlexText } from '../../model';
-import Utils from '../../utils'
+import {
+  Action,
+  FlexBox,
+  FlexButton,
+  FlexComponent,
+  FlexFiller,
+  FlexIcon,
+  FlexImage,
+  FlexSeparator,
+  FlexSpacer,
+  FlexSpan,
+  FlexText,
+} from '../../model';
+import Utils from '../../utils';
 @Component({
   selector: '[flex-box]',
   templateUrl: './flex-box.component.html',
@@ -10,10 +22,10 @@ export class FlexBoxComponent {
   @Input('data') data?: FlexBox;
   @Output() action: EventEmitter<Action> = new EventEmitter();
 
-  onClickAction(action: Action) {    
+  onClickAction(action?: Action) {
     this.action.emit(action);
   }
-  
+
   get customClass(): string[] {
     return Utils.getFlexBoxClass(this.data as FlexBox);
   }
@@ -118,7 +130,10 @@ export class FlexBoxComponent {
     return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;
   }
 
-  getFlexData(data: FlexComponent): FlexBox
+  getFlexData(
+    data: FlexComponent
+  ):
+    | FlexBox
     | FlexButton
     | FlexImage
     | FlexIcon
@@ -126,8 +141,8 @@ export class FlexBoxComponent {
     | FlexSpan
     | FlexSeparator
     | FlexFiller
-    | FlexSpacer | any {
+    | FlexSpacer
+    | any {
     return Utils.getFlexData(data);
   }
-
 }

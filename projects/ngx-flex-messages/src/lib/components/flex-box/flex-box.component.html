@@ -21,13 +21,56 @@
   [style.flex-grow]="flex"
 >
   <ng-container *ngFor="let item of data?.contents" remove-host>
-    <div *ngIf="item?.type == 'box'" flex-box [data]="getFlexData(item)" (action)="onClickAction($event)" remove-host></div>
-    <div *ngIf="item?.type == 'image'" flex-image [data]="getFlexData(item)" (action)="onClickAction($event)" remove-host></div>
-    <div *ngIf="item?.type == 'icon'" flex-icon [data]="getFlexData(item)" remove-host></div>
-    <div *ngIf="item?.type == 'text'" flex-text [data]="getFlexData(item)" remove-host></div>
-    <div *ngIf="item?.type == 'button'" flex-button [data]="getFlexData(item)" (action)="onClickAction($event)" remove-host></div>
-    <div *ngIf="item?.type == 'filler'" flex-filler [data]="getFlexData(item)" remove-host></div>
-    <div *ngIf="item?.type == 'separator'" flex-separator [data]="getFlexData(item)" remove-host></div>
-    <div *ngIf="item?.type == 'spacer'" flex-spacer [data]="getFlexData(item)" remove-host></div>
+    <div
+      *ngIf="item?.type == 'box'"
+      flex-box
+      [data]="getFlexData(item)"
+      (action)="onClickAction($event)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'image'"
+      flex-image
+      [data]="getFlexData(item)"
+      (action)="onClickAction($event)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'icon'"
+      flex-icon
+      [data]="getFlexData(item)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'text'"
+      flex-text
+      [data]="getFlexData(item)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'button'"
+      flex-button
+      [data]="getFlexData(item)"
+      (action)="onClickAction($event)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'filler'"
+      flex-filler
+      [data]="getFlexData(item)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'separator'"
+      flex-separator
+      [data]="getFlexData(item)"
+      remove-host
+    ></div>
+    <div
+      *ngIf="item?.type == 'spacer'"
+      flex-spacer
+      [data]="getFlexData(item)"
+      remove-host
+    ></div>
   </ng-container>
 </div>

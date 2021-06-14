@@ -11,7 +11,7 @@ export class FlexBubbleComponent {
   @Input('data') data?: FlexBubble;
   @Output() action: EventEmitter<Action> = new EventEmitter();
 
-  onClickAction(action: Action) {
+  onClickAction(action?: Action) {
     this.action.emit(action);
   }
 

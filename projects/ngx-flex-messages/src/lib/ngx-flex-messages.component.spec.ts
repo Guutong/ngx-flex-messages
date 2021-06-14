@@ -8,9 +8,8 @@ describe('NgxFlexMessagesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NgxFlexMessagesComponent ]
-    })
-    .compileComponents();
+      declarations: [NgxFlexMessagesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -10,7 +10,7 @@ import Utils from '../../utils';
 export class FlexImageComponent {
   @Input('data') data?: FlexImage;
   @Output() action: EventEmitter<Action> = new EventEmitter();
-  
+
   onClickAction(action?: Action) {
     this.action.emit(action);
   }
