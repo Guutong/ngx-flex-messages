@@ -1,7 +1,7 @@
-name: NgxFlexMessages Master 
+name: NgxFlexMessages Main 
 on:
   branches:
-    - master
+    - main
 jobs:
   build:
     runs-on: ubuntu-latest
