@@ -5,7 +5,6 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "ng build ngx-flex-messages",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "cd dist/ngx-flex-messages && npm pack",
@@ -17,7 +16,7 @@
     "publish:release": "npm run build:lib && lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes"
   },
   "workspaces": [
-    "dist/*"
+    "projects/*"
   ],
   "repository": {
     "type": "git",

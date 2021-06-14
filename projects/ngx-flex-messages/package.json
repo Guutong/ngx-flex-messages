@@ -1,6 +1,10 @@
 {
   "name": "ngx-flex-messages",
   "version": "0.1.1",
+  "scripts": {
+    "build": "ng build ngx-flex-messages",
+    "postpublish": "rm -rf dist/"
+  },
   "peerDependencies": {
     "@angular/common": "^12.0.3",
     "@angular/core": "^12.0.3"
