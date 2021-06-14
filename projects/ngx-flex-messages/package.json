@@ -1,6 +1,6 @@
 {
   "name": "ngx-flex-messages",
-  "version": "0.1.1",
+  "version": "0.1.2-alpha.1623653081.0",
   "scripts": {
     "build": "ng build ngx-flex-messages",
     "postpublish": "rm -rf dist/"
