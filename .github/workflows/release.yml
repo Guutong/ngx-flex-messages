@@ -24,8 +24,8 @@ jobs:
         run: npm install
 
       - name: Release application
-        # if:  false == contains('skip-deploy', ${{ github.event.head_commit.message }})
-        # run: npm run publish:release
+        if:  false == contains('skip-deploy', ${{ github.event.head_commit.message }})
+        run: npm run publish:release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           BUILD_ID: ${{ steps.generate_unique_id.outputs.unique_id }}
