@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.2.2 (2021-06-17)
+
+**Note:** Version bump only for package ngx-flex-messages
+
+
+
+
+
 # [0.2.0-alpha.1623653081.0](https://github.com/Guutong/ngx-flex-messages/compare/ngx-flex-messages@0.1.1...ngx-flex-messages@0.2.0-alpha.1623653081.0) (2021-06-14)
 
 
