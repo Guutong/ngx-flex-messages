@@ -5,7 +5,6 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "ng build ngx-flex-messages",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pack": "cd dist/ngx-flex-messages && npm pack",
@@ -13,8 +12,10 @@
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "storybook:build": "npm run docs:json && build-storybook",
     "storybook:deploy": "gh-pages -d storybook-static",
-    "publish:canary": "lerna publish --yes --skip-git --exact --cd-version=prerelease --pre-dist-tag canary --preid=alpha.$BUILD_ID",
-    "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes"
+    "publish:prebuild": "lerna run build",
+    "publish:version": "lerna version prerelease --conventional-prerelease --exact --preid=alpha.$BUILD_ID --yes --no-push --no-git-tag-version",
+    "publish:canary": "npm run publish:version && npm run publish:prebuild && lerna publish --contents dist prerelease --preid=alpha.$BUILD_ID --exact --skip-git --yes",
+    "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes --contents dist"
   },
   "workspaces": [
     "projects/*"
