@@ -12,8 +12,9 @@
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "storybook:build": "npm run docs:json && build-storybook",
     "storybook:deploy": "gh-pages -d storybook-static",
-    "publish:canary": "lerna version --skip-git --exact prerelease --preid=alpha.$BUILD_ID --conventional-commits --message \"chore(release): publish /skip-deploy\" && lerna run build && lerna publish --yes --contents dist",
-    "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna run build && lerna publish from-git --yes --contents dist"
+    "prepublish": "lerna run build --since HEAD~1 --concurrency=1",
+    "publish:canary": "lerna publish --yes --skip-git --exact --cd-version=prerelease --pre-dist-tag canary --preid=alpha.$BUILD_ID && lerna publish from-git --yes --contents dist",
+    "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes --contents dist"
   },
   "workspaces": [
     "projects/*"
