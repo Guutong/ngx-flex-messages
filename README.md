@@ -1,6 +1,10 @@
 # NgxFlexMessages
 
+<a href="https://npmjs.org/ngx-flex-messages"><img src="https://img.shields.io/npm/v/ngx-flex-messages/latest.svg" alt="npm latest version" ></a>
+<a href="https://npmjs.org/ngx-flex-messages"><img src="https://img.shields.io/npm/v/ngx-flex-messages/canary.svg" alt="npm next version" ></a>
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3.
+[![NPM](https://nodei.co/npm/ngx-flex-messages.png)](https://nodei.co/npm/ngx-flex-messages/)
 
 ## Development server
 
