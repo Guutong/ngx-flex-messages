@@ -15,7 +15,7 @@
     "publish:build": "lerna run build",
     "publish:version": "lerna version prerelease --conventional-prerelease --exact --preid=alpha.$BUILD_ID --yes --no-push --no-git-tag-version",
     "publish:canary": "npm run publish:version && npm run publish:build && lerna publish --contents dist prerelease --preid=alpha.$BUILD_ID --exact --skip-git --yes",
-    "publish:bump": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\"",
+    "publish:bump": "lerna version patch --force-publish=* --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\"",
     "publish:release": "npm run publish:bump && npm run publish:build && lerna publish --contents dist release --exact --skip-git --yes"
   },
   "workspaces": [
