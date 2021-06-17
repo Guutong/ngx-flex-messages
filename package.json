@@ -13,6 +13,7 @@
     "storybook:build": "npm run docs:json && build-storybook",
     "storybook:deploy": "gh-pages -d storybook-static",
     "prepack": "lerna run build --since HEAD~1 --concurrency=1",
+    "publish:version": "lerna publish --skip-git --skip-npm --exact canary --preid=alpha.$BUILD_ID",
     "publish:canary": "lerna publish --yes --skip-git --exact --cd-version=prerelease --pre-dist-tag canary --preid=alpha.$BUILD_ID && lerna publish from-git --yes --contents projects/ngx-flex-messages/dist",
     "publish:release": "lerna version --create-release github --conventional-commits --exact --yes --message \"chore(release): publish /skip-deploy\" && lerna publish from-git --yes --contents dist"
   },
