@@ -1,4 +1,5 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NgxFlexMessagesComponent } from './ngx-flex-messages.component';
 import { FlexMessageComponent } from './components/flex-message/flex-message.component';
 import { FlexBubbleComponent } from './components/flex-bubble/flex-bubble.component';
@@ -12,7 +13,6 @@ import { FlexSeparatorComponent } from './components/flex-separator/flex-separat
 import { FlexSpacerComponent } from './components/flex-spacer/flex-spacer.component';
 import { FlexSpanComponent } from './components/flex-span/flex-span.component';
 import { FlexTextComponent } from './components/flex-text/flex-text.component';
-import { CommonModule } from '@angular/common';
 import { RemoveHostDirective } from './directives/remove-host.directive';
 
 @NgModule({
@@ -50,8 +50,4 @@ import { RemoveHostDirective } from './directives/remove-host.directive';
     RemoveHostDirective,
   ],
 })
-export class NgxFlexMessagesModule {
-  static forRoot(): ModuleWithProviders<NgxFlexMessagesModule> {
-    return { ngModule: NgxFlexMessagesModule, providers: [] };
-  }
-}
+export class NgxFlexMessagesModule {}
