@@ -11,8 +11,6 @@ export class NgxFlexMessagesComponent {
   @Output() action: EventEmitter<Action> = new EventEmitter();
 
   onClickAction(action: Action) {
-    console.log(action);
-
     this.action.emit(action);
   }
 
