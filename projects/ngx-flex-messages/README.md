@@ -7,27 +7,27 @@
 
 [![NPM](https://nodei.co/npm/ngx-flex-messages.png)](https://nodei.co/npm/ngx-flex-messages/)
 ### Installation
-```
+```sh
 npm i ngx-flex-messages --save
 ```
 
 Add wanted package to NgModule imports
-```
+```ts
 import { NgxFlexMessagesModule } from 'ngx-flex-messages';
    
   @NgModule({
     ...
-    imports: [ 
-			...
-			NgxFlexMessagesModule, 
-			... 
-		]
+    imports: [
+      ...
+      NgxFlexMessagesModule,
+      ...
+    ]
     ...
   })
 ```
 
 Add style to projects in `angular.json`
-```
+```json
 {
     ...
     "styles": [
@@ -38,8 +38,9 @@ Add style to projects in `angular.json`
 }
 ```
 
+
 Add component to your page
-```
+```html
 <ngx-flex-messages 
 	[data]="json" 
 	(action)="onClickAction($event)"
