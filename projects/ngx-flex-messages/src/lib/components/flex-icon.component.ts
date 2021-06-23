@@ -1,16 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { FlexIcon } from '../../model';
-import Utils from '../../utils';
+import { Component, HostBinding, Input } from '@angular/core';
+import { FlexIcon } from '../model';
+import Utils from '../utils';
 
 @Component({
   selector: '[flex-icon]',
-  templateUrl: './flex-icon.component.html',
-  styleUrls: ['./flex-icon.component.scss'],
+  template: `<div><span [style.width.em]="width" [style.background-image]="backgroundImage"></span></div>`,
 })
 export class FlexIconComponent {
   @Input('data') data?: FlexIcon;
-
-  constructor() {}
+  @HostBinding('style.margin-top') public get _marginTop() { return this.marginTop; }
+  @HostBinding('style.left') public get _offsetStart() { return this.offsetStart; }
+  @HostBinding('style.right') public get _offsetEnd() { return this.offsetEnd; }
+  @HostBinding('style.bottom') public get _offsetBottom() { return this.offsetBottom; }
+  @HostBinding('style.top') public get _offsetTop() { return this.offsetTop; }
+  @HostBinding('style.font-size') public get _fontSiz() { return this.fontSize; }
+  @HostBinding('class') public get _classes() { return this.iconClass.join(' '); }
 
   get iconClass() {
     return Utils.getFlexIconClass(this.data as FlexIcon);
