@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Action, FlexCarousel } from '../../model';
+import { Action, FlexCarousel } from '../model';
 
 @Component({
   selector: '[flex-carousel]',
-  templateUrl: './flex-carousel.component.html',
-  styleUrls: ['./flex-carousel.component.scss'],
+  template: `<div *ngFor="let item of data?.contents" flex-bubble [data]="item" (action)="onClickAction($event)"></div>`
 })
 export class FlexCarouselComponent {
   @Input('data') data?: FlexCarousel;

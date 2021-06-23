@@ -1,10 +1,26 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Action, FlexBubble, FlexCarousel, FlexContainer } from '../../model';
+import { Action, FlexBubble, FlexCarousel, FlexContainer } from '../model';
 
 @Component({
   selector: 'flex-message',
-  templateUrl: './flex-message.component.html',
-  styleUrls: ['./flex-message.component.scss'],
+  template: `
+  <div class="LySlider">
+    <div
+      class="lyInner"
+      *ngIf="data?.type === 'carousel'"
+      flex-carousel
+      [data]="flexCarousel"
+      (action)="onClickAction($event)"
+    ></div>
+    <div
+      class="lyInner"
+      *ngIf="data?.type === 'bubble'"
+      flex-bubble
+      [data]="flexBubble"
+      (action)="onClickAction($event)"
+    ></div>
+  </div>
+  `,
 })
 export class FlexMessageComponent {
   @Input() data?: FlexContainer;
