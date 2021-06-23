@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import {
   Action,
   FlexBox,
@@ -11,16 +11,45 @@ import {
   FlexSpacer,
   FlexSpan,
   FlexText,
-} from '../../model';
-import Utils from '../../utils';
+} from '../model';
+import Utils from '../utils';
 @Component({
   selector: '[flex-box]',
-  templateUrl: './flex-box.component.html',
-  styleUrls: ['./flex-box.component.scss'],
+  template: `
+  <ng-container *ngFor="let item of data?.contents">
+    <div *ngIf="item?.type == 'box'" flex-box [data]="getFlexData(item)" (action)="onClickAction($event)"></div>
+    <div *ngIf="item?.type == 'image'" flex-image [data]="getFlexData(item)" (action)="onClickAction($event)"></div>
+    <div *ngIf="item?.type == 'icon'" flex-icon [data]="getFlexData(item)"></div>
+    <div *ngIf="item?.type == 'text'" flex-text [data]="getFlexData(item)"></div>
+    <div *ngIf="item?.type == 'button'" flex-button [data]="getFlexData(item)" (action)="onClickAction($event)"></div>
+    <div *ngIf="item?.type == 'filler'" flex-filler [data]="getFlexData(item)"></div>
+    <div *ngIf="item?.type == 'separator'" flex-separator [data]="getFlexData(item)"></div>
+    <div *ngIf="item?.type == 'spacer'" flex-spacer [data]="getFlexData(item)"></div>
+  </ng-container>
+  `
 })
 export class FlexBoxComponent {
   @Input('data') data?: FlexBox;
   @Output() action: EventEmitter<Action> = new EventEmitter();
+  @HostBinding('style.padding-right') public get _paddingEnd() { return this.paddingEnd; }
+  @HostBinding('style.padding-left') public get _paddingStart() { return this.paddingStart; }
+  @HostBinding('style.padding-bottom') public get _paddingBottom() { return this.paddingBottom; }
+  @HostBinding('style.padding-top') public get _paddingTop() { return this.paddingTop; }
+  @HostBinding('style.padding') public get _padding() { return this.padding; }
+  @HostBinding('style.left') public get _offsetStart() { return this.offsetStart; }
+  @HostBinding('style.right') public get _offsetEnd() { return this.offsetEnd; }
+  @HostBinding('style.bottom') public get _offsetBottom() { return this.offsetBottom; }
+  @HostBinding('style.top') public get _offsetTop() { return this.offsetTop; }
+  @HostBinding('style.border-radius') public get _cornerRadius() { return this.cornerRadius; }
+  @HostBinding('style.border-width') public get _borderWidth() { return this.borderWidth; }
+  @HostBinding('style.border-color') public get _borderColor() { return this.borderColor; }
+  @HostBinding('style.background') public get _background() { return this.background; }
+  @HostBinding('style.height') public get _height() { return this.height; }
+  @HostBinding('style.width') public get _width() { return this.width; }
+  @HostBinding('style.margin-top') public get _marginTop() { return this.marginTop; }
+  @HostBinding('style.-webkit-box-flex') public get _webkitBoxFlex() { return this.flex; }
+  @HostBinding('style.flex-grow') public get _flex() { return this.flex; }
+  @HostBinding('class') public get _classes() { return this.customClass.join(' '); }
 
   onClickAction(action?: Action) {
     this.action.emit(action);
@@ -41,8 +70,9 @@ export class FlexBoxComponent {
       } else {
         return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;
       }
+    } else {
+      return this.data?.backgroundColor ? this.data?.backgroundColor : null;
     }
-    return null;
   }
 
   get padding() {
@@ -98,10 +128,6 @@ export class FlexBoxComponent {
 
   get height() {
     return this.data?.height ? this.data?.height : null;
-  }
-
-  get backgroundColor() {
-    return this.data?.backgroundColor ? this.data?.backgroundColor : null;
   }
 
   get borderColor() {

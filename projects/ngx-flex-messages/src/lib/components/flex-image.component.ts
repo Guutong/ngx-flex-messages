@@ -1,16 +1,30 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Action, FlexImage } from '../../model';
-import Utils from '../../utils';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { FlexImage, Action } from '../model';
+import Utils from '../utils';
 
 @Component({
   selector: '[flex-image]',
-  templateUrl: './flex-image.component.html',
-  styleUrls: ['./flex-image.component.scss'],
+  template: `
+  <div [style.width]="width">
+    <a
+      (click)="onClickAction(data?.action)"
+      [style.padding-bottom.%]="paddingBottom"
+    >
+      <span
+        [style.background-image]="backgroundImage"
+        [style.background-color]="backgroundColor"
+      ></span>
+    </a>
+  </div>
+  `
 })
 export class FlexImageComponent {
   @Input('data') data?: FlexImage;
   @Output() action: EventEmitter<Action> = new EventEmitter();
-
+  @HostBinding('style.-webkit-box-flex') public get _webkitBoxFlex() { return this.flex; }
+  @HostBinding('style.flex-grow') public get _flex() { return this.flex; }
+  @HostBinding('class') public get _classes() { return this.customClass.join(' '); }
+  
   onClickAction(action?: Action) {
     this.action.emit(action);
   }
