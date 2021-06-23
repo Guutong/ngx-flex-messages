@@ -1,6 +1,6 @@
 {
   "name": "ngx-flex-messages",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "scripts": {
     "build": "ng build ngx-flex-messages"
   },
