@@ -6,6 +6,12 @@
 <a href="https://npmjs.org/ngx-flex-messages"><img src="https://img.shields.io/npm/v/ngx-flex-messages/canary.svg" alt="npm next version" ></a>
 
 [![NPM](https://nodei.co/npm/ngx-flex-messages.png)](https://nodei.co/npm/ngx-flex-messages/)
+
+### Demo
+storybook: https://guutong.github.io/ngx-flex-messages
+
+stackblitz: https://angular-ivy-q9fseo.stackblitz.io
+
 ### Installation
 ```sh
 npm i ngx-flex-messages --save

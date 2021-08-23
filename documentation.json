@@ -373,7 +373,7 @@
     "components": [
         {
             "name": "FlexBoxComponent",
-            "id": "component-FlexBoxComponent-39ddc7f003de5bcf356ae576af001cc9",
+            "id": "component-FlexBoxComponent-6b413d1eda4c489086c23300e90147e2",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-box.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -414,7 +414,7 @@
                     "optional": false,
                     "returnType": "FlexBox | FlexButton | FlexImage | FlexIcon | FlexText | FlexSpan | FlexSeparator | FlexFiller | FlexSpacer | any",
                     "typeParameters": [],
-                    "line": 163,
+                    "line": 159,
                     "jsdoctags": [
                         {
                             "name": "data",
@@ -437,7 +437,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 55,
+                    "line": 54,
                     "jsdoctags": [
                         {
                             "name": "action",
@@ -453,18 +453,14 @@
             "hostBindings": [
                 {
                     "name": "class",
-                    "line": 53
+                    "line": 52
                 },
                 {
                     "name": "style.-webkit-box-flex",
-                    "line": 51
+                    "line": 50
                 },
                 {
                     "name": "style.background",
-                    "line": 47
-                },
-                {
-                    "name": "style.background-color",
                     "line": 46
                 },
                 {
@@ -485,11 +481,11 @@
                 },
                 {
                     "name": "style.flex-grow",
-                    "line": 52
+                    "line": 51
                 },
                 {
                     "name": "style.height",
-                    "line": 48
+                    "line": 47
                 },
                 {
                     "name": "style.left",
@@ -497,7 +493,7 @@
                 },
                 {
                     "name": "style.margin-top",
-                    "line": 50
+                    "line": 49
                 },
                 {
                     "name": "style.padding",
@@ -529,14 +525,14 @@
                 },
                 {
                     "name": "style.width",
-                    "line": 49
+                    "line": 48
                 }
             ],
             "hostListeners": [],
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';\nimport {\n  Action,\n  FlexBox,\n  FlexButton,\n  FlexComponent,\n  FlexFiller,\n  FlexIcon,\n  FlexImage,\n  FlexSeparator,\n  FlexSpacer,\n  FlexSpan,\n  FlexText,\n} from '../model';\nimport Utils from '../utils';\n@Component({\n  selector: '[flex-box]',\n  template: `\n  <ng-container *ngFor=\"let item of data?.contents\">\n    <div *ngIf=\"item?.type == 'box'\" flex-box [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'image'\" flex-image [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'icon'\" flex-icon [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'text'\" flex-text [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'button'\" flex-button [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'filler'\" flex-filler [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'separator'\" flex-separator [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'spacer'\" flex-spacer [data]=\"getFlexData(item)\"></div>\n  </ng-container>\n  `\n})\nexport class FlexBoxComponent {\n  @Input('data') data?: FlexBox;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n  @HostBinding('style.padding-right') public get _paddingEnd() { return this.paddingEnd; }\n  @HostBinding('style.padding-left') public get _paddingStart() { return this.paddingStart; }\n  @HostBinding('style.padding-bottom') public get _paddingBottom() { return this.paddingBottom; }\n  @HostBinding('style.padding-top') public get _paddingTop() { return this.paddingTop; }\n  @HostBinding('style.padding') public get _padding() { return this.padding; }\n  @HostBinding('style.left') public get _offsetStart() { return this.offsetStart; }\n  @HostBinding('style.right') public get _offsetEnd() { return this.offsetEnd; }\n  @HostBinding('style.bottom') public get _offsetBottom() { return this.offsetBottom; }\n  @HostBinding('style.top') public get _offsetTop() { return this.offsetTop; }\n  @HostBinding('style.border-radius') public get _cornerRadius() { return this.cornerRadius; }\n  @HostBinding('style.border-width') public get _borderWidth() { return this.borderWidth; }\n  @HostBinding('style.border-color') public get _borderColor() { return this.borderColor; }\n  @HostBinding('style.background-color') public get _backgroundColor() { return this.backgroundColor; }\n  @HostBinding('style.background') public get _background() { return this.background; }\n  @HostBinding('style.height') public get _height() { return this.height; }\n  @HostBinding('style.width') public get _width() { return this.width; }\n  @HostBinding('style.margin-top') public get _marginTop() { return this.marginTop; }\n  @HostBinding('style.-webkit-box-flex') public get _webkitBoxFlex() { return this.flex; }\n  @HostBinding('style.flex-grow') public get _flex() { return this.flex; }\n  @HostBinding('class') public get _classes() { return this.customClass.join(' '); }\n\n  onClickAction(action?: Action) {\n    this.action.emit(action);\n  }\n\n  get customClass(): string[] {\n    return Utils.getFlexBoxClass(this.data as FlexBox);\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    }\n    return null;\n  }\n\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get backgroundColor() {\n    return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  getFlexData(\n    data: FlexComponent\n  ):\n    | FlexBox\n    | FlexButton\n    | FlexImage\n    | FlexIcon\n    | FlexText\n    | FlexSpan\n    | FlexSeparator\n    | FlexFiller\n    | FlexSpacer\n    | any {\n    return Utils.getFlexData(data);\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';\nimport {\n  Action,\n  FlexBox,\n  FlexButton,\n  FlexComponent,\n  FlexFiller,\n  FlexIcon,\n  FlexImage,\n  FlexSeparator,\n  FlexSpacer,\n  FlexSpan,\n  FlexText,\n} from '../model';\nimport Utils from '../utils';\n@Component({\n  selector: '[flex-box]',\n  template: `\n  <ng-container *ngFor=\"let item of data?.contents\">\n    <div *ngIf=\"item?.type == 'box'\" flex-box [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'image'\" flex-image [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'icon'\" flex-icon [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'text'\" flex-text [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'button'\" flex-button [data]=\"getFlexData(item)\" (action)=\"onClickAction($event)\"></div>\n    <div *ngIf=\"item?.type == 'filler'\" flex-filler [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'separator'\" flex-separator [data]=\"getFlexData(item)\"></div>\n    <div *ngIf=\"item?.type == 'spacer'\" flex-spacer [data]=\"getFlexData(item)\"></div>\n  </ng-container>\n  `\n})\nexport class FlexBoxComponent {\n  @Input('data') data?: FlexBox;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n  @HostBinding('style.padding-right') public get _paddingEnd() { return this.paddingEnd; }\n  @HostBinding('style.padding-left') public get _paddingStart() { return this.paddingStart; }\n  @HostBinding('style.padding-bottom') public get _paddingBottom() { return this.paddingBottom; }\n  @HostBinding('style.padding-top') public get _paddingTop() { return this.paddingTop; }\n  @HostBinding('style.padding') public get _padding() { return this.padding; }\n  @HostBinding('style.left') public get _offsetStart() { return this.offsetStart; }\n  @HostBinding('style.right') public get _offsetEnd() { return this.offsetEnd; }\n  @HostBinding('style.bottom') public get _offsetBottom() { return this.offsetBottom; }\n  @HostBinding('style.top') public get _offsetTop() { return this.offsetTop; }\n  @HostBinding('style.border-radius') public get _cornerRadius() { return this.cornerRadius; }\n  @HostBinding('style.border-width') public get _borderWidth() { return this.borderWidth; }\n  @HostBinding('style.border-color') public get _borderColor() { return this.borderColor; }\n  @HostBinding('style.background') public get _background() { return this.background; }\n  @HostBinding('style.height') public get _height() { return this.height; }\n  @HostBinding('style.width') public get _width() { return this.width; }\n  @HostBinding('style.margin-top') public get _marginTop() { return this.marginTop; }\n  @HostBinding('style.-webkit-box-flex') public get _webkitBoxFlex() { return this.flex; }\n  @HostBinding('style.flex-grow') public get _flex() { return this.flex; }\n  @HostBinding('class') public get _classes() { return this.customClass.join(' '); }\n\n  onClickAction(action?: Action) {\n    this.action.emit(action);\n  }\n\n  get customClass(): string[] {\n    return Utils.getFlexBoxClass(this.data as FlexBox);\n  }\n\n  get background() {\n    const { background }: any = this.data;\n    if (background && background.type === 'linearGradient') {\n      const centerPosition = background.centerPosition\n        ? background.centerPosition\n        : '50%';\n      if (background.centerColor) {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.centerColor} ${centerPosition}, ${background.endColor} 100%);`;\n      } else {\n        return `linear-gradient(${background.angle}, ${background.startColor} 0%, ${background.endColor} 100%);`;\n      }\n    } else {\n      return this.data?.backgroundColor ? this.data?.backgroundColor : null;\n    }\n  }\n\n  get padding() {\n    return this.data?.paddingAll && this.data?.paddingAll.indexOf('px') >= 0\n      ? this.data?.paddingAll\n      : null;\n  }\n  get paddingTop() {\n    return this.data?.paddingTop && this.data?.paddingTop.indexOf('px') >= 0\n      ? this.data?.paddingTop\n      : null;\n  }\n  get paddingBottom() {\n    return this.data?.paddingBottom &&\n      this.data?.paddingBottom.indexOf('px') >= 0\n      ? this.data?.paddingBottom\n      : null;\n  }\n  get paddingStart() {\n    return this.data?.paddingStart && this.data?.paddingStart.indexOf('px') >= 0\n      ? this.data?.paddingStart\n      : null;\n  }\n  get paddingEnd() {\n    return this.data?.paddingEnd && this.data?.paddingEnd.indexOf('px') >= 0\n      ? this.data?.paddingEnd\n      : null;\n  }\n  get offsetTop() {\n    return this.data?.offsetTop && this.data?.offsetTop.indexOf('px') >= 0\n      ? this.data?.offsetTop\n      : null;\n  }\n  get offsetBottom() {\n    return this.data?.offsetBottom && this.data?.offsetBottom.indexOf('px') >= 0\n      ? this.data?.offsetBottom\n      : null;\n  }\n  get offsetStart() {\n    return this.data?.offsetStart && this.data?.offsetStart.indexOf('px') >= 0\n      ? this.data?.offsetStart\n      : null;\n  }\n  get offsetEnd() {\n    return this.data?.offsetEnd && this.data?.offsetEnd.indexOf('px') >= 0\n      ? this.data?.offsetEnd\n      : null;\n  }\n\n  get width() {\n    return this.data?.width ? this.data?.width : null;\n  }\n\n  get height() {\n    return this.data?.height ? this.data?.height : null;\n  }\n\n  get borderColor() {\n    return this.data?.borderColor ? this.data?.borderColor : null;\n  }\n\n  get borderWidth() {\n    return this.data?.borderWidth && this.data?.borderWidth.indexOf('px') >= 0\n      ? this.data?.borderWidth\n      : null;\n  }\n\n  get cornerRadius() {\n    return this.data?.cornerRadius && this.data?.cornerRadius.indexOf('px') >= 0\n      ? this.data?.cornerRadius\n      : null;\n  }\n\n  get marginTop() {\n    return this.data?.margin && this.data?.margin.indexOf('px') >= 0\n      ? this.data?.margin\n      : null;\n  }\n\n  get flex() {\n    return this.data?.flex && this.data?.flex > 3 ? this.data?.flex : null;\n  }\n\n  getFlexData(\n    data: FlexComponent\n  ):\n    | FlexBox\n    | FlexButton\n    | FlexImage\n    | FlexIcon\n    | FlexText\n    | FlexSpan\n    | FlexSeparator\n    | FlexFiller\n    | FlexSpacer\n    | any {\n    return Utils.getFlexData(data);\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -547,7 +543,7 @@
                         "name": "customClass",
                         "type": "[]",
                         "returnType": "string[]",
-                        "line": 59
+                        "line": 58
                     }
                 },
                 "background": {
@@ -556,7 +552,7 @@
                         "name": "background",
                         "type": "",
                         "returnType": "",
-                        "line": 63
+                        "line": 62
                     }
                 },
                 "padding": {
@@ -658,22 +654,13 @@
                         "line": 129
                     }
                 },
-                "backgroundColor": {
-                    "name": "backgroundColor",
-                    "getSignature": {
-                        "name": "backgroundColor",
-                        "type": "",
-                        "returnType": "",
-                        "line": 133
-                    }
-                },
                 "borderColor": {
                     "name": "borderColor",
                     "getSignature": {
                         "name": "borderColor",
                         "type": "",
                         "returnType": "",
-                        "line": 137
+                        "line": 133
                     }
                 },
                 "borderWidth": {
@@ -682,7 +669,7 @@
                         "name": "borderWidth",
                         "type": "",
                         "returnType": "",
-                        "line": 141
+                        "line": 137
                     }
                 },
                 "cornerRadius": {
@@ -691,7 +678,7 @@
                         "name": "cornerRadius",
                         "type": "",
                         "returnType": "",
-                        "line": 147
+                        "line": 143
                     }
                 },
                 "marginTop": {
@@ -700,7 +687,7 @@
                         "name": "marginTop",
                         "type": "",
                         "returnType": "",
-                        "line": 153
+                        "line": 149
                     }
                 },
                 "flex": {
@@ -709,14 +696,14 @@
                         "name": "flex",
                         "type": "",
                         "returnType": "",
-                        "line": 159
+                        "line": 155
                     }
                 }
             }
         },
         {
             "name": "FlexBubbleComponent",
-            "id": "component-FlexBubbleComponent-2030fa9ac9b0ba7b1ee3713c10aa6c5b",
+            "id": "component-FlexBubbleComponent-44c902b8ded0e085beec862460cdfaf9",
             "file": "projects/ngx-flex-messages/src/lib/components/flex-bubble.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -726,7 +713,7 @@
             "selector": "[flex-bubble]",
             "styleUrls": [],
             "styles": [],
-            "template": "<div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n  <div class=\"t1Hero\">\n    <div\n      *ngIf=\"data?.hero?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.hero)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n    <div\n      *ngIf=\"data?.hero?.type == 'image'\"\n      flex-image\n      [data]=\"getFlexContent(data?.hero)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Header\">\n    <div\n      *ngIf=\"data?.header?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.header)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Body ExHasFooter\">\n    <div\n      *ngIf=\"data?.body?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.body)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Footer\">\n    <div\n      *ngIf=\"data?.footer?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.footer)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n</div>\n",
+            "template": "<div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n  <div class=\"t1Hero\" [style.background-color]=\"getBackgroundColor(data?.hero)\">\n    <div\n      *ngIf=\"data?.hero?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.hero)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n    <div\n      *ngIf=\"data?.hero?.type == 'image'\"\n      flex-image\n      [data]=\"getFlexContent(data?.hero)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Header\" [style.background-color]=\"getBackgroundColor(data?.header)\">\n    <div\n      *ngIf=\"data?.header?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.header)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Body ExHasFooter\" [style.background-color]=\"getBackgroundColor(data?.body)\">\n    <div\n      *ngIf=\"data?.body?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.body)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n  <div class=\"t1Footer\" [style.background-color]=\"getBackgroundColor(data?.footer)\">\n    <div\n      *ngIf=\"data?.footer?.type == 'box'\"\n      flex-box\n      [data]=\"getFlexContent(data?.footer)\"\n      (action)=\"onClickAction($event)\"\n    ></div>\n  </div>\n</div>\n",
             "templateUrl": [],
             "viewProviders": [],
             "inputsClass": [
@@ -747,6 +734,28 @@
             "propertiesClass": [],
             "methodsClass": [
                 {
+                    "name": "getBackgroundColor",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "literal type"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 74,
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "literal type",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "getFlexContent",
                     "args": [
                         {
@@ -757,7 +766,7 @@
                     "optional": false,
                     "returnType": "FlexBox | FlexImage | any",
                     "typeParameters": [],
-                    "line": 84,
+                    "line": 88,
                     "jsdoctags": [
                         {
                             "name": "data",
@@ -825,7 +834,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';\nimport { Action, FlexBox, FlexBubble, FlexImage } from '../model';\nimport Utils from '../utils';\n\n@Component({\n  selector: '[flex-bubble]',\n  template: `\n    <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n      <div class=\"t1Hero\">\n        <div\n          *ngIf=\"data?.hero?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.hero)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n        <div\n          *ngIf=\"data?.hero?.type == 'image'\"\n          flex-image\n          [data]=\"getFlexContent(data?.hero)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Header\">\n        <div\n          *ngIf=\"data?.header?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.header)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Body ExHasFooter\">\n        <div\n          *ngIf=\"data?.body?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.body)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Footer\">\n        <div\n          *ngIf=\"data?.footer?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.footer)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n    </div>\n  `\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n  @HostBinding('class') public get _classes() { return this.customBubbleClass.join(' '); }\n\n  onClickAction(action?: Action) {\n    this.action.emit(action);\n  }\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  get customBubbleClass() {\n    return Utils.getFlexBubbleClass(this.data as FlexBubble);\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'image':\n        return data as FlexImage;\n    }\n  }\n}\n",
+            "sourceCode": "import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';\nimport { Action, FlexBox, FlexBubble, FlexImage } from '../model';\nimport Utils from '../utils';\n\n@Component({\n  selector: '[flex-bubble]',\n  template: `\n    <div [ngClass]=\"customDirectionClass\" dir=\"{{ data?.direction }}\">\n      <div class=\"t1Hero\" [style.background-color]=\"getBackgroundColor(data?.hero)\">\n        <div\n          *ngIf=\"data?.hero?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.hero)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n        <div\n          *ngIf=\"data?.hero?.type == 'image'\"\n          flex-image\n          [data]=\"getFlexContent(data?.hero)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Header\" [style.background-color]=\"getBackgroundColor(data?.header)\">\n        <div\n          *ngIf=\"data?.header?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.header)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Body ExHasFooter\" [style.background-color]=\"getBackgroundColor(data?.body)\">\n        <div\n          *ngIf=\"data?.body?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.body)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n      <div class=\"t1Footer\" [style.background-color]=\"getBackgroundColor(data?.footer)\">\n        <div\n          *ngIf=\"data?.footer?.type == 'box'\"\n          flex-box\n          [data]=\"getFlexContent(data?.footer)\"\n          (action)=\"onClickAction($event)\"\n        ></div>\n      </div>\n    </div>\n  `\n})\nexport class FlexBubbleComponent {\n  @Input('data') data?: FlexBubble;\n  @Output() action: EventEmitter<Action> = new EventEmitter();\n  @HostBinding('class') public get _classes() { return this.customBubbleClass.join(' '); }\n\n  onClickAction(action?: Action) {\n    this.action.emit(action);\n  }\n\n  get flexData() {\n    const { header, hero, body, footer } = this.data as FlexBubble;\n    let data: any = { header, hero, body, footer };\n    Object.keys(data).forEach((key) => {\n      if (!data[key]) {\n        delete data[key];\n      }\n    });\n    return data;\n  }\n\n  getFlexData(key: string) {\n    return this.flexData[key];\n  }\n\n  getBackgroundColor(data: { backgroundColor: string }) {\n    return data?.backgroundColor ? data?.backgroundColor : null;\n  }\n\n  get customBubbleClass() {\n    return Utils.getFlexBubbleClass(this.data as FlexBubble);\n  }\n\n  get customDirectionClass() {\n    const customClass = ['T1'];\n    customClass.push(`fx${(this.data?.direction || 'ltr').toUpperCase()}`);\n    return customClass;\n  }\n\n  getFlexContent(data: FlexBox | FlexImage | any): FlexBox | FlexImage | any {\n    switch (data.type) {\n      case 'box':\n        return data as FlexBox;\n      case 'image':\n        return data as FlexImage;\n    }\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -845,7 +854,7 @@
                         "name": "customBubbleClass",
                         "type": "",
                         "returnType": "",
-                        "line": 74
+                        "line": 78
                     }
                 },
                 "customDirectionClass": {
@@ -854,7 +863,7 @@
                         "name": "customDirectionClass",
                         "type": "",
                         "returnType": "",
-                        "line": 78
+                        "line": 82
                     }
                 }
             }
@@ -2859,7 +2868,7 @@
                 "linktype": "component",
                 "name": "FlexBoxComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/25",
+                "coverageCount": "0/24",
                 "status": "low"
             },
             {
@@ -2868,7 +2877,7 @@
                 "linktype": "component",
                 "name": "FlexBubbleComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/7",
+                "coverageCount": "0/8",
                 "status": "low"
             },
             {
