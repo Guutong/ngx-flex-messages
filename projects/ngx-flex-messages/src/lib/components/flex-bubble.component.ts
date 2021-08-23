@@ -6,7 +6,15 @@ import Utils from '../utils';
   selector: '[flex-bubble]',
   template: `
     <div [ngClass]="customDirectionClass" dir="{{ data?.direction }}">
-      <div class="t1Hero">
+      <div class="t1Header" [style.background-color]="getBackgroundColor(data?.styles?.header)">
+        <div
+          *ngIf="data?.header?.type == 'box'"
+          flex-box
+          [data]="getFlexContent(data?.header)"
+          (action)="onClickAction($event)"
+        ></div>
+      </div>
+      <div class="t1Hero" [style.background-color]="getBackgroundColor(data?.styles?.hero)">
         <div
           *ngIf="data?.hero?.type == 'box'"
           flex-box
@@ -20,15 +28,7 @@ import Utils from '../utils';
           (action)="onClickAction($event)"
         ></div>
       </div>
-      <div class="t1Header">
-        <div
-          *ngIf="data?.header?.type == 'box'"
-          flex-box
-          [data]="getFlexContent(data?.header)"
-          (action)="onClickAction($event)"
-        ></div>
-      </div>
-      <div class="t1Body ExHasFooter">
+      <div class="t1Body ExHasFooter" [style.background-color]="getBackgroundColor(data?.styles?.body)">
         <div
           *ngIf="data?.body?.type == 'box'"
           flex-box
@@ -36,7 +36,7 @@ import Utils from '../utils';
           (action)="onClickAction($event)"
         ></div>
       </div>
-      <div class="t1Footer">
+      <div class="t1Footer" [style.background-color]="getBackgroundColor(data?.styles?.footer)">
         <div
           *ngIf="data?.footer?.type == 'box'"
           flex-box
@@ -69,6 +69,10 @@ export class FlexBubbleComponent {
 
   getFlexData(key: string) {
     return this.flexData[key];
+  }
+
+  getBackgroundColor(data: { backgroundColor: string }) {
+    return data?.backgroundColor ? data?.backgroundColor : null;
   }
 
   get customBubbleClass() {
