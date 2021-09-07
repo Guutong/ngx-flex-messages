@@ -82,7 +82,7 @@ export default class Utils {
         md: 'ExMgnTMd',
         lg: 'ExMgnTLg',
         xl: 'ExMgnTXl',
-        xxl: 'ExMgnTXXl',
+        xxl: 'ExMgnTXxl',
       };
       customClass.push(ExMgnT[margin] || '');
     }

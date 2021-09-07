@@ -375,7 +375,7 @@ strong {
 .T1 .MdBx.hr.spcXl > div {
   margin-left: 16px;
 }
-.T1 .MdBx.hr.spcXXl > div {
+.T1 .MdBx.hr.spcXxl > div {
   margin-left: 20px;
 }
 .T1 .MdBx.hr > div.mdBxFiller,
@@ -401,7 +401,7 @@ strong {
 .T1.fxRTL .MdBx.hr.spcXl > div {
   margin-right: 16px;
 }
-.T1.fxRTL .MdBx.hr.spcXXl > div {
+.T1.fxRTL .MdBx.hr.spcXxl > div {
   margin-right: 20px;
 }
 .T1.fxRTL .MdBx.hr > div.mdBxFiller,
@@ -466,7 +466,7 @@ strong {
 .MdBx.vr.spcXl > div {
   margin-top: 16px;
 }
-.MdBx.vr.spcXXl > div {
+.MdBx.vr.spcXxl > div {
   margin-top: 20px;
 }
 .MdBx.vr > div.mdBxFiller,
@@ -547,7 +547,7 @@ strong {
 .MdBx.hr > div.mdBxSpacer.spcXl {
   width: 16px;
 }
-.MdBx.hr > div.mdBxSpacer.spcXXl {
+.MdBx.hr > div.mdBxSpacer.spcXxl {
   width: 20px;
 }
 .MdBx.hr[class*="spc"] > div.mdBxSpacer + div {
@@ -574,7 +574,7 @@ strong {
 .MdBx.vr > div.mdBxSpacer.spcXl {
   height: 16px;
 }
-.MdBx.vr > div.mdBxSpacer.spcXXl {
+.MdBx.vr > div.mdBxSpacer.spcXxl {
   height: 20px;
 }
 .MdBx.vr > div.fl0 {
@@ -693,35 +693,35 @@ strong {
   font-weight: inherit;
   text-decoration: inherit;
 }
-.MdSpn.ExXXs {
-  font-size: 11px;
+.MdSpn.ExXxs {
+  font-size: 11px !important;
 }
 .MdSpn.ExXs {
-  font-size: 13px;
+  font-size: 13px !important;
 }
 .MdSpn.ExSm {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .MdSpn.ExMd {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 .MdSpn.ExLg {
-  font-size: 19px;
+  font-size: 19px !important;
 }
 .MdSpn.ExXl {
-  font-size: 22px;
+  font-size: 22px !important;
 }
-.MdSpn.ExXXl {
-  font-size: 29px;
+.MdSpn.ExXxl {
+  font-size: 29px !important;
 }
 .MdSpn.Ex3Xl {
-  font-size: 35px;
+  font-size: 35px !important;
 }
 .MdSpn.Ex4Xl {
-  font-size: 48px;
+  font-size: 48px !important;
 }
 .MdSpn.Ex5Xl {
-  font-size: 74px;
+  font-size: 74px !important;
 }
 .MdIco {
   position: relative;
@@ -741,45 +741,45 @@ strong {
 .MdIco.ExAr3to1 span {
   width: 3em;
 }
-.MdIco.ExXXs,
-.MdTxt.ExXXs {
-  font-size: 11px;
+.MdIco.ExXxs,
+.MdTxt.ExXxs {
+  font-size: 11px !important;
 }
 .MdIco.ExXs,
 .MdTxt.ExXs {
-  font-size: 13px;
+  font-size: 13px !important;
 }
 .MdIco.ExSm,
 .MdTxt.ExSm {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .MdIco.ExMd,
 .MdTxt.ExMd {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 .MdIco.ExLg,
 .MdTxt.ExLg {
-  font-size: 19px;
+  font-size: 19px !important;
 }
 .MdIco.ExXl,
 .MdTxt.ExXl {
-  font-size: 22px;
+  font-size: 22px !important;
 }
-.MdIco.ExXXl,
-.MdTxt.ExXXl {
-  font-size: 29px;
+.MdIco.ExXxl,
+.MdTxt.ExXxl {
+  font-size: 29px !important;
 }
 .MdIco.Ex3Xl,
 .MdTxt.Ex3Xl {
-  font-size: 35px;
+  font-size: 35px !important;
 }
 .MdIco.Ex4Xl,
 .MdTxt.Ex4Xl {
-  font-size: 48px;
+  font-size: 48px !important;
 }
 .MdIco.Ex5Xl,
 .MdTxt.Ex5Xl {
-  font-size: 74px;
+  font-size: 74px !important;
 }
 .MdBtn {
   position: relative;
@@ -841,7 +841,7 @@ strong {
   background-repeat: no-repeat;
   background-position: center center;
 }
-.MdImg.ExXXs > div {
+.MdImg.ExXxs > div {
   width: 40px;
 }
 .MdImg.ExXs > div {
@@ -859,7 +859,7 @@ strong {
 .MdImg.ExXl > div {
   width: 140px;
 }
-.MdImg.ExXXl > div {
+.MdImg.ExXxl > div {
   width: 160px;
 }
 .MdImg.Ex3Xl > div {
@@ -944,7 +944,7 @@ strong {
 .ExMgnAXl {
   margin: 16px !important;
 }
-.ExMgnAXXl {
+.ExMgnAXxl {
   margin: 20px !important;
 }
 .ExMgnTNone {
@@ -965,7 +965,7 @@ strong {
 .ExMgnTXl {
   margin-top: 16px !important;
 }
-.ExMgnTXXl {
+.ExMgnTXxl {
   margin-top: 20px !important;
 }
 .ExMgnBNone {
@@ -986,7 +986,7 @@ strong {
 .ExMgnBXl {
   margin-bottom: 16px !important;
 }
-.ExMgnBXXl {
+.ExMgnBXxl {
   margin-bottom: 20px !important;
 }
 .ExMgnLNone {
@@ -1007,7 +1007,7 @@ strong {
 .ExMgnLXl {
   margin-left: 16px !important;
 }
-.ExMgnLXXl {
+.ExMgnLXxl {
   margin-left: 20px !important;
 }
 .ExMgnRNone {
@@ -1028,7 +1028,7 @@ strong {
 .ExMgnRXl {
   margin-right: 16px !important;
 }
-.ExMgnRXXl {
+.ExMgnRXxl {
   margin-right: 20px !important;
 }
 .ExPadANone {
@@ -1049,7 +1049,7 @@ strong {
 .ExPadAXl {
   padding: 16px !important;
 }
-.ExPadAXXl {
+.ExPadAXxl {
   padding: 20px !important;
 }
 .ExPadTNone {
@@ -1070,7 +1070,7 @@ strong {
 .ExPadTXl {
   padding-top: 16px !important;
 }
-.ExPadTXXl {
+.ExPadTXxl {
   padding-top: 20px !important;
 }
 .ExPadBNone {
@@ -1091,7 +1091,7 @@ strong {
 .ExPadBXl {
   padding-bottom: 16px !important;
 }
-.ExPadBXXl {
+.ExPadBXxl {
   padding-bottom: 20px !important;
 }
 .ExPadLNone {
@@ -1112,7 +1112,7 @@ strong {
 .ExPadLXl {
   padding-left: 16px !important;
 }
-.ExPadLXXl {
+.ExPadLXxl {
   padding-left: 20px !important;
 }
 .ExPadRNone {
@@ -1133,7 +1133,7 @@ strong {
 .ExPadRXl {
   padding-right: 16px !important;
 }
-.ExPadRXXl {
+.ExPadRXxl {
   padding-right: 20px !important;
 }
 .ExBdrWdtNone {
@@ -1172,7 +1172,7 @@ strong {
 .ExBdrRadXl {
   border-radius: 16px !important;
 }
-.ExBdrRadXXl {
+.ExBdrRadXxl {
   border-radius: 20px !important;
 }
 .ExAbs {
@@ -1198,7 +1198,7 @@ strong {
 .ExTXl {
   top: 16px;
 }
-.ExTXXl {
+.ExTXxl {
   top: 20px;
 }
 .ExBNone {
@@ -1219,7 +1219,7 @@ strong {
 .ExBXl {
   bottom: 16px;
 }
-.ExBXXl {
+.ExBXxl {
   bottom: 20px;
 }
 .ExLNone {
@@ -1240,7 +1240,7 @@ strong {
 .ExLXl {
   left: 16px;
 }
-.ExLXXl {
+.ExLXxl {
   left: 20px;
 }
 .ExRNone {
@@ -1261,7 +1261,7 @@ strong {
 .ExRXl {
   right: 16px;
 }
-.ExRXXl {
+.ExRXxl {
   right: 20px;
 }
 .ExWR {
