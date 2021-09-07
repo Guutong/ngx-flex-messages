@@ -433,7 +433,7 @@ export default class Utils {
     customClass.push(position === 'absolute' ? 'ExAbs' : '');
 
     if (!(margin && margin.indexOf('px') >= 0)) {
-      customClass.push(margin ? `ExMgnL${this.upperAllDigit(margin)}` : '');
+      customClass.push(margin ? `ExMgnT${this.upperAllDigit(margin)}` : '');
     }
 
     if (align === 'start' || align === 'end' || align === 'center') {
